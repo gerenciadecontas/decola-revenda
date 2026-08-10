@@ -36,10 +36,14 @@ const revendas = [
 
 export default function PendenciasPage() {
   const [pendencias, setPendencias] = useState<Pendencia[]>([]);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    revenda: string;
+    descricao: string;
+    nivel: 'critica' | 'normal';
+  }>({
     revenda: '',
     descricao: '',
-    nivel: 'normal' as const,
+    nivel: 'normal',
   });
   const [filterStatus, setFilterStatus] = useState<'todas' | 'abertas' | 'resolvidas'>('abertas');
 
