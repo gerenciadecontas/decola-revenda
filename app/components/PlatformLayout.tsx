@@ -27,13 +27,13 @@ interface PlatformLayoutProps {
 
 const allMenuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard', roles: ['gestor', 'agente-canal'] },
-  { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor'] },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes', roles: ['gestor', 'agente-canal'] },
   { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos', roles: ['gestor', 'agente-canal'] },
   { id: 'pendencias', label: 'Pendências', icon: CheckCircle2, href: '/platform/pendencias', roles: ['gestor', 'agente-canal'] },
-  { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor'] },
+  { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor', 'agente-canal'] },
+  { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor', 'agente-canal'] },
+  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas', roles: ['gestor', 'agente-canal'] },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes', roles: ['gestor'] },
-  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas', roles: ['gestor'] },
   { id: 'historico', label: 'Histórico', icon: History, href: '/platform/historico', roles: ['gestor'] },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios', roles: ['gestor'] },
   { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes', roles: ['gestor'] },
