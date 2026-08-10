@@ -1,20 +1,21 @@
 'use client';
 
-import { useRole } from '../context/RoleContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { role } = useRole();
 
   useEffect(() => {
+    const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
+    const role = savedRole || 'admin';
+
     if (role === 'admin') {
       router.push('/admin/dashboard');
     } else {
       router.push('/gestor/revendas');
     }
-  }, [role, router]);
+  }, [router]);
 
   return null;
 }
