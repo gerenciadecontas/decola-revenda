@@ -38,7 +38,7 @@ const trainings: Record<TrainingTab, TrainingDay[]> = {
 };
 
 export function CronogramaTrainamento() {
-  const [userRole, setUserRoleState] = useState<UserRole | null>(null);
+  const [userRole, setUserRoleState] = useState<UserRole>('gestor');
   const [selectedTab, setSelectedTab] = useState<TrainingTab>('lcweb');
   const [expandedDay, setExpandedDay] = useState<number>(1);
   const [progress, setProgress] = useState<Record<string, boolean>>({});
@@ -46,7 +46,9 @@ export function CronogramaTrainamento() {
   // Carrega o role do localStorage
   useEffect(() => {
     const savedRole = localStorage.getItem('trainingRole') as UserRole | null;
-    setUserRoleState(savedRole || 'gestor');
+    if (savedRole) {
+      setUserRoleState(savedRole);
+    }
   }, []);
 
   const setUserRole = (role: UserRole) => {
@@ -64,10 +66,6 @@ export function CronogramaTrainamento() {
     setProgress(newProgress);
     localStorage.setItem(`training-progress-${selectedTab}`, JSON.stringify(newProgress));
   };
-
-  if (userRole === null) {
-    return null;
-  }
 
   const days = trainings[selectedTab];
   const completedScreens = Object.values(progress).filter(Boolean).length;

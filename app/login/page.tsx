@@ -73,12 +73,14 @@ const mockTreinamentoDiario = [
 ];
 
 export default function LoginPage() {
-  const [view, setViewState] = useState<'admin' | 'gestor' | null>(null);
+  const [view, setViewState] = useState<'admin' | 'gestor'>('admin');
   const [subView, setSubView] = useState<'dashboard' | 'treinamento-diario'>('dashboard');
 
   useEffect(() => {
     const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
-    setViewState(savedRole || 'admin');
+    if (savedRole) {
+      setViewState(savedRole);
+    }
   }, []);
 
   const setView = (role: 'admin' | 'gestor') => {
@@ -101,10 +103,6 @@ export default function LoginPage() {
     ultimoTreinamento: 'Hoje às 14:30',
     quemRealizou: 'Maria Santos',
   };
-
-  if (view === null) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-slate-900">

@@ -3,19 +3,19 @@
 import { useState, useEffect } from 'react';
 
 export function RoleToggle() {
-  const [role, setRoleState] = useState<'admin' | 'gestor' | null>(null);
+  const [role, setRoleState] = useState<'admin' | 'gestor'>('admin');
 
   useEffect(() => {
     const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
-    setRoleState(savedRole || 'admin');
+    if (savedRole) {
+      setRoleState(savedRole);
+    }
   }, []);
 
   const setRole = (newRole: 'admin' | 'gestor') => {
     setRoleState(newRole);
     localStorage.setItem('userRole', newRole);
   };
-
-  if (role === null) return null;
 
   return (
     <div className="flex gap-2">

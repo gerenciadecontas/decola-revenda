@@ -13,21 +13,21 @@ const trainings: Record<TrainingTab, { title: string; days: number; temas: numbe
 };
 
 export function DashboardLayout() {
-  const [userRole, setUserRoleState] = useState<UserRole | null>(null);
+  const [userRole, setUserRoleState] = useState<UserRole>('gestor');
   const [selectedTab, setSelectedTab] = useState<TrainingTab>('lcweb');
   const [completionRate, setCompletionRate] = useState(0);
 
   useEffect(() => {
     const savedRole = localStorage.getItem('trainingRole') as UserRole | null;
-    setUserRoleState(savedRole || 'gestor');
+    if (savedRole) {
+      setUserRoleState(savedRole);
+    }
   }, []);
 
   const setUserRole = (role: UserRole) => {
     setUserRoleState(role);
     localStorage.setItem('trainingRole', role);
   };
-
-  if (userRole === null) return null;
 
   const training = trainings[selectedTab];
   const chartData = [

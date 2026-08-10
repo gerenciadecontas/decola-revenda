@@ -38,13 +38,12 @@ const allMenuItems = [
   { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes', roles: ['gestor'] },
 ];
 
-const getMenuItems = (role: UserRole | null) => {
-  if (!role) return [];
+const getMenuItems = (role: UserRole) => {
   return allMenuItems.filter(item => item.roles.includes(role));
 };
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
-  const [userRole, setUserRoleState] = useState<UserRole | null>(null);
+  const [userRole, setUserRoleState] = useState<UserRole>('gestor');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [period, setPeriod] = useState<'mes' | 'trimestre' | 'ano'>('mes');
 
