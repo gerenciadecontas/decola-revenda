@@ -1,7 +1,7 @@
 'use client';
 
 import { GestorLayout } from '@/app/components/GestorLayout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const COLORS = {
   darkBg: '#0E1013',
@@ -42,13 +42,48 @@ const treinamentos = {
 export default function TreinamentosPage() {
   const [activeTab, setActiveTab] = useState<'lcweb' | 'lcerp' | 'produtos'>('lcweb');
   const [expandedDay, setExpandedDay] = useState(1);
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem(`treinamentos-admin-${activeTab}`);
+    if (saved) {
+      setCheckedItems(JSON.parse(saved));
+    } else {
+      setCheckedItems({});
+    }
+  }, [activeTab]);
+
+  const handleCheck = (key: string) => {
+    const updated = { ...checkedItems, [key]: !checkedItems[key] };
+    setCheckedItems(updated);
+    localStorage.setItem(`treinamentos-admin-${activeTab}`, JSON.stringify(updated));
+  };
 
   const tabData = treinamentos[activeTab];
   const totalTemas = tabData.reduce((sum, d) => sum + d.temas, 0);
   const totalDias = tabData.length;
+  const completedTemas = Object.values(checkedItems).filter(Boolean).length;
 
   const content = (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '30px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>
+          Treinamentos
+        </h1>
+        <p style={{ color: COLORS.textSecondary }}>Gerencie e acompanhe todos os treinamentos programados</p>
+      </div>
+
+      {/* Progress Card */}
+      <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ fontSize: '48px' }}>📈</div>
+        <div>
+          <p style={{ fontSize: '13px', color: COLORS.textSecondary, margin: 0 }}>Progresso geral</p>
+          <p style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, margin: 0 }}>
+            {totalTemas > 0 ? Math.round((completedTemas / totalTemas) * 100) : 0}%
+          </p>
+        </div>
+      </div>
+
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '30px' }}>
         {(['lcweb', 'lcerp', 'produtos'] as const).map((tab) => (
@@ -83,23 +118,15 @@ export default function TreinamentosPage() {
           <p style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, margin: 0 }}>{totalTemas}</p>
         </div>
         <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', padding: '20px' }}>
-          <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Média de Temas/Dia</p>
-          <p style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, margin: 0 }}>{Math.round(totalTemas / totalDias)}</p>
+          <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Temas Concluídos</p>
+          <p style={{ fontSize: '32px', fontWeight: 700, color: COLORS.green, margin: 0 }}>{completedTemas}</p>
         </div>
       </div>
 
       {/* Day Cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {tabData.map((day) => (
-          <div
-            key={day.day}
-            style={{
-              background: COLORS.cardBg,
-              border: `1px solid ${COLORS.borderColor}`,
-              borderRadius: '16px',
-              overflow: 'hidden',
-            }}
-          >
+          <div key={day.day} style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', overflow: 'hidden' }}>
             <button
               onClick={() => setExpandedDay(expandedDay === day.day ? -1 : day.day)}
               style={{
@@ -117,21 +144,7 @@ export default function TreinamentosPage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
-              <div
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  background: COLORS.purple,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 700,
-                  fontSize: '18px',
-                  color: '#fff',
-                  flexShrink: 0,
-                }}
-              >
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: COLORS.purple, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '18px', color: '#fff', flexShrink: 0 }}>
                 {day.day}
               </div>
               <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
@@ -155,23 +168,37 @@ export default function TreinamentosPage() {
                         Tela/Tópico
                       </th>
                       <th style={{ textAlign: 'right', padding: '8px 0', fontSize: '12px', color: COLORS.textTertiary, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, borderBottom: `1px solid ${COLORS.borderColor}` }}>
-                        Acesso
+                        Realizado
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {day.screens.map((screen, idx) => (
-                      <tr key={idx} style={{ borderBottom: `1px solid ${COLORS.borderColor}` }}>
-                        <td style={{ padding: '12px 0', color: COLORS.textPrimary }}>
-                          <code style={{ background: `${COLORS.purple}22`, color: COLORS.purple, padding: '3px 8px', borderRadius: '6px', fontSize: '13px', fontFamily: 'monospace' }}>
-                            {screen}
-                          </code>
-                        </td>
-                        <td style={{ textAlign: 'right', padding: '12px 0', color: COLORS.textSecondary }}>
-                          ✓
-                        </td>
-                      </tr>
-                    ))}
+                    {day.screens.map((screen, idx) => {
+                      const key = `${activeTab}-day${day.day}-${idx}`;
+                      const isChecked = checkedItems[key] || false;
+                      return (
+                        <tr key={idx} style={{ borderBottom: `1px solid ${COLORS.borderColor}`, background: isChecked ? 'rgba(52, 211, 153, 0.05)' : 'transparent' }}>
+                          <td style={{ padding: '12px 0', color: COLORS.textPrimary, textDecoration: isChecked ? 'line-through' : 'none', opacity: isChecked ? 0.6 : 1 }}>
+                            <code style={{ background: `${COLORS.purple}22`, color: COLORS.purple, padding: '3px 8px', borderRadius: '6px', fontSize: '13px', fontFamily: 'monospace' }}>
+                              {screen}
+                            </code>
+                          </td>
+                          <td style={{ textAlign: 'right', padding: '12px 0' }}>
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleCheck(key)}
+                              style={{
+                                width: '18px',
+                                height: '18px',
+                                cursor: 'pointer',
+                                accentColor: COLORS.green,
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
