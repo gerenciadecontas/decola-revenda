@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -30,14 +29,6 @@ const COLORS = {
 };
 
 export default function AdminDashboardPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   // KPI Data
   const kpis = [
     {
