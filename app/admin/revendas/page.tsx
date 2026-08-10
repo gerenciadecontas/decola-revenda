@@ -42,12 +42,16 @@ export default function AdminRevendasPage() {
         supabase.from('profiles').select('*').eq('role', 'gestor').order('full_name'),
       ]);
 
+      if (revendasRes.error) throw revendasRes.error;
+      if (trilhasRes.error) throw trilhasRes.error;
+      if (gestoresRes.error) throw gestoresRes.error;
+
       setRevendas(revendasRes.data || []);
       setTrilhas(trilhasRes.data || []);
       setGestores(gestoresRes.data || []);
     } catch (err: any) {
       console.error('Erro ao carregar dados:', err);
-      alert('Erro ao carregar dados');
+      alert('Erro ao carregar dados: ' + (err.message || 'Tente novamente'));
     } finally {
       setLoading(false);
     }

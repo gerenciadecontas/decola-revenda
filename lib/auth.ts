@@ -16,13 +16,22 @@ export async function getUserProfile() {
     return null;
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  try {
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
 
-  return profile;
+    if (error) {
+      console.error('Erro ao buscar profile:', error);
+      return null;
+    }
+    return profile;
+  } catch (err) {
+    console.error('Erro inesperado em getUserProfile:', err);
+    return null;
+  }
 }
 
 export async function isAdmin() {

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Plataforma de monitoramento de treinamentos para revendas",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="pt-BR"

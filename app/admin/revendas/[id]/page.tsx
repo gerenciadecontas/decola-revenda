@@ -42,22 +42,28 @@ export default function AdminRevendaDetailPage() {
       setRevenda(revendaData);
 
       // Load dias and temas
-      const { data: diasData } = await supabase
+      const { data: diasData, error: diasError } = await supabase
         .from('dias')
         .select('*')
         .eq('trilha_id', revendaData.trilha_id)
         .order('numero');
 
-      const { data: temasData } = await supabase
+      if (diasError) throw diasError;
+
+      const { data: temasData, error: temasError } = await supabase
         .from('temas')
         .select('*')
-        .in('dia_id', diasData?.map((d) => d.id) || []);
+        .in('dia_id', diasData?.map((d) => d.id) ?? []);
+
+      if (temasError) throw temasError;
 
       // Load progresso
-      const { data: progressoData } = await supabase
+      const { data: progressoData, error: progressoError } = await supabase
         .from('progresso')
         .select('*')
         .eq('revenda_id', revendaId);
+
+      if (progressoError) throw progressoError;
 
       setDias(diasData || []);
       setTemas(temasData || []);
