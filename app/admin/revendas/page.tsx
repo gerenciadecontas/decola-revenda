@@ -15,12 +15,18 @@ export default function AdminRevendasPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    nome: string;
+    cnpj: string;
+    trilha_id: string;
+    gestor_responsavel_id: string;
+    status: 'ativa' | 'pausada' | 'concluida';
+  }>({
     nome: '',
     cnpj: '',
     trilha_id: '',
     gestor_responsavel_id: '',
-    status: 'ativa' as const,
+    status: 'ativa',
   });
 
   useEffect(() => {
