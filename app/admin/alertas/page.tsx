@@ -36,7 +36,7 @@ export default function AlertasPage() {
     descricao: '',
     prioridade: 'media',
   });
-  const [filterStatus, setFilterStatus] = useState<'todos' | 'ativos' | 'lidos' | 'resolvidos'>('ativos');
+  const [filterStatus, setFilterStatus] = useState<'todos' | 'ativo' | 'lido' | 'resolvido'>('ativo');
 
   useEffect(() => {
     const saved = localStorage.getItem('alertas-list');
@@ -213,10 +213,10 @@ export default function AlertasPage() {
 
         {/* Filtros */}
         <div style={{ display: 'flex', gap: '8px' }}>
-          {(['todos', 'ativos', 'lidos', 'resolvidos'] as const).map(status => (
+          {(['todos', 'ativo', 'lido', 'resolvido'] as const).map(status => (
             <button
               key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => setFilterStatus(status as any)}
               style={{
                 padding: '8px 16px',
                 borderRadius: '8px',
@@ -228,7 +228,7 @@ export default function AlertasPage() {
                 cursor: 'pointer',
               }}
             >
-              {status === 'todos' ? 'Todos' : status === 'ativos' ? 'Ativos' : status === 'lidos' ? 'Lidos' : 'Resolvidos'}
+              {status === 'todos' ? 'Todos' : status === 'ativo' ? 'Ativos' : status === 'lido' ? 'Lidos' : 'Resolvidos'}
             </button>
           ))}
         </div>
