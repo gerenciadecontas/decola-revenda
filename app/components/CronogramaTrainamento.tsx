@@ -107,7 +107,6 @@ export function CronogramaTrainamento() {
 
       <p className="text-gray-600 mb-6">{roleDescriptions[userRole]}</p>
 
-      <div className="max-w-6xl mx-auto">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-200">
         {(['lcweb', 'lcerp', 'produtos'] as const).map((tab) => (
