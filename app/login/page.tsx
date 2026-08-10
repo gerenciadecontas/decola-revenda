@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { RoleToggle } from '../components/RoleToggle';
 
 const mockRevendas = [
   {
@@ -72,8 +73,19 @@ const mockTreinamentoDiario = [
 ];
 
 export default function LoginPage() {
-  const [view, setView] = useState<'admin' | 'gestor'>('admin');
+  const [view, setViewState] = useState<'admin' | 'gestor' | null>(null);
   const [subView, setSubView] = useState<'dashboard' | 'treinamento-diario'>('dashboard');
+
+  useEffect(() => {
+    // Carrega a preferência do localStorage
+    const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
+    setViewState(savedRole || 'admin');
+  }, []);
+
+  const setView = (role: 'admin' | 'gestor') => {
+    setViewState(role);
+    localStorage.setItem('userRole', role);
+  };
 
   const revendas = view === 'admin' ? mockRevendas : mockRevendasGestor;
 
@@ -91,6 +103,10 @@ export default function LoginPage() {
     quemRealizou: 'Maria Santos',
   };
 
+  if (view === null) {
+    return null; // Não renderiza até carregar do localStorage
+  }
+
   return (
     <div className="min-h-screen bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -106,28 +122,7 @@ export default function LoginPage() {
                 : 'Revendas atribuídas a você'}
             </p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setView('admin')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                view === 'admin'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-800 border border-slate-700 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              👨‍💼 Admin
-            </button>
-            <button
-              onClick={() => setView('gestor')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                view === 'gestor'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-800 border border-slate-700 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              👤 Gestor
-            </button>
-          </div>
+          {view && <RoleToggle role={view} onRoleChange={setView} />
         </div>
 
         {/* Sub Views Tabs */}
