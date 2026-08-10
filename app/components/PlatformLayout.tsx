@@ -29,7 +29,6 @@ const allMenuItems = [
   { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor'] },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes', roles: ['gestor', 'agente-canal'] },
   { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos', roles: ['gestor', 'agente-canal'] },
-  { id: 'servicos', label: 'Serviços Adicionais', icon: Zap, href: '/platform/servicos', roles: ['gestor', 'agente-canal'] },
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor'] },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes', roles: ['gestor'] },
   { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias', roles: ['gestor'] },

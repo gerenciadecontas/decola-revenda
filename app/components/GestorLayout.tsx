@@ -26,7 +26,6 @@ const allMenuItems = [
   { id: 'revendas', label: 'Revendas', icon: Building2, href: '/admin/revendas' },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/admin/implantacoes' },
   { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/admin/treinamentos' },
-  { id: 'servicos', label: 'Serviços Adicionais', icon: Zap, href: '/admin/servicos' },
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/admin/agenda' },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/admin/agentes' },
   { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/admin/pendencias' },

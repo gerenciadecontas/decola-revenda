@@ -34,13 +34,13 @@ const treinamentos = {
     { day: 3, title: 'Estoque e Gestão', desc: 'Registrar entradas de estoque, acompanhar o dashboard', temas: 4, screens: ['Estoque/Entrada', 'Sistema/Dashboard', 'Sistema/Multiempresa', 'Configuração/PDV'] },
     { day: 4, title: 'Fiscal', desc: 'Emitir e transmitir documentos fiscais e obrigações acessórias', temas: 7, screens: ['Fiscal/NF-e', 'Fiscal/NFC-e', 'Fiscal/MD-e', 'Fiscal/MDF-e', 'Fiscal/CT-e', 'Fiscal/Sintegra', 'Fiscal/Sped'] },
   ],
-  produtos: [
+  servicos: [
     { day: 1, title: 'Portfólio de Produtos LC', desc: 'Conhecer os produtos e integrações do ecossistema LC', temas: 8, screens: ['Produto/LC Pay', 'Produto/LC Força de Vendas', 'Produto/LC Gourmet', 'Produto/LC Balcão', 'Produto/LC Dashboard', 'Produto/LC Coletor de Dados', 'Produto/Smart TEF', 'Produto/Imendes'] },
   ],
 };
 
 export default function TreinamentosPage() {
-  const [activeTab, setActiveTab] = useState<'lcweb' | 'lcerp' | 'produtos'>('lcweb');
+  const [activeTab, setActiveTab] = useState<'lcweb' | 'lcerp' | 'servicos'>('lcweb');
   const [expandedDay, setExpandedDay] = useState(1);
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
@@ -87,7 +87,7 @@ export default function TreinamentosPage() {
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '30px' }}>
-          {(['lcweb', 'lcerp', 'produtos'] as const).map((tab) => (
+          {(['lcweb', 'lcerp', 'servicos'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => { setActiveTab(tab); setExpandedDay(1); }}
@@ -103,7 +103,7 @@ export default function TreinamentosPage() {
                 transition: 'all 0.2s',
               }}
             >
-              {tab === 'lcweb' ? 'LC WEB' : tab === 'lcerp' ? 'LC ERP Desktop' : 'Produtos'}
+              {tab === 'lcweb' ? 'LC WEB' : tab === 'lcerp' ? 'LC ERP Desktop' : 'Serviços Adicionais'}
             </button>
           ))}
         </div>
