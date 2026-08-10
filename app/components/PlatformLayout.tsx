@@ -50,15 +50,15 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
   useEffect(() => {
     const savedRole = localStorage.getItem('platformRole') as UserRole | null;
-    setUserRoleState(savedRole || 'gestor');
+    if (savedRole) {
+      setUserRoleState(savedRole);
+    }
   }, []);
 
   const setUserRole = (role: UserRole) => {
     setUserRoleState(role);
     localStorage.setItem('platformRole', role);
   };
-
-  if (userRole === null) return null;
 
   return (
     <div className="flex h-screen" style={{ background: '#0E1013', fontFamily: '"DM Sans", system-ui, sans-serif' }}>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import {
   BarChart,
@@ -31,14 +30,6 @@ const COLORS = {
 };
 
 export default function DashboardPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   // KPI Data
   const kpis = [
     {
