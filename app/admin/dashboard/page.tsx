@@ -1,8 +1,15 @@
+import { redirect } from 'next/navigation';
+import { getUserProfile } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 
 export default async function AdminDashboardPage() {
-  // Temporário: desabilitada autenticação para exploração
+  const profile = await getUserProfile();
+
+  if (!profile || profile.role !== 'admin') {
+    redirect('/login');
+  }
+
   const supabase = await createClient();
 
   // Get all revendas with related data
