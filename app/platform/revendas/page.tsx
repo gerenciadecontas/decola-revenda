@@ -55,15 +55,6 @@ export default function RevendasPage() {
     const saved = localStorage.getItem('revendas-list');
     if (saved) {
       setRevendas(JSON.parse(saved));
-    } else {
-      const defaultRevendas: Revenda[] = [
-        { id: '1', nome: 'Auto Nova Peças', cidade: 'São Paulo', status: 'em-implantacao', ultimoContato: new Date().toISOString().split('T')[0], responsavel: 'Ana Prado' },
-        { id: '2', nome: 'MGX Automação', cidade: 'Belo Horizonte', status: 'ativa', ultimoContato: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], responsavel: 'Diego Souza' },
-        { id: '3', nome: 'TecCampo', cidade: 'Curitiba', status: 'em-implantacao', ultimoContato: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], responsavel: 'Bruno Lima' },
-        { id: '4', nome: 'Elétrica Pro', cidade: 'Rio de Janeiro', status: 'ativa', ultimoContato: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], responsavel: 'Carla Dias' },
-      ];
-      setRevendas(defaultRevendas);
-      localStorage.setItem('revendas-list', JSON.stringify(defaultRevendas));
     }
   }, []);
 
