@@ -14,6 +14,7 @@ import {
   X,
   History,
   Zap,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface GestorLayoutProps {
@@ -26,9 +27,9 @@ const allMenuItems = [
   { id: 'revendas', label: 'Revendas', icon: Building2, href: '/admin/revendas' },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/admin/implantacoes' },
   { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/admin/treinamentos' },
+  { id: 'pendencias', label: 'Pendências', icon: CheckCircle2, href: '/admin/pendencias' },
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/admin/agenda' },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/admin/agentes' },
-  { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/admin/pendencias' },
   { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/admin/alertas' },
   { id: 'historico', label: 'Histórico', icon: History, href: '/admin/historico' },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/admin/relatorios' },

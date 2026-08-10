@@ -15,6 +15,7 @@ import {
   X,
   History,
   Zap,
+  CheckCircle2,
 } from 'lucide-react';
 
 type UserRole = 'gestor' | 'agente-canal';
@@ -29,9 +30,9 @@ const allMenuItems = [
   { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor'] },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes', roles: ['gestor', 'agente-canal'] },
   { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos', roles: ['gestor', 'agente-canal'] },
+  { id: 'pendencias', label: 'Pendências', icon: CheckCircle2, href: '/platform/pendencias', roles: ['gestor', 'agente-canal'] },
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor'] },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes', roles: ['gestor'] },
-  { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias', roles: ['gestor'] },
   { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas', roles: ['gestor'] },
   { id: 'historico', label: 'Histórico', icon: History, href: '/platform/historico', roles: ['gestor'] },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios', roles: ['gestor'] },

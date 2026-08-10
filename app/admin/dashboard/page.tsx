@@ -36,13 +36,14 @@ export default function AdminDashboardPage() {
     }
   }, []);
 
-  const pendenciasAbertas = pendencias.filter(p => p.status === 'aberta');
-  const pendenciasCriticas = pendenciasAbertas.filter(p => p.nivel === 'critica');
+  const hoje = new Date().toISOString().split('T')[0];
+  const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
+  const pendenciasCriticas = pendenciasHoje.filter(p => p.nivel === 'critica');
   const kpis = [
     { label: 'Revendas em implantação', value: '4', icon: '◉', accent: COLORS.purple, deltaTag: '+2', hint: 'esta semana' },
     { label: 'Implantações concluídas', value: '2', icon: '✓', accent: COLORS.green, deltaTag: 'Este mês', hint: 'meta 5' },
     { label: 'Treinamentos hoje', value: '0', icon: '▷', accent: COLORS.yellow, deltaTag: '3', hint: 'programados na semana' },
-    { label: 'Pendências abertas', value: pendenciasAbertas.length.toString(), icon: '!', accent: COLORS.red, deltaTag: `${pendenciasCriticas.length} críticas`, hint: 'requerem ação' },
+    { label: 'Pendências de hoje', value: pendenciasHoje.length.toString(), icon: '!', accent: COLORS.red, deltaTag: `${pendenciasCriticas.length} críticas`, hint: 'requerem ação' },
   ];
 
   const secondary = [

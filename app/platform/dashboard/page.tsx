@@ -44,8 +44,9 @@ export default function DashboardPage() {
     return diff;
   };
 
-  // Pendências abertas (carregadas do localStorage)
-  const pendenciasAbertas = pendencias.filter(p => p.status === 'aberta');
+  // Pendências de hoje (carregadas do localStorage)
+  const hoje = new Date().toISOString().split('T')[0];
+  const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
 
   const trainingsToday = [
     { time: '10:00', title: 'LC WEB - Cadastro de Produtos', revenda: 'Auto Nova Peças' },
@@ -160,14 +161,14 @@ export default function DashboardPage() {
               <div style={{ fontSize: '24px' }}>⚠️</div>
               <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Pendências Críticas</h3>
               <div style={{ background: COLORS.red, color: '#fff', fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
-                {pendenciasAbertas.filter(p => p.nivel === 'critica').length}
+                {pendenciasHoje.filter(p => p.nivel === 'critica').length}
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {pendenciasAbertas.filter(p => p.nivel === 'critica').length === 0 ? (
+              {pendenciasHoje.filter(p => p.nivel === 'critica').length === 0 ? (
                 <div style={{ fontSize: '12px', color: COLORS.textSecondary }}>Nenhuma pendência crítica no momento</div>
               ) : (
-                pendenciasAbertas.filter(p => p.nivel === 'critica').map((p, i) => (
+                pendenciasHoje.filter(p => p.nivel === 'critica').map((p, i) => (
                   <div key={i} style={{ background: 'rgba(248,113,113,0.08)', padding: '10px', borderRadius: '8px', borderLeft: `3px solid ${COLORS.red}` }}>
                     <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
                     <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.descricao}</div>
@@ -188,10 +189,10 @@ export default function DashboardPage() {
           <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 14px 0' }}>Pendências para Resolver</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {pendenciasAbertas.length === 0 ? (
+              {pendenciasHoje.length === 0 ? (
                 <div style={{ fontSize: '12px', color: COLORS.textSecondary }}>Nenhuma pendência aberta</div>
               ) : (
-                pendenciasAbertas.map((p, i) => (
+                pendenciasHoje.map((p, i) => (
                   <div key={i} style={{ padding: '12px', background: p.nivel === 'critica' ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', borderRadius: '10px', borderLeft: `3px solid ${p.nivel === 'critica' ? COLORS.red : COLORS.yellow}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                       <div>
