@@ -108,36 +108,6 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
           </button>
         </div>
 
-        {/* Role Toggle */}
-        <div className={`px-4 py-4 ${sidebarOpen ? '' : 'px-2'}`} style={{ borderTop: '1px solid #23262C' }}>
-          <div className={`flex flex-col gap-2 ${sidebarOpen ? '' : 'items-center'}`}>
-            <button
-              onClick={() => setUserRole('gestor')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${sidebarOpen ? '' : 'px-2 text-center'}`}
-              style={{
-                background: userRole === 'gestor' ? '#8B5CF6' : '#1E2127',
-                color: userRole === 'gestor' ? '#fff' : '#9AA1AA',
-                border: userRole === 'gestor' ? 'none' : '1px solid #262A31'
-              }}
-              title="Gestor"
-            >
-              {sidebarOpen ? '👨‍💼 Gestor' : '👨'}
-            </button>
-            <button
-              onClick={() => setUserRole('agente-canal')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${sidebarOpen ? '' : 'px-2 text-center'}`}
-              style={{
-                background: userRole === 'agente-canal' ? '#8B5CF6' : '#1E2127',
-                color: userRole === 'agente-canal' ? '#fff' : '#9AA1AA',
-                border: userRole === 'agente-canal' ? 'none' : '1px solid #262A31'
-              }}
-              title="Agente de Canal"
-            >
-              {sidebarOpen ? '🚀 Agente' : '🚀'}
-            </button>
-          </div>
-        </div>
-
         {/* Menu */}
         <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
           {getMenuItems(userRole).map((item) => {
