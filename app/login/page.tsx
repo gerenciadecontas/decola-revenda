@@ -122,7 +122,7 @@ export default function LoginPage() {
                 : 'Revendas atribuídas a você'}
             </p>
           </div>
-          {view && <RoleToggle role={view} onRoleChange={setView} />}
+          {view ? <RoleToggle role={view} onRoleChange={setView} /> : null}
         </div>
 
         {/* Sub Views Tabs */}
