@@ -1,7 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+// TODO: Habilitar quando Supabase estiver conectado corretamente
+export async function middleware_disabled(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
