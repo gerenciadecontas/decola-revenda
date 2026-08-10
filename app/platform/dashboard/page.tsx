@@ -34,9 +34,19 @@ interface Implantacao {
   status: 'em-andamento' | 'concluida';
 }
 
+interface Compromisso {
+  id: string;
+  titulo: string;
+  data: string;
+  hora: string;
+  tipo: 'treinamento' | 'reuniao' | 'visita' | 'outro';
+  descricao: string;
+}
+
 export default function DashboardPage() {
   const [pendencias, setPendencias] = useState<Pendencia[]>([]);
   const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
+  const [compromissos, setCompromisos] = useState<Compromisso[]>([]);
 
   // Carregar dados do localStorage
   useEffect(() => {
@@ -48,6 +58,11 @@ export default function DashboardPage() {
     const savedImplantacoes = localStorage.getItem('implantacoes-list');
     if (savedImplantacoes) {
       setImplantacoes(JSON.parse(savedImplantacoes));
+    }
+
+    const savedCompromisos = localStorage.getItem('agenda-list');
+    if (savedCompromisos) {
+      setCompromisos(JSON.parse(savedCompromisos));
     }
   }, []);
 
@@ -97,13 +112,40 @@ export default function DashboardPage() {
     { activity: 'Implementação de relatórios customizados', revenda: 'Elétrica Pro', daysLate: 5 },
   ];
 
-  const weekAgenda = [
-    { day: 'Segunda', date: '11 Ago', items: ['10:00 - Treinamento LC WEB', '15:00 - Reunião MGX'] },
-    { day: 'Terça', date: '12 Ago', items: ['14:00 - Treinamento Financeiro'] },
-    { day: 'Quarta', date: '13 Ago', items: ['Sem compromissos'] },
-    { day: 'Quinta', date: '14 Ago', items: ['09:30 - Treinamento TecCampo', '16:00 - Acompanhamento'] },
-    { day: 'Sexta', date: '15 Ago', items: ['14:00 - Reunião de Resultados'] },
-  ];
+  const getDiasProximos = () => {
+    const dias = [];
+    const dataHoje = new Date();
+    for (let i = 0; i < 7; i++) {
+      const data = new Date(dataHoje);
+      data.setDate(data.getDate() + i);
+      dias.push(data.toISOString().split('T')[0]);
+    }
+    return dias;
+  };
+
+  const getNomeDia = (dataStr: string) => {
+    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const data = new Date(dataStr + 'T00:00:00');
+    return nomes[data.getDay()];
+  };
+
+  const formatData = (dataStr: string) => {
+    return new Date(dataStr + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  };
+
+  const diasProximos = getDiasProximos();
+  const weekAgenda = diasProximos.map(dia => {
+    const compromissosDia = compromissos.filter(c => c.data === dia).sort((a, b) => a.hora.localeCompare(b.hora));
+    const items = compromissosDia.length === 0
+      ? ['Sem compromissos']
+      : compromissosDia.map(c => `${c.hora} - ${c.titulo}`);
+
+    return {
+      day: getNomeDia(dia),
+      date: formatData(dia),
+      items,
+    };
+  });
 
   return (
     <PlatformLayout currentPage="dashboard">
