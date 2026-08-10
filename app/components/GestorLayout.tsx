@@ -30,8 +30,6 @@ const allMenuItems = [
   { id: 'pendencias', label: 'Pendências', icon: CheckCircle2, href: '/admin/pendencias' },
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/admin/agenda' },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/admin/agentes' },
-  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/admin/alertas' },
-  { id: 'historico', label: 'Histórico', icon: History, href: '/admin/historico' },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/admin/relatorios' },
   { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/admin/configuracoes' },
 ];
