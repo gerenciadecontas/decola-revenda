@@ -34,9 +34,28 @@ interface Implantacao {
   status: 'em-andamento' | 'concluida';
 }
 
+interface Revenda {
+  id: string;
+  nome: string;
+  cidade: string;
+  status: 'ativa' | 'em-implantacao' | 'inativa';
+  ultimoContato: string;
+  responsavel: string;
+}
+
+interface Treinamento {
+  id: string;
+  titulo: string;
+  descricao: string;
+  data: string;
+  completo: boolean;
+}
+
 export default function AdminDashboardPage() {
   const [pendencias, setPendencias] = useState<Pendencia[]>([]);
   const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
+  const [revendas, setRevendas] = useState<Revenda[]>([]);
+  const [treinamentos, setTreinamentos] = useState<Treinamento[]>([]);
 
   // Carregar dados do localStorage
   useEffect(() => {
@@ -49,12 +68,38 @@ export default function AdminDashboardPage() {
     if (savedImplantacoes) {
       setImplantacoes(JSON.parse(savedImplantacoes));
     }
+
+    const savedRevendas = localStorage.getItem('revendas-list');
+    if (savedRevendas) {
+      setRevendas(JSON.parse(savedRevendas));
+    }
+
+    const savedTreinamentos = localStorage.getItem('treinamentos-list');
+    if (savedTreinamentos) {
+      setTreinamentos(JSON.parse(savedTreinamentos));
+    }
   }, []);
 
   const hoje = new Date().toISOString().split('T')[0];
   const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
   const pendenciasCriticas = pendenciasHoje.filter(p => p.nivel === 'critica');
   const implantacoesEmAndamento = implantacoes.filter(i => i.status === 'em-andamento');
+
+  // Calcular funil de implantação
+  const totalRevendas = revendas.length;
+  const revendasEmImplantacao = revendas.filter(r => r.status === 'em-implantacao').length;
+  const revendasComTreinamento = treinamentos.length;
+  const treinamentosCompletos = treinamentos.filter(t => t.completo).length;
+  const implantacoesCompletas = implantacoes.filter(i => i.status === 'concluida').length;
+
+  const funnelData = [
+    { label: 'Revendas cadastradas', value: totalRevendas, pct: 100 },
+    { label: 'Iniciaram implantação', value: revendasEmImplantacao, pct: totalRevendas > 0 ? Math.round((revendasEmImplantacao / totalRevendas) * 100) : 0 },
+    { label: 'Estão em treinamento', value: revendasComTreinamento, pct: totalRevendas > 0 ? Math.round((revendasComTreinamento / totalRevendas) * 100) : 0 },
+    { label: 'Concluíram treinamentos', value: treinamentosCompletos, pct: totalRevendas > 0 ? Math.round((treinamentosCompletos / totalRevendas) * 100) : 0 },
+    { label: 'Concluíram implantação', value: implantacoesCompletas, pct: totalRevendas > 0 ? Math.round((implantacoesCompletas / totalRevendas) * 100) : 0 },
+  ];
+
   const kpis = [
     { label: 'Revendas em implantação', value: implantacoesEmAndamento.length.toString(), icon: '◉', accent: COLORS.purple, deltaTag: 'em andamento', hint: '' },
     { label: 'Implantações concluídas', value: implantacoes.filter(i => i.status === 'concluida').length.toString(), icon: '✓', accent: COLORS.green, deltaTag: 'finalizadas', hint: '' },
@@ -94,6 +139,38 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Funil de Implantação */}
+      <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '24px' }}>
+        <h3 style={{ fontSize: '17px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 22px 0' }}>Funil de Implantação</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {funnelData.map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ minWidth: '140px' }}>
+                <div style={{ fontSize: '13px', color: COLORS.textSecondary, marginBottom: '6px' }}>{item.label}</div>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: COLORS.textPrimary }}>{item.value}</div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ height: '32px', borderRadius: '8px', background: COLORS.borderColor, overflow: 'hidden', flex: 1, position: 'relative' }}>
+                    <div style={{
+                      height: '100%',
+                      borderRadius: '8px',
+                      width: `${item.pct}%`,
+                      background: i === 0 ? COLORS.purple : i === 1 ? COLORS.yellow : i === 2 ? COLORS.purple : i === 3 ? COLORS.green : COLORS.green,
+                      transition: 'width 0.3s ease'
+                    }} />
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: COLORS.textSecondary, minWidth: '45px', textAlign: 'right' }}>{item.pct}%</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '18px', padding: '14px', background: 'rgba(139,92,246,0.08)', borderRadius: '8px', fontSize: '13px', color: COLORS.textSecondary }}>
+          💡 Isso permite identificar onde as revendas estão ficando presas. Se muitas ficam entre treinamento e conclusão, pode haver um problema nessa etapa.
+        </div>
       </div>
 
       {/* Secondary KPIs */}
