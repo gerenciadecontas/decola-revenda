@@ -25,14 +25,29 @@ interface Pendencia {
   dataAbertura: string;
 }
 
+interface Implantacao {
+  id: string;
+  revenda: string;
+  etapa: 'kickoff' | 'configuracao' | 'testes' | 'golive';
+  progresso: number;
+  dataPrevista: string;
+  status: 'em-andamento' | 'concluida';
+}
+
 export default function DashboardPage() {
   const [pendencias, setPendencias] = useState<Pendencia[]>([]);
+  const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
 
-  // Carregar pendências do localStorage
+  // Carregar dados do localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('pendencias-list');
-    if (saved) {
-      setPendencias(JSON.parse(saved));
+    const savedPendencias = localStorage.getItem('pendencias-list');
+    if (savedPendencias) {
+      setPendencias(JSON.parse(savedPendencias));
+    }
+
+    const savedImplantacoes = localStorage.getItem('implantacoes-list');
+    if (savedImplantacoes) {
+      setImplantacoes(JSON.parse(savedImplantacoes));
     }
   }, []);
 
@@ -44,9 +59,10 @@ export default function DashboardPage() {
     return diff;
   };
 
-  // Pendências de hoje (carregadas do localStorage)
+  // Dados de hoje
   const hoje = new Date().toISOString().split('T')[0];
   const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
+  const implantacoesHoje = implantacoes.filter(i => i.status === 'em-andamento' && i.dataPrevista === hoje);
 
   const trainingsToday = [
     { time: '10:00', title: 'LC WEB - Cadastro de Produtos', revenda: 'Auto Nova Peças' },
@@ -134,19 +150,19 @@ export default function DashboardPage() {
               <div style={{ fontSize: '24px' }}>🚀</div>
               <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Implantações Hoje</h3>
               <div style={{ background: COLORS.green, color: COLORS.darkBg, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
-                {deploymentsToday.length}
+                {implantacoesHoje.length}
               </div>
             </div>
-            {deploymentsToday.length > 0 ? (
+            {implantacoesHoje.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {deploymentsToday.map((dep, i) => (
+                {implantacoesHoje.map((impl, i) => (
                   <div key={i}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{dep.revenda}</div>
-                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{dep.stage}</div>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.revenda}</div>
+                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{impl.etapa.charAt(0).toUpperCase() + impl.etapa.slice(1)}</div>
                     <div style={{ height: '5px', borderRadius: '4px', background: COLORS.borderColor, marginTop: '8px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', background: COLORS.green, width: `${dep.progress}%` }} />
+                      <div style={{ height: '100%', background: COLORS.green, width: `${impl.progresso}%` }} />
                     </div>
-                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>{dep.progress}% concluído</div>
+                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>{impl.progresso}% concluído</div>
                   </div>
                 ))}
               </div>

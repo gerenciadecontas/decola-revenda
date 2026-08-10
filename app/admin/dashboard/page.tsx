@@ -25,23 +25,39 @@ interface Pendencia {
   dataAbertura: string;
 }
 
+interface Implantacao {
+  id: string;
+  revenda: string;
+  etapa: 'kickoff' | 'configuracao' | 'testes' | 'golive';
+  progresso: number;
+  dataPrevista: string;
+  status: 'em-andamento' | 'concluida';
+}
+
 export default function AdminDashboardPage() {
   const [pendencias, setPendencias] = useState<Pendencia[]>([]);
+  const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
 
-  // Carregar pendências do localStorage
+  // Carregar dados do localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('pendencias-list');
-    if (saved) {
-      setPendencias(JSON.parse(saved));
+    const savedPendencias = localStorage.getItem('pendencias-list');
+    if (savedPendencias) {
+      setPendencias(JSON.parse(savedPendencias));
+    }
+
+    const savedImplantacoes = localStorage.getItem('implantacoes-list');
+    if (savedImplantacoes) {
+      setImplantacoes(JSON.parse(savedImplantacoes));
     }
   }, []);
 
   const hoje = new Date().toISOString().split('T')[0];
   const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
   const pendenciasCriticas = pendenciasHoje.filter(p => p.nivel === 'critica');
+  const implantacoesEmAndamento = implantacoes.filter(i => i.status === 'em-andamento');
   const kpis = [
-    { label: 'Revendas em implantação', value: '4', icon: '◉', accent: COLORS.purple, deltaTag: '+2', hint: 'esta semana' },
-    { label: 'Implantações concluídas', value: '2', icon: '✓', accent: COLORS.green, deltaTag: 'Este mês', hint: 'meta 5' },
+    { label: 'Revendas em implantação', value: implantacoesEmAndamento.length.toString(), icon: '◉', accent: COLORS.purple, deltaTag: 'em andamento', hint: '' },
+    { label: 'Implantações concluídas', value: implantacoes.filter(i => i.status === 'concluida').length.toString(), icon: '✓', accent: COLORS.green, deltaTag: 'finalizadas', hint: '' },
     { label: 'Treinamentos hoje', value: '0', icon: '▷', accent: COLORS.yellow, deltaTag: '3', hint: 'programados na semana' },
     { label: 'Pendências de hoje', value: pendenciasHoje.length.toString(), icon: '!', accent: COLORS.red, deltaTag: `${pendenciasCriticas.length} críticas`, hint: 'requerem ação' },
   ];
