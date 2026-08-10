@@ -15,7 +15,7 @@ export default function DashboardPage() {
     } else {
       router.push('/gestor/revendas');
     }
-  }, [router]);
+  }, []);
 
   return null;
 }
