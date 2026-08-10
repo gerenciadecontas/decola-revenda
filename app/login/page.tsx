@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useRole } from '../context/RoleContext';
 import { RoleToggle } from '../components/RoleToggle';
 
 const mockRevendas = [
@@ -73,19 +74,8 @@ const mockTreinamentoDiario = [
 ];
 
 export default function LoginPage() {
-  const [view, setViewState] = useState<'admin' | 'gestor' | null>(null);
+  const { role: view, setRole: setView } = useRole();
   const [subView, setSubView] = useState<'dashboard' | 'treinamento-diario'>('dashboard');
-
-  useEffect(() => {
-    // Carrega a preferência do localStorage
-    const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
-    setViewState(savedRole || 'admin');
-  }, []);
-
-  const setView = (role: 'admin' | 'gestor') => {
-    setViewState(role);
-    localStorage.setItem('userRole', role);
-  };
 
   const revendas = view === 'admin' ? mockRevendas : mockRevendasGestor;
 
@@ -103,10 +93,6 @@ export default function LoginPage() {
     quemRealizou: 'Maria Santos',
   };
 
-  if (view === null) {
-    return null; // Não renderiza até carregar do localStorage
-  }
-
   return (
     <div className="min-h-screen bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -122,7 +108,7 @@ export default function LoginPage() {
                 : 'Revendas atribuídas a você'}
             </p>
           </div>
-          {view ? <RoleToggle role={view} onRoleChange={setView} /> : null}
+          <RoleToggle role={view} onRoleChange={setView} />
         </div>
 
         {/* Sub Views Tabs */}
