@@ -3,6 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+const COLORS = {
+  purple: '#8B5CF6',
+  darkBg: '#0E1013',
+  cardBg: '#16181D',
+  borderColor: '#23262C',
+  textPrimary: '#E8EAED',
+  textSecondary: '#9AA1AA',
+};
+
 export default function HomePage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -13,26 +22,92 @@ export default function HomePage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <p className="text-white">Inicializando...</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: COLORS.darkBg }}>
+        <p style={{ color: COLORS.textPrimary }}>Inicializando...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 gap-4">
-      <p className="text-white text-2xl font-bold">Decola Revenda</p>
-      <p className="text-gray-400">Escolha seu papel:</p>
-      <div className="flex gap-4">
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: COLORS.darkBg, gap: '40px', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
+      `}</style>
+
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          width: '64px',
+          height: '64px',
+          borderRadius: '16px',
+          background: `linear-gradient(150deg, ${COLORS.purple}, #6D28D9)`,
+          display: 'grid',
+          placeItems: 'center',
+          fontFamily: '"Sora", sans-serif',
+          fontWeight: 700,
+          color: '#fff',
+          fontSize: '32px',
+          marginBottom: '16px',
+          margin: '0 auto 16px'
+        }}>
+          D
+        </div>
+        <h1 style={{ fontSize: '40px', fontWeight: 700, color: COLORS.textPrimary, margin: '0', letterSpacing: '-0.02em' }}>
+          Decola Revenda
+        </h1>
+      </div>
+
+      <div style={{ display: 'flex', gap: '16px' }}>
         <button
           onClick={() => router.push('/admin/dashboard')}
-          className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          style={{
+            padding: '16px 32px',
+            background: COLORS.purple,
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#7C3AED';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = COLORS.purple;
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
         >
           👨‍💼 Gestor
         </button>
         <button
           onClick={() => router.push('/platform/dashboard')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          style={{
+            padding: '16px 32px',
+            background: COLORS.purple,
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#7C3AED';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = COLORS.purple;
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
         >
           🚀 Agente de Canal
         </button>
