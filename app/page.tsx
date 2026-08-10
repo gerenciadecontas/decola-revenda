@@ -28,7 +28,7 @@ export default function HomePage() {
           onClick={() => router.push('/admin/dashboard')}
           className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
         >
-          👨‍💼 Admin
+          👨‍💼 Gestor
         </button>
         <button
           onClick={() => router.push('/platform/dashboard')}

@@ -1,5 +1,7 @@
 'use client';
 
+import { GestorLayout } from '@/app/components/GestorLayout';
+
 const COLORS = {
   purple: '#8B5CF6',
   yellow: '#FFC93C',
@@ -34,16 +36,10 @@ export default function AdminDashboardPage() {
     { ini: 'MG', name: 'MGX Automação', agent: 'Diego Souza', stage: 'Go-live', pct: '92%', color: COLORS.green, due: '4 dias' },
   ];
 
-  return (
-    <div style={{ background: COLORS.darkBg, color: COLORS.textPrimary, fontFamily: '"DM Sans", system-ui, sans-serif', minHeight: '100vh', padding: '30px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '8px' }}>Dashboard Admin</h1>
-        <p style={{ color: COLORS.textSecondary }}>Visão geral das implantações</p>
-      </div>
-
+  const content = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '30px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
         {kpis.map((k, i) => (
           <div key={i} style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -62,7 +58,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Secondary KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '30px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
         {secondary.map((s, i) => (
           <div key={i} style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px' }}>
             <div style={{ minWidth: 0 }}>
@@ -116,5 +112,11 @@ export default function AdminDashboardPage() {
         ))}
       </div>
     </div>
+  );
+
+  return (
+    <GestorLayout currentPage="dashboard">
+      {content}
+    </GestorLayout>
   );
 }
