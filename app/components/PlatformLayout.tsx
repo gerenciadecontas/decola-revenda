@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  History,
 } from 'lucide-react';
 
 type UserRole = 'gestor' | 'agente-canal';
@@ -31,6 +32,7 @@ const menuItems = [
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes' },
   { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias' },
   { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas' },
+  { id: 'historico', label: 'Histórico', icon: History, href: '/platform/historico' },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios' },
   { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes' },
 ];

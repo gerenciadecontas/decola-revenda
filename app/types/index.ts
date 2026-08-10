@@ -148,3 +148,21 @@ export interface Alert {
   createdAt: string;
   read: boolean;
 }
+
+export type ActivityActionType = 'criar' | 'atualizar' | 'concluir' | 'agendar' | 'cancelar' | 'reagendar' | 'marcar-comparecimento' | 'abrir-pendencia' | 'resolver-pendencia' | 'exportar' | 'importar' | 'atribuir';
+export type ActivityEntityType = 'revenda' | 'treinamento' | 'pendencia' | 'agente' | 'estágio' | 'sistema';
+
+export interface ActivityLog {
+  id: string;
+  action: ActivityActionType;
+  entityType: ActivityEntityType;
+  entityId: string;
+  entityName: string;
+  performedBy: Agent;
+  description: string;
+  details?: Record<string, any>;
+  relatedRevenda?: Revenda;
+  relatedTraining?: Training;
+  relatedPendency?: Pendency;
+  createdAt: string;
+}
