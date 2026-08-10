@@ -111,7 +111,7 @@ export default function AgendaPage() {
 
   return (
     <GestorLayout currentPage="agenda">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', maxWidth: '900px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', width: '100%' }}>
         {/* Header */}
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>
