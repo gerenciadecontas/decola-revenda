@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 const mockRevendas = [
   {
@@ -30,22 +33,61 @@ const mockRevendas = [
   },
 ];
 
+const mockRevendasGestor = [
+  mockRevendas[0],
+  mockRevendas[1],
+];
+
 export default function LoginPage() {
+  const [view, setView] = useState<'admin' | 'gestor'>('admin');
+
+  const revendas = view === 'admin' ? mockRevendas : mockRevendasGestor;
+
   const stats = {
-    totalRevendas: mockRevendas.length,
-    ativas: mockRevendas.filter((r) => r.status === 'ativa').length,
-    concluidas: mockRevendas.filter((r) => r.status === 'concluida').length,
+    totalRevendas: revendas.length,
+    ativas: revendas.filter((r) => r.status === 'ativa').length,
+    concluidas: revendas.filter((r) => r.status === 'concluida').length,
     mediaProgresso: Math.round(
-      mockRevendas.reduce((sum, r) => sum + r.percentual, 0) / mockRevendas.length
+      revendas.reduce((sum, r) => sum + r.percentual, 0) / revendas.length
     ),
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Dashboard de Monitoramento</h1>
-          <p className="text-gray-600 mt-2">Acompanhe o progresso de todas as revendas</p>
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              {view === 'admin' ? 'Dashboard Admin' : 'Minhas Revendas'}
+            </h1>
+            <p className="text-gray-600 mt-2">
+              {view === 'admin'
+                ? 'Acompanhe o progresso de todas as revendas'
+                : 'Revendas atribuídas a você'}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setView('admin')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                view === 'admin'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              👨‍💼 Admin
+            </button>
+            <button
+              onClick={() => setView('gestor')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                view === 'gestor'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              👤 Gestor
+            </button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -97,7 +139,7 @@ export default function LoginPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {mockRevendas.map((revenda) => (
+              {revendas.map((revenda) => (
                 <tr key={revenda.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 font-medium text-gray-900">{revenda.nome}</td>
                   <td className="px-6 py-4 text-sm text-gray-700">{revenda.trilha.nome}</td>
@@ -149,14 +191,16 @@ export default function LoginPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex gap-4">
-          <Link
-            href="/admin/revendas"
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
-          >
-            Gerenciar Revendas
-          </Link>
-        </div>
+        {view === 'admin' && (
+          <div className="mt-8 flex gap-4">
+            <Link
+              href="/admin/revendas"
+              className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+            >
+              Gerenciar Revendas
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
