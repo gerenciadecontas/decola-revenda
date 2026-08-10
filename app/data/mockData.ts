@@ -1,4 +1,4 @@
-import { Agent, Revenda, Training, Pendency, Stage } from '@/app/types';
+import { Agent, Revenda, Training, Pendency, Stage, Alert } from '@/app/types';
 
 // Agentes de Canal
 export const mockAgents: Agent[] = [
@@ -547,5 +547,96 @@ export const mockPendencies: Pendency[] = [
     openDate: '2024-01-12',
     dueDate: '2024-01-25',
     status: 'aberta',
+  },
+];
+
+// Alertas gerados automaticamente
+export const mockAlerts: Alert[] = [
+  {
+    id: '1',
+    type: 'revenda-sem-treinamento',
+    severity: 'critica',
+    title: 'Revenda sem treinamento há 12 dias',
+    description: 'Revenda Goiás está sem treinamentos há 12 dias. Agente: Carlos Costa',
+    relatedRevenda: mockRevendas[6],
+    relatedAgent: mockAgents[2],
+    createdAt: '2024-01-20T08:30:00Z',
+    read: false,
+  },
+  {
+    id: '2',
+    type: 'revenda-sem-treinamento',
+    severity: 'alta',
+    title: 'Revenda sem treinamento há 8 dias',
+    description: 'Revenda Paraná está sem treinamentos há 8 dias. Agente: Carlos Costa',
+    relatedRevenda: mockRevendas[4],
+    relatedAgent: mockAgents[2],
+    createdAt: '2024-01-20T08:15:00Z',
+    read: false,
+  },
+  {
+    id: '3',
+    type: 'revenda-atrasada',
+    severity: 'critica',
+    title: 'Revenda Goiás está atrasada',
+    description: 'Revenda Goiás passou da data estimada de conclusão (30/01/2024). Taxa de conclusão: 55%',
+    relatedRevenda: mockRevendas[6],
+    relatedAgent: mockAgents[2],
+    createdAt: '2024-01-20T07:45:00Z',
+    read: false,
+  },
+  {
+    id: '4',
+    type: 'pendencia-critica',
+    severity: 'critica',
+    title: 'Pendência crítica aberta: Bloqueando implantação',
+    description: 'Pendência crítica na Revenda Rio de Janeiro está aberta e bloqueando o progresso. Data vencimento: 18/01/2024',
+    relatedRevenda: mockRevendas[2],
+    relatedPendency: mockPendencies[5],
+    createdAt: '2024-01-20T06:00:00Z',
+    read: false,
+  },
+  {
+    id: '5',
+    type: 'pendencia-vencida',
+    severity: 'alta',
+    title: '2 pendências vencidas sem resolução',
+    description: 'Revenda Goiás tem 2 pendências vencidas: Emissão de nota fiscal (vencida em 20/01) e Problema na configuração de impostos',
+    relatedRevenda: mockRevendas[6],
+    relatedAgent: mockAgents[2],
+    createdAt: '2024-01-20T05:30:00Z',
+    read: false,
+  },
+  {
+    id: '6',
+    type: 'agente-sobrecarregado',
+    severity: 'media',
+    title: 'Agente Carlos Costa está sobrecarregado',
+    description: 'Carlos Costa tem 3 revendas atrasadas e 5 pendências abertas. Taxa de conclusão: 85%',
+    relatedAgent: mockAgents[2],
+    createdAt: '2024-01-20T04:00:00Z',
+    read: false,
+  },
+  {
+    id: '7',
+    type: 'revenda-sem-treinamento',
+    severity: 'media',
+    title: 'Revenda sem treinamento há 5 dias',
+    description: 'Revenda Distrito Federal está sem treinamentos há 5 dias. Agente: João Silva',
+    relatedRevenda: mockRevendas[9],
+    relatedAgent: mockAgents[0],
+    createdAt: '2024-01-20T03:15:00Z',
+    read: true,
+  },
+  {
+    id: '8',
+    type: 'treinamento-atrasado',
+    severity: 'alta',
+    title: 'Treinamento não comparecimento',
+    description: 'Revenda Goiás não compareceu ao treinamento de Cadastro de Produtos agendado para 10/01',
+    relatedRevenda: mockRevendas[6],
+    relatedTraining: mockTrainings[8],
+    createdAt: '2024-01-11T14:30:00Z',
+    read: true,
   },
 ];

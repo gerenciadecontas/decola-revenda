@@ -131,3 +131,20 @@ export interface FunnelData {
   stage: string;
   value: number;
 }
+
+export type AlertType = 'revenda-sem-treinamento' | 'treinamento-atrasado' | 'revenda-atrasada' | 'pendencia-critica' | 'pendencia-vencida' | 'agente-sobrecarregado' | 'taxa-conclusao-baixa';
+export type AlertSeverity = 'critica' | 'alta' | 'media' | 'baixa';
+
+export interface Alert {
+  id: string;
+  type: AlertType;
+  severity: AlertSeverity;
+  title: string;
+  description: string;
+  relatedRevenda?: Revenda;
+  relatedAgent?: Agent;
+  relatedTraining?: Training;
+  relatedPendency?: Pendency;
+  createdAt: string;
+  read: boolean;
+}

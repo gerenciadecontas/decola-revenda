@@ -30,6 +30,7 @@ const menuItems = [
   { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda' },
   { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes' },
   { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias' },
+  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas' },
   { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios' },
   { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes' },
 ];
