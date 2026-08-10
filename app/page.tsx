@@ -1,7 +1,5 @@
-import { redirect } from 'next/navigation';
+import AdminDashboardPage from './admin/dashboard/page';
 
-export default async function HomePage() {
-  // Desenvolvimento temporário: pula autenticação para explorar a plataforma
-  // TODO: Remover quando Supabase estiver conectado corretamente
-  redirect('/admin/dashboard');
+export default function HomePage() {
+  return <AdminDashboardPage />;
 }
