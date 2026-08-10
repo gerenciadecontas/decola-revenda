@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   History,
+  Zap,
 } from 'lucide-react';
 
 type UserRole = 'gestor' | 'agente-canal';
@@ -40,6 +41,7 @@ const menuItems = [
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const [userRole, setUserRoleState] = useState<UserRole | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [period, setPeriod] = useState<'mes' | 'trimestre' | 'ano'>('mes');
 
   useEffect(() => {
     const savedRole = localStorage.getItem('platformRole') as UserRole | null;
@@ -54,48 +56,77 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   if (userRole === null) return null;
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen" style={{ background: '#0E1013', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
+        .sora { font-family: "Sora", sans-serif; }
+      `}</style>
       {/* Sidebar */}
       <div
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
-        } bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 flex flex-col`}
+        } text-white transition-all duration-300 flex flex-col`}
+        style={{ background: '#16181D', borderRight: '1px solid #23262C' }}
       >
         {/* Logo */}
-        <div className="p-6 flex items-center justify-between">
+        <div className="p-6 flex items-center justify-between gap-3">
           <div className={sidebarOpen ? '' : 'hidden'}>
-            <h1 className="text-2xl font-bold">Decola</h1>
-            <p className="text-xs text-gray-400">Central de Implantação</p>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '11px',
+                background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)',
+                display: 'grid',
+                placeItems: 'center',
+                fontFamily: '"Sora", sans-serif',
+                fontWeight: 700,
+                color: '#fff',
+                fontSize: '18px',
+                marginBottom: '8px',
+              }}
+            >
+              D
+            </div>
+            <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              Decola
+            </h1>
+            <p style={{ fontSize: '11.5px', color: '#8A9099', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
+              Central de Implantação
+            </p>
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1 hover:bg-slate-700 rounded"
+            className="p-1 rounded"
+            style={{ background: 'transparent', border: 0, color: '#6B7280', cursor: 'pointer' }}
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {/* Role Toggle */}
-        <div className={`px-4 py-4 ${sidebarOpen ? '' : 'px-2'} border-t border-slate-700`}>
+        <div className={`px-4 py-4 ${sidebarOpen ? '' : 'px-2'}`} style={{ borderTop: '1px solid #23262C' }}>
           <div className={`flex flex-col gap-2 ${sidebarOpen ? '' : 'items-center'}`}>
             <button
               onClick={() => setUserRole('gestor')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${
-                userRole === 'gestor'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
-              } ${sidebarOpen ? '' : 'px-2 text-center'}`}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${sidebarOpen ? '' : 'px-2 text-center'}`}
+              style={{
+                background: userRole === 'gestor' ? '#8B5CF6' : '#1E2127',
+                color: userRole === 'gestor' ? '#fff' : '#9AA1AA',
+                border: userRole === 'gestor' ? 'none' : '1px solid #262A31'
+              }}
               title="Gestor"
             >
               {sidebarOpen ? '👨‍💼 Gestor' : '👨'}
             </button>
             <button
               onClick={() => setUserRole('agente-canal')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${
-                userRole === 'agente-canal'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
-              } ${sidebarOpen ? '' : 'px-2 text-center'}`}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left ${sidebarOpen ? '' : 'px-2 text-center'}`}
+              style={{
+                background: userRole === 'agente-canal' ? '#8B5CF6' : '#1E2127',
+                color: userRole === 'agente-canal' ? '#fff' : '#9AA1AA',
+                border: userRole === 'agente-canal' ? 'none' : '1px solid #262A31'
+              }}
               title="Agente de Canal"
             >
               {sidebarOpen ? '🚀 Agente' : '🚀'}
@@ -112,11 +143,11 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
               <Link
                 key={item.id}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-                } ${sidebarOpen ? '' : 'justify-center px-2'}`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${sidebarOpen ? '' : 'justify-center px-2'}`}
+                style={{
+                  background: isActive ? '#8B5CF6' : 'transparent',
+                  color: isActive ? '#fff' : '#9AA1AA'
+                }}
                 title={item.label}
               >
                 <Icon size={20} />
@@ -127,34 +158,73 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
         </nav>
 
         {/* Footer */}
-        <div className={`p-4 border-t border-slate-700 ${sidebarOpen ? '' : 'text-center'}`}>
-          <p className="text-xs text-gray-400">
+        <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
+          <p className="text-xs" style={{ color: '#8A9099' }}>
             {sidebarOpen ? `Logado como ${userRole === 'gestor' ? 'Gestor' : 'Agente'}` : '✓'}
           </p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#0E1013' }}>
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-sm">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              {menuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
-            </h2>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-gray-100 rounded-lg">🔔</button>
-            <button className="p-2 hover:bg-gray-100 rounded-lg">⚙️</button>
-            <div className="w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">
-              {userRole === 'gestor' ? 'G' : 'A'}
+        <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: '1px solid #1D2026', backdropFilter: 'blur(8px)' }} className="px-8 py-4">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
+                {menuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+              </h2>
+              <p className="text-sm mt-1" style={{ color: '#8A9099' }}>Visão geral das implantações · atualizado há 4 min</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="p-2 rounded-lg" style={{ background: '#16181D', border: '1px solid #23262C', color: '#C9CED6' }}>🔔</button>
+              <button className="p-2 rounded-lg" style={{ background: '#16181D', border: '1px solid #23262C', color: '#C9CED6' }}>⚙️</button>
+              <div className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold" style={{ background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)' }}>
+                {userRole === 'gestor' ? 'G' : 'A'}
+              </div>
             </div>
           </div>
+
+          {/* Period Filters */}
+          {currentPage === 'dashboard' && (
+            <div className="flex items-center gap-2" style={{ background: '#16181D', border: '1px solid #23262C', borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
+              <button
+                onClick={() => setPeriod('mes')}
+                className="px-4 py-2 rounded-lg font-medium transition-colors"
+                style={{
+                  background: period === 'mes' ? '#FFC93C' : 'transparent',
+                  color: period === 'mes' ? '#16181D' : '#9AA1AA'
+                }}
+              >
+                Mês
+              </button>
+              <button
+                onClick={() => setPeriod('trimestre')}
+                className="px-4 py-2 rounded-lg font-medium transition-colors"
+                style={{
+                  background: period === 'trimestre' ? '#FFC93C' : 'transparent',
+                  color: period === 'trimestre' ? '#16181D' : '#9AA1AA'
+                }}
+              >
+                Trimestre
+              </button>
+              <button
+                onClick={() => setPeriod('ano')}
+                className="px-4 py-2 rounded-lg font-medium transition-colors"
+                style={{
+                  background: period === 'ano' ? '#FFC93C' : 'transparent',
+                  color: period === 'ano' ? '#16181D' : '#9AA1AA'
+                }}
+              >
+                Ano
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Page Content */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8">{children}</div>
+          <div className="p-8" style={{ background: '#0E1013' }}>{children}</div>
         </div>
       </div>
     </div>
