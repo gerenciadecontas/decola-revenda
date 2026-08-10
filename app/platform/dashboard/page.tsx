@@ -16,97 +16,260 @@ const COLORS = {
 };
 
 export default function DashboardPage() {
-  const kpis = [
-    { label: 'Revendas em implantação', value: '4', icon: '◉', accent: COLORS.purple, deltaTag: '+2', hint: 'esta semana' },
-    { label: 'Implantações concluídas', value: '2', icon: '✓', accent: COLORS.green, deltaTag: 'Este mês', hint: 'meta 5' },
-    { label: 'Treinamentos hoje', value: '0', icon: '▷', accent: COLORS.yellow, deltaTag: '3', hint: 'programados na semana' },
-    { label: 'Pendências abertas', value: '6', icon: '!', accent: COLORS.red, deltaTag: '2 críticas', hint: 'requerem ação' },
+  const trainingsToday = [
+    { time: '10:00', title: 'LC WEB - Cadastro de Produtos', revenda: 'Auto Nova Peças' },
+    { time: '14:30', title: 'LC WEB - Vendas', revenda: 'Elétrica Pro' },
   ];
 
-  const secondary = [
-    { label: 'Revendas atrasadas', value: '1', unit: 'de 13', icon: '▲', accent: COLORS.red, pct: '8%' },
-    { label: 'Tempo médio de implantação', value: '17', unit: 'dias', icon: '◷', accent: COLORS.yellow, pct: '57%' },
-    { label: 'Taxa de conclusão', value: '20%', unit: '', icon: '◎', accent: COLORS.purple, pct: '20%' },
+  const deploymentsToday = [
+    { id: 1, revenda: 'MGX Automação', stage: 'Configuração', progress: 65 },
+    { id: 2, revenda: 'TecCampo', stage: 'Testes', progress: 80 },
+  ];
+
+  const upcomingTrainings = [
+    { date: '12 Ago', time: '14:00', title: 'Módulo Financeiro', revenda: 'Nova Rota', remote: true },
+    { date: '14 Ago', time: '09:30', title: 'Fiscal avançado', revenda: 'TecCampo', remote: false },
+    { date: '16 Ago', time: '11:00', title: 'LC ERP Desktop', revenda: 'Auto Nova', remote: true },
+  ];
+
+  const myRevendas = [
+    { name: 'Auto Nova Peças', city: 'São Paulo', status: 'Em implantação', lastContact: '2 dias' },
+    { name: 'MGX Automação', city: 'Belo Horizonte', status: 'Ativa', lastContact: '5 dias' },
+    { name: 'TecCampo', city: 'Curitiba', status: 'Em implantação', lastContact: '1 dia' },
+    { name: 'Elétrica Pro', city: 'Rio de Janeiro', status: 'Ativa', lastContact: '3 dias' },
+  ];
+
+  const pendencies = [
+    { id: 1, revenda: 'MGX Automação', issue: 'Dados fiscais pendentes', days: 9, critical: true },
+    { id: 2, revenda: 'Auto Nova Peças', issue: 'Configuração de impostos', days: 3, critical: false },
+    { id: 3, revenda: 'TecCampo', issue: 'Integração com sistema legado', days: 5, critical: true },
+  ];
+
+  const needsAttention = [
+    { name: 'Nova Rota Distribuição', issue: 'Sem resposta há 7 dias', daysAlert: 7 },
+    { name: 'Força Distribuidora', issue: 'Dúvidas não respondidas', daysAlert: 4 },
+  ];
+
+  const delayedActivities = [
+    { activity: 'Treinamento de Força de Vendas', revenda: 'Auto Nova Peças', daysLate: 2 },
+    { activity: 'Implementação de relatórios customizados', revenda: 'Elétrica Pro', daysLate: 5 },
+  ];
+
+  const weekAgenda = [
+    { day: 'Segunda', date: '11 Ago', items: ['10:00 - Treinamento LC WEB', '15:00 - Reunião MGX'] },
+    { day: 'Terça', date: '12 Ago', items: ['14:00 - Treinamento Financeiro'] },
+    { day: 'Quarta', date: '13 Ago', items: ['Sem compromissos'] },
+    { day: 'Quinta', date: '14 Ago', items: ['09:30 - Treinamento TecCampo', '16:00 - Acompanhamento'] },
+    { day: 'Sexta', date: '15 Ago', items: ['14:00 - Reunião de Resultados'] },
   ];
 
   return (
     <PlatformLayout currentPage="dashboard">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-        {/* KPI Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-          {kpis.map((k, i) => (
-            <div key={i} style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                <div style={{ fontSize: '13.5px', color: COLORS.textSecondary, fontWeight: 500 }}>{k.label}</div>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', background: `${k.accent}22`, color: k.accent }}>
-                  {k.icon}
-                </div>
-              </div>
-              <div style={{ fontSize: '38px', fontWeight: 700, color: COLORS.textPrimary }}>{k.value}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '12.5px', color: COLORS.textSecondary }}>
-                <span style={{ padding: '2px 7px', borderRadius: '6px', fontWeight: 700, fontSize: '11.5px', background: `${k.accent}22`, color: k.accent }}>{k.deltaTag}</span>
-                {k.hint}
-              </div>
-            </div>
-          ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+        {/* Page Header */}
+        <div>
+          <h1 style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>
+            Seu Dashboard
+          </h1>
+          <p style={{ fontSize: '15px', color: COLORS.textSecondary, margin: 0 }}>
+            Acompanhe suas atividades, treinamentos e implantações de hoje
+          </p>
         </div>
 
-        {/* Secondary KPIs */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-          {secondary.map((s, i) => (
-            <div key={i} style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '16px', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px' }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: '13.5px', color: COLORS.textSecondary, fontWeight: 500 }}>{s.label}</div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '7px', marginTop: '8px' }}>
-                  <div style={{ fontSize: '30px', fontWeight: 700, color: COLORS.textPrimary }}>{s.value}</div>
-                  <div style={{ fontSize: '13.5px', color: COLORS.textTertiary }}>{s.unit}</div>
-                </div>
-                <div style={{ height: '6px', borderRadius: '6px', background: COLORS.borderColor, marginTop: '14px', overflow: 'hidden', width: '190px' }}>
-                  <div style={{ height: '100%', borderRadius: '6px', width: s.pct, background: s.accent }} />
-                </div>
-              </div>
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '17px', background: `${s.accent}22`, color: s.accent, flexShrink: 0 }}>
-                {s.icon}
+        {/* TODAY SECTION - Priority Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+          {/* Trainings Today */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+              <div style={{ fontSize: '24px' }}>📚</div>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Treinamentos Hoje</h3>
+              <div style={{ background: COLORS.yellow, color: COLORS.darkBg, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
+                {trainingsToday.length}
               </div>
             </div>
-          ))}
+            {trainingsToday.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {trainingsToday.map((training, i) => (
+                  <div key={i} style={{ background: 'rgba(255,255,255,0.04)', padding: '12px', borderRadius: '10px', borderLeft: `3px solid ${COLORS.yellow}` }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.yellow }}>{training.time}</div>
+                    <div style={{ fontSize: '13px', color: COLORS.textPrimary, marginTop: '4px', fontWeight: 500 }}>{training.title}</div>
+                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{training.revenda}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: '13px', color: COLORS.textSecondary }}>Nenhum treinamento programado para hoje</div>
+            )}
+          </div>
+
+          {/* Deployments Today */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+              <div style={{ fontSize: '24px' }}>🚀</div>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Implantações Hoje</h3>
+              <div style={{ background: COLORS.green, color: COLORS.darkBg, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
+                {deploymentsToday.length}
+              </div>
+            </div>
+            {deploymentsToday.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {deploymentsToday.map((dep, i) => (
+                  <div key={i}>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{dep.revenda}</div>
+                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{dep.stage}</div>
+                    <div style={{ height: '5px', borderRadius: '4px', background: COLORS.borderColor, marginTop: '8px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', background: COLORS.green, width: `${dep.progress}%` }} />
+                    </div>
+                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>{dep.progress}% concluído</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: '13px', color: COLORS.textSecondary }}>Nenhuma implantação prevista para hoje</div>
+            )}
+          </div>
+
+          {/* Critical Pendencies */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+              <div style={{ fontSize: '24px' }}>⚠️</div>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Pendências Críticas</h3>
+              <div style={{ background: COLORS.red, color: '#fff', fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
+                {pendencies.filter(p => p.critical).length}
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {pendencies.filter(p => p.critical).map((p, i) => (
+                <div key={i} style={{ background: 'rgba(248,113,113,0.08)', padding: '10px', borderRadius: '8px', borderLeft: `3px solid ${COLORS.red}` }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
+                  <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.issue}</div>
+                  <div style={{ fontSize: '11px', color: COLORS.red, marginTop: '3px', fontWeight: 600 }}>⏰ Aberta há {p.days} dias</div>
+                </div>
+              ))}
+            </div>
+            <button style={{ background: COLORS.red, color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', marginTop: '4px' }}>
+              Resolver Agora
+            </button>
+          </div>
         </div>
 
-        {/* Info Cards */}
+        {/* PENDING ACTIONS & ATTENTION */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-          <div style={{ background: 'linear-gradient(150deg, #6D28D9, #4C1D95)', borderRadius: '18px', padding: '22px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Pendências críticas</div>
-              <div style={{ background: COLORS.yellow, color: COLORS.cardBg, fontSize: '12px', fontWeight: 700, padding: '3px 9px', borderRadius: '7px' }}>2</div>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: '12px', padding: '13px 14px' }}>
-              <div style={{ fontSize: '13.5px', color: COLORS.textPrimary, fontWeight: 600 }}>MGX Automação — dados fiscais pendentes</div>
-              <div style={{ fontSize: '12.5px', color: '#DDD6FE', marginTop: '4px' }}>Aberta há 9 dias · Diego Souza</div>
-            </div>
-            <div style={{ background: COLORS.yellow, color: COLORS.cardBg, textAlign: 'center', fontSize: '13.5px', fontWeight: 700, padding: '11px', borderRadius: '11px', cursor: 'pointer' }}>
-              Resolver pendências
+          {/* All Pendencies */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 14px 0' }}>Pendências para Resolver</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {pendencies.map((p, i) => (
+                <div key={i} style={{ padding: '12px', background: p.critical ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', borderRadius: '10px', borderLeft: `3px solid ${p.critical ? COLORS.red : COLORS.yellow}` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
+                      <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.issue}</div>
+                    </div>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: p.critical ? COLORS.red : COLORS.yellow, whiteSpace: 'nowrap' }}>
+                      {p.days}d
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px 24px' }}>
-            <div style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, marginBottom: '6px' }}>Próximos treinamentos</div>
-            <div style={{ fontSize: '12.5px', color: COLORS.textSecondary, marginBottom: '12px' }}>Nenhum hoje</div>
-            {[
-              { day: '12', mon: 'Ago', title: 'Módulo Financeiro — Nova Rota', meta: '14:00 · remoto · 6 participantes' },
-              { day: '14', mon: 'Ago', title: 'Fiscal avançado — TecCampo', meta: '09:30 · presencial · 4 participantes' },
-            ].map((t, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '13px', padding: '13px 0', borderTop: `1px solid #1F2228` }}>
-                <div style={{ width: '44px', textAlign: 'center', flexShrink: 0 }}>
-                  <div style={{ fontSize: '17px', fontWeight: 700, color: COLORS.yellow, lineHeight: '1' }}>{t.day}</div>
-                  <div style={{ fontSize: '10.5px', color: COLORS.textTertiary, textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: '2px' }}>{t.mon}</div>
+          {/* Revendas that need attention */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 14px 0' }}>Revendas que Precisam de Atenção</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {needsAttention.map((item, i) => (
+                <div key={i} style={{ padding: '12px', background: 'rgba(255,193,60,0.08)', borderRadius: '10px', borderLeft: `3px solid ${COLORS.yellow}` }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{item.name}</div>
+                  <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{item.issue}</div>
+                  <div style={{ fontSize: '11px', color: COLORS.yellow, marginTop: '3px', fontWeight: 600 }}>⏰ {item.daysAlert} dias sem retorno</div>
                 </div>
-                <div style={{ width: '1px', alignSelf: 'stretch', background: COLORS.borderColor }} />
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '13.5px', color: COLORS.textPrimary, fontWeight: 500 }}>{t.title}</div>
-                  <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{t.meta}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Delayed Activities */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 14px 0' }}>Atividades Atrasadas</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {delayedActivities.map((activity, i) => (
+                <div key={i} style={{ padding: '12px', background: 'rgba(248,113,113,0.08)', borderRadius: '10px', borderLeft: `3px solid ${COLORS.red}` }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{activity.activity}</div>
+                  <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{activity.revenda}</div>
+                  <div style={{ fontSize: '11px', color: COLORS.red, marginTop: '3px', fontWeight: 600 }}>📅 {activity.daysLate} dias atrasado</div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* UPCOMING & SCHEDULE */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          {/* Upcoming Trainings */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Próximos Treinamentos</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {upcomingTrainings.map((t, i) => (
+                <div key={i} style={{ display: 'flex', gap: '12px', padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
+                  <div style={{ textAlign: 'center', minWidth: '50px', flexShrink: 0 }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: COLORS.yellow }}>{t.date.split(' ')[0]}</div>
+                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '2px' }}>{t.date.split(' ')[1]}</div>
+                  </div>
+                  <div style={{ width: '1px', background: COLORS.borderColor }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{t.title}</div>
+                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{t.revenda}</div>
+                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>
+                      {t.time} · {t.remote ? '🌐 Remoto' : '📍 Presencial'}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* My Revendas */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Revendas Sob Minha Responsabilidade</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {myRevendas.map((revenda, i) => (
+                <div key={i} style={{ padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{revenda.name}</div>
+                      <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '2px' }}>{revenda.city}</div>
+                    </div>
+                    <div style={{ fontSize: '11px', fontWeight: 600, padding: '4px 8px', borderRadius: '6px', background: revenda.status === 'Em implantação' ? `${COLORS.purple}22` : `${COLORS.green}22`, color: revenda.status === 'Em implantação' ? COLORS.purple : COLORS.green }}>
+                      {revenda.status}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '6px' }}>Último contato: {revenda.lastContact}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Week Agenda */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Minha Agenda da Semana</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {weekAgenda.map((day, i) => (
+                <div key={i} style={{ padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{day.day}</div>
+                      <div style={{ fontSize: '11px', color: COLORS.textTertiary }}>{day.date}</div>
+                    </div>
+                  </div>
+                  {day.items.map((item, j) => (
+                    <div key={j} style={{ fontSize: '12px', color: COLORS.textSecondary, paddingLeft: '12px', borderLeft: `2px solid ${COLORS.purple}`, marginTop: j > 0 ? '6px' : '0' }}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
