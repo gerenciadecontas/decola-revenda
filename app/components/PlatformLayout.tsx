@@ -24,19 +24,24 @@ interface PlatformLayoutProps {
   currentPage: string;
 }
 
-const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard' },
-  { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas' },
-  { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes' },
-  { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos' },
-  { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda' },
-  { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes' },
-  { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias' },
-  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas' },
-  { id: 'historico', label: 'Histórico', icon: History, href: '/platform/historico' },
-  { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios' },
-  { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes' },
+const allMenuItems = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard', roles: ['gestor', 'agente-canal'] },
+  { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor'] },
+  { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes', roles: ['gestor', 'agente-canal'] },
+  { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos', roles: ['gestor', 'agente-canal'] },
+  { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor'] },
+  { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes', roles: ['gestor'] },
+  { id: 'pendencias', label: 'Pendências', icon: AlertCircle, href: '/platform/pendencias', roles: ['gestor'] },
+  { id: 'alertas', label: 'Alertas', icon: AlertCircle, href: '/platform/alertas', roles: ['gestor'] },
+  { id: 'historico', label: 'Histórico', icon: History, href: '/platform/historico', roles: ['gestor'] },
+  { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios', roles: ['gestor'] },
+  { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes', roles: ['gestor'] },
 ];
+
+const getMenuItems = (role: UserRole | null) => {
+  if (!role) return [];
+  return allMenuItems.filter(item => item.roles.includes(role));
+};
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const [userRole, setUserRoleState] = useState<UserRole | null>(null);
@@ -136,7 +141,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
         {/* Menu */}
         <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
-          {menuItems.map((item) => {
+          {getMenuItems(userRole).map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
@@ -172,7 +177,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
-                {menuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+                {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
               </h2>
               <p className="text-sm mt-1" style={{ color: '#8A9099' }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
