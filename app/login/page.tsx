@@ -92,15 +92,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-4xl font-bold text-white">
               {view === 'admin' ? 'Dashboard Admin' : 'Minhas Revendas'}
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-400 mt-2">
               {view === 'admin'
                 ? 'Acompanhe o progresso de todas as revendas'
                 : 'Revendas atribuídas a você'}
@@ -112,7 +112,7 @@ export default function LoginPage() {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'admin'
                   ? 'bg-purple-600 text-white'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                  : 'bg-slate-800 border border-slate-700 text-gray-300 hover:bg-slate-700'
               }`}
             >
               👨‍💼 Admin
@@ -122,7 +122,7 @@ export default function LoginPage() {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'gestor'
                   ? 'bg-purple-600 text-white'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                  : 'bg-slate-800 border border-slate-700 text-gray-300 hover:bg-slate-700'
               }`}
             >
               👤 Gestor
@@ -131,13 +131,13 @@ export default function LoginPage() {
         </div>
 
         {/* Sub Views Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-gray-200">
+        <div className="mb-6 flex gap-2 border-b border-slate-700">
           <button
             onClick={() => setSubView('dashboard')}
             className={`px-4 py-3 font-medium transition-colors ${
               subView === 'dashboard'
-                ? 'text-purple-600 border-b-2 border-purple-600'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'text-purple-500 border-b-2 border-purple-500'
+                : 'text-gray-400 hover:text-gray-300'
             }`}
           >
             📊 Dashboard
@@ -146,8 +146,8 @@ export default function LoginPage() {
             onClick={() => setSubView('treinamento-diario')}
             className={`px-4 py-3 font-medium transition-colors ${
               subView === 'treinamento-diario'
-                ? 'text-purple-600 border-b-2 border-purple-600'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'text-purple-500 border-b-2 border-purple-500'
+                : 'text-gray-400 hover:text-gray-300'
             }`}
           >
             📅 Treinamento Diário
@@ -160,37 +160,32 @@ export default function LoginPage() {
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Total de Revendas</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-blue-100 rounded-lg">📅</div>
+                  <p className="text-gray-600 text-sm">Dias de treinamento</p>
+                </div>
                 <p className="text-3xl font-bold text-gray-900">{stats.totalRevendas}</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Em Andamento</p>
-                <p className="text-3xl font-bold text-blue-600">{stats.emAndamento}</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-yellow-100 rounded-lg">📋</div>
+                  <p className="text-gray-600 text-sm">Temas totais</p>
+                </div>
+                <p className="text-3xl font-bold text-gray-900">{stats.temasHoje}</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Atrasadas</p>
-                <p className="text-3xl font-bold text-red-600">{stats.atrasadas}</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-gray-100 rounded-lg">✓</div>
+                  <p className="text-gray-600 text-sm">Temas concluídos</p>
+                </div>
+                <p className="text-3xl font-bold text-gray-900">{stats.atrasadas}</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Concluídas</p>
-                <p className="text-3xl font-bold text-green-600">{stats.concluidas}</p>
-              </div>
-            </div>
-
-            {/* Additional Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">% de Conclusão Geral</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-purple-100 rounded-lg">📈</div>
+                  <p className="text-gray-600 text-sm">Progresso geral</p>
+                </div>
                 <p className="text-3xl font-bold text-purple-600">{stats.mediaProgresso}%</p>
-              </div>
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Temas Realizados Hoje</p>
-                <p className="text-3xl font-bold text-orange-600">{stats.temasHoje}</p>
-              </div>
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <p className="text-gray-600 text-sm">Último Treinamento</p>
-                <p className="text-sm font-semibold text-gray-900">{stats.ultimoTreinamento}</p>
-                <p className="text-xs text-gray-600 mt-2">Por: {stats.quemRealizou}</p>
               </div>
             </div>
 
