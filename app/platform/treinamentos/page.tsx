@@ -9,6 +9,7 @@ const COLORS = {
   textSecondary: '#9AA1AA',
   purple: '#8B5CF6',
   yellow: '#FFC93C',
+  green: '#34D399',
 };
 
 export default function TreinamentosPage() {
