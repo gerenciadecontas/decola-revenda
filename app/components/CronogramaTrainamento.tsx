@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 
 type TrainingTab = 'lcweb' | 'lcerp' | 'produtos';
+type UserRole = 'gestor' | 'agente-canal';
 
 interface TrainingDay {
   day: number;
@@ -37,9 +38,21 @@ const trainings: Record<TrainingTab, TrainingDay[]> = {
 };
 
 export function CronogramaTrainamento() {
+  const [userRole, setUserRoleState] = useState<UserRole | null>(null);
   const [selectedTab, setSelectedTab] = useState<TrainingTab>('lcweb');
   const [expandedDay, setExpandedDay] = useState<number>(1);
   const [progress, setProgress] = useState<Record<string, boolean>>({});
+
+  // Carrega o role do localStorage
+  useEffect(() => {
+    const savedRole = localStorage.getItem('trainingRole') as UserRole | null;
+    setUserRoleState(savedRole || 'gestor');
+  }, []);
+
+  const setUserRole = (role: UserRole) => {
+    setUserRoleState(role);
+    localStorage.setItem('trainingRole', role);
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem(`training-progress-${selectedTab}`);
@@ -52,13 +65,49 @@ export function CronogramaTrainamento() {
     localStorage.setItem(`training-progress-${selectedTab}`, JSON.stringify(newProgress));
   };
 
+  if (userRole === null) {
+    return null;
+  }
+
   const days = trainings[selectedTab];
   const completedScreens = Object.values(progress).filter(Boolean).length;
   const totalScreens = days.reduce((sum, d) => sum + d.temasCount, 0);
   const progressPct = Math.round((completedScreens / totalScreens) * 100);
 
+  const roleDescriptions = {
+    'gestor': 'Gerencie e acompanhe o progresso dos treinamentos das revendas',
+    'agente-canal': 'Responsável por acompanhar o progresso dos treinamentos de todas as revendas'
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
+      {/* Role Toggle Buttons */}
+      <div className="mb-6 flex gap-3">
+        <button
+          onClick={() => setUserRole('gestor')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            userRole === 'gestor'
+              ? 'bg-purple-600 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          👤 Gestor
+        </button>
+        <button
+          onClick={() => setUserRole('agente-canal')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            userRole === 'agente-canal'
+              ? 'bg-purple-600 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          🚀 Agente de Canal
+        </button>
+      </div>
+
+      <p className="text-gray-600 mb-6">{roleDescriptions[userRole]}</p>
+
+      <div className="max-w-6xl mx-auto">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-200">
         {(['lcweb', 'lcerp', 'produtos'] as const).map((tab) => (
