@@ -1,6 +1,7 @@
 'use client';
 
 import { PlatformLayout } from '@/app/components/PlatformLayout';
+import { useState, useEffect } from 'react';
 
 const COLORS = {
   purple: '#8B5CF6',
@@ -15,7 +16,37 @@ const COLORS = {
   textTertiary: '#6B7280',
 };
 
+interface Pendencia {
+  id: string;
+  revenda: string;
+  descricao: string;
+  nivel: 'critica' | 'normal';
+  status: 'aberta' | 'resolvida';
+  dataAbertura: string;
+}
+
 export default function DashboardPage() {
+  const [pendencias, setPendencias] = useState<Pendencia[]>([]);
+
+  // Carregar pendências do localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('pendencias-list');
+    if (saved) {
+      setPendencias(JSON.parse(saved));
+    }
+  }, []);
+
+  // Calcular dias abertos
+  const getDiasAbertos = (dataAbertura: string) => {
+    const hoje = new Date();
+    const data = new Date(dataAbertura);
+    const diff = Math.floor((hoje.getTime() - data.getTime()) / (1000 * 60 * 60 * 24));
+    return diff;
+  };
+
+  // Pendências abertas (carregadas do localStorage)
+  const pendenciasAbertas = pendencias.filter(p => p.status === 'aberta');
+
   const trainingsToday = [
     { time: '10:00', title: 'LC WEB - Cadastro de Produtos', revenda: 'Auto Nova Peças' },
     { time: '14:30', title: 'LC WEB - Vendas', revenda: 'Elétrica Pro' },
@@ -37,12 +68,6 @@ export default function DashboardPage() {
     { name: 'MGX Automação', city: 'Belo Horizonte', status: 'Ativa', lastContact: '5 dias' },
     { name: 'TecCampo', city: 'Curitiba', status: 'Em implantação', lastContact: '1 dia' },
     { name: 'Elétrica Pro', city: 'Rio de Janeiro', status: 'Ativa', lastContact: '3 dias' },
-  ];
-
-  const pendencies = [
-    { id: 1, revenda: 'MGX Automação', issue: 'Dados fiscais pendentes', days: 9, critical: true },
-    { id: 2, revenda: 'Auto Nova Peças', issue: 'Configuração de impostos', days: 3, critical: false },
-    { id: 3, revenda: 'TecCampo', issue: 'Integração com sistema legado', days: 5, critical: true },
   ];
 
   const needsAttention = [
@@ -135,20 +160,24 @@ export default function DashboardPage() {
               <div style={{ fontSize: '24px' }}>⚠️</div>
               <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Pendências Críticas</h3>
               <div style={{ background: COLORS.red, color: '#fff', fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
-                {pendencies.filter(p => p.critical).length}
+                {pendenciasAbertas.filter(p => p.nivel === 'critica').length}
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {pendencies.filter(p => p.critical).map((p, i) => (
-                <div key={i} style={{ background: 'rgba(248,113,113,0.08)', padding: '10px', borderRadius: '8px', borderLeft: `3px solid ${COLORS.red}` }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
-                  <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.issue}</div>
-                  <div style={{ fontSize: '11px', color: COLORS.red, marginTop: '3px', fontWeight: 600 }}>⏰ Aberta há {p.days} dias</div>
-                </div>
-              ))}
+              {pendenciasAbertas.filter(p => p.nivel === 'critica').length === 0 ? (
+                <div style={{ fontSize: '12px', color: COLORS.textSecondary }}>Nenhuma pendência crítica no momento</div>
+              ) : (
+                pendenciasAbertas.filter(p => p.nivel === 'critica').map((p, i) => (
+                  <div key={i} style={{ background: 'rgba(248,113,113,0.08)', padding: '10px', borderRadius: '8px', borderLeft: `3px solid ${COLORS.red}` }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
+                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.descricao}</div>
+                    <div style={{ fontSize: '11px', color: COLORS.red, marginTop: '3px', fontWeight: 600 }}>⏰ Aberta há {getDiasAbertos(p.dataAbertura)} dias</div>
+                  </div>
+                ))
+              )}
             </div>
             <button style={{ background: COLORS.red, color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', marginTop: '4px' }}>
-              Resolver Agora
+              Ir para Pendências
             </button>
           </div>
         </div>
@@ -159,19 +188,23 @@ export default function DashboardPage() {
           <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 14px 0' }}>Pendências para Resolver</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {pendencies.map((p, i) => (
-                <div key={i} style={{ padding: '12px', background: p.critical ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', borderRadius: '10px', borderLeft: `3px solid ${p.critical ? COLORS.red : COLORS.yellow}` }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
-                      <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.issue}</div>
-                    </div>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: p.critical ? COLORS.red : COLORS.yellow, whiteSpace: 'nowrap' }}>
-                      {p.days}d
+              {pendenciasAbertas.length === 0 ? (
+                <div style={{ fontSize: '12px', color: COLORS.textSecondary }}>Nenhuma pendência aberta</div>
+              ) : (
+                pendenciasAbertas.map((p, i) => (
+                  <div key={i} style={{ padding: '12px', background: p.nivel === 'critica' ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', borderRadius: '10px', borderLeft: `3px solid ${p.nivel === 'critica' ? COLORS.red : COLORS.yellow}` }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                      <div>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{p.revenda}</div>
+                        <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{p.descricao}</div>
+                      </div>
+                      <div style={{ fontSize: '11px', fontWeight: 600, color: p.nivel === 'critica' ? COLORS.red : COLORS.yellow, whiteSpace: 'nowrap' }}>
+                        {getDiasAbertos(p.dataAbertura)}d
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 

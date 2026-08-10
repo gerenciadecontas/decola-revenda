@@ -1,6 +1,7 @@
 'use client';
 
 import { GestorLayout } from '@/app/components/GestorLayout';
+import { useState, useEffect } from 'react';
 
 const COLORS = {
   purple: '#8B5CF6',
@@ -15,12 +16,33 @@ const COLORS = {
   textTertiary: '#6B7280',
 };
 
+interface Pendencia {
+  id: string;
+  revenda: string;
+  descricao: string;
+  nivel: 'critica' | 'normal';
+  status: 'aberta' | 'resolvida';
+  dataAbertura: string;
+}
+
 export default function AdminDashboardPage() {
+  const [pendencias, setPendencias] = useState<Pendencia[]>([]);
+
+  // Carregar pendências do localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('pendencias-list');
+    if (saved) {
+      setPendencias(JSON.parse(saved));
+    }
+  }, []);
+
+  const pendenciasAbertas = pendencias.filter(p => p.status === 'aberta');
+  const pendenciasCriticas = pendenciasAbertas.filter(p => p.nivel === 'critica');
   const kpis = [
     { label: 'Revendas em implantação', value: '4', icon: '◉', accent: COLORS.purple, deltaTag: '+2', hint: 'esta semana' },
     { label: 'Implantações concluídas', value: '2', icon: '✓', accent: COLORS.green, deltaTag: 'Este mês', hint: 'meta 5' },
     { label: 'Treinamentos hoje', value: '0', icon: '▷', accent: COLORS.yellow, deltaTag: '3', hint: 'programados na semana' },
-    { label: 'Pendências abertas', value: '6', icon: '!', accent: COLORS.red, deltaTag: '2 críticas', hint: 'requerem ação' },
+    { label: 'Pendências abertas', value: pendenciasAbertas.length.toString(), icon: '!', accent: COLORS.red, deltaTag: `${pendenciasCriticas.length} críticas`, hint: 'requerem ação' },
   ];
 
   const secondary = [
