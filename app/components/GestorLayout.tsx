@@ -54,7 +54,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
         } text-white transition-all duration-300 flex flex-col`}
-        style={{ background: colors.cardBg, borderRight: `1px solid ${colors.borderColor}` }}
+        style={{ background: colors.cardBg, borderRight: '1px solid #23262C' }}
       >
         {/* Logo */}
         <div className="p-6 flex items-center justify-between gap-3">
@@ -131,7 +131,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
         </nav>
 
         {/* Footer */}
-        <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: `1px solid ${colors.borderColor}` }}>
+        <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
           <p className="text-xs" style={{ color: colors.textTertiary }}>
             {sidebarOpen ? 'Logado como Gestor' : '✓'}
           </p>
@@ -141,7 +141,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden" style={{ background: colors.darkBg }}>
         {/* Top Bar */}
-        <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: `1px solid ${colors.borderColor}`, backdropFilter: 'blur(8px)' }} className="px-8 py-4">
+        <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: '1px solid #1D2026', backdropFilter: 'blur(8px)' }} className="px-8 py-4">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
@@ -150,7 +150,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
               <p className="text-sm mt-1" style={{ color: colors.textTertiary }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 rounded-lg" style={{ background: colors.cardBg, border: `1px solid ${colors.borderColor}`, color: colors.textSecondary }}>🔔</button>
+              <button className="p-2 rounded-lg" style={{ background: colors.cardBg, border: '1px solid #23262C', color: colors.textSecondary }}>🔔</button>
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-lg transition-colors"
@@ -167,7 +167,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
 
           {/* Period Filters */}
           {currentPage === 'dashboard' && (
-            <div className="flex items-center gap-2" style={{ background: colors.cardBg, border: `1px solid ${colors.borderColor}`, borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
+            <div className="flex items-center gap-2" style={{ background: colors.cardBg, border: '1px solid #23262C', borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
               <button
                 onClick={() => setPeriod('mes')}
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
