@@ -2,18 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-const COLORS = {
-  purple: '#8B5CF6',
-  darkBg: '#0E1013',
-  cardBg: '#16181D',
-  borderColor: '#23262C',
-  textPrimary: '#E8EAED',
-  textSecondary: '#9AA1AA',
-};
+import { useTheme } from '@/app/context/ThemeContext';
 
 export default function HomePage() {
   const router = useRouter();
+  const { colors } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -22,14 +15,14 @@ export default function HomePage() {
 
   if (!mounted) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: COLORS.darkBg }}>
-        <p style={{ color: COLORS.textPrimary }}>Inicializando...</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: colors.darkBg }}>
+        <p style={{ color: colors.textPrimary }}>Inicializando...</p>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: COLORS.darkBg, gap: '40px', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: colors.darkBg, gap: '40px', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
       `}</style>
@@ -39,7 +32,7 @@ export default function HomePage() {
           width: '64px',
           height: '64px',
           borderRadius: '16px',
-          background: `linear-gradient(150deg, ${COLORS.purple}, #6D28D9)`,
+          background: `linear-gradient(150deg, ${colors.purple}, #6D28D9)`,
           display: 'grid',
           placeItems: 'center',
           fontFamily: '"Sora", sans-serif',
@@ -51,7 +44,7 @@ export default function HomePage() {
         }}>
           D
         </div>
-        <h1 style={{ fontSize: '40px', fontWeight: 700, color: COLORS.textPrimary, margin: '0', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '40px', fontWeight: 700, color: colors.textPrimary, margin: '0', letterSpacing: '-0.02em' }}>
           Decola Revenda
         </h1>
       </div>
@@ -61,7 +54,7 @@ export default function HomePage() {
           onClick={() => router.push('/admin/dashboard')}
           style={{
             padding: '16px 32px',
-            background: COLORS.purple,
+            background: colors.purple,
             color: '#fff',
             border: 'none',
             borderRadius: '12px',
@@ -78,7 +71,7 @@ export default function HomePage() {
             e.currentTarget.style.transform = 'translateY(-2px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = COLORS.purple;
+            e.currentTarget.style.background = colors.purple;
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
@@ -88,7 +81,7 @@ export default function HomePage() {
           onClick={() => router.push('/platform/dashboard')}
           style={{
             padding: '16px 32px',
-            background: COLORS.purple,
+            background: colors.purple,
             color: '#fff',
             border: 'none',
             borderRadius: '12px',
@@ -105,7 +98,7 @@ export default function HomePage() {
             e.currentTarget.style.transform = 'translateY(-2px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = COLORS.purple;
+            e.currentTarget.style.background = colors.purple;
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
