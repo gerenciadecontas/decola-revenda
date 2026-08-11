@@ -93,7 +93,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
         </div>
 
         {/* Role Badge */}
-        <div className={`px-4 py-4 ${sidebarOpen ? '' : 'px-2'}`} style={{ borderTop: '1px solid #23262C' }}>
+        <div className={`px-4 py-4 ${sidebarOpen ? '' : 'px-2'}`} style={{ borderTop: `1px solid ${colors.borderColor}` }}>
           <div className={`flex ${sidebarOpen ? '' : 'justify-center'}`}>
             <div
               className={`px-3 py-2 rounded-lg text-sm font-medium w-full text-center`}
