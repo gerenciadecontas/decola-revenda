@@ -104,7 +104,6 @@ export default function AdminDashboardPage() {
     { label: 'Revendas em implantação', value: implantacoesEmAndamento.length.toString(), icon: '◉', accent: COLORS.purple, deltaTag: 'em andamento', hint: '' },
     { label: 'Implantações concluídas', value: implantacoes.filter(i => i.status === 'concluida').length.toString(), icon: '✓', accent: COLORS.green, deltaTag: 'finalizadas', hint: '' },
     { label: 'Treinamentos hoje', value: '0', icon: '▷', accent: COLORS.yellow, deltaTag: '3', hint: 'programados na semana' },
-    { label: 'Pendências de hoje', value: pendenciasHoje.length.toString(), icon: '!', accent: COLORS.red, deltaTag: `${pendenciasCriticas.length} críticas`, hint: 'requerem ação' },
   ];
 
   const secondary = [
