@@ -18,10 +18,6 @@ export const metadata: Metadata = {
   description: "Plataforma de monitoramento de treinamentos para revendas",
 };
 
-function RootLayoutContent({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -29,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-gray-50">
-        <RootLayoutContent>{children}</RootLayoutContent>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
