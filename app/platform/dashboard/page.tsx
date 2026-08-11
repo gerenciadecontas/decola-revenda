@@ -262,27 +262,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Week Agenda */}
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Minha Agenda da Semana</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {weekAgenda.map((day, i) => (
-                <div key={i} style={{ padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{day.day}</div>
-                      <div style={{ fontSize: '11px', color: COLORS.textTertiary }}>{day.date}</div>
-                    </div>
-                  </div>
-                  {day.items.map((item, j) => (
-                    <div key={j} style={{ fontSize: '12px', color: COLORS.textSecondary, paddingLeft: '12px', borderLeft: `2px solid ${COLORS.purple}`, marginTop: j > 0 ? '6px' : '0' }}>
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </PlatformLayout>
