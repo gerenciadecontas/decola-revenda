@@ -54,6 +54,7 @@ const etapas = [
 
 export default function ImplantacoesPage() {
   const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
+  const [activeTab, setActiveTab] = useState<string>('chegada');
   const [formData, setFormData] = useState<{
     revenda: string;
     etapa: string;
@@ -119,23 +120,15 @@ export default function ImplantacoesPage() {
     saveImplantacoes(implantacoes.filter(i => i.id !== id));
   };
 
+  const implantacoesAtivas = implantacoes.filter(i => i.etapa === activeTab);
+
   return (
     <PlatformLayout currentPage="implantacoes">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', width: '100%' }}>
-        {/* Header */}
-        <div>
-          <h1 style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>
-            Implantações
-          </h1>
-          <p style={{ fontSize: '15px', color: COLORS.textSecondary, margin: 0 }}>
-            Acompanhe o progresso das implantações por etapa
-          </p>
-        </div>
-
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
         {/* Formulário */}
-        <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 20px 0' }}>
-            Nova Implantação
+        <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>
+            Adicionar Nova Implantação
           </h2>
           <form onSubmit={handleAddImplantacao} style={{ display: 'grid', gap: '16px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -241,134 +234,139 @@ export default function ImplantacoesPage() {
                 cursor: 'pointer',
               }}
             >
-              Adicionar Implantação
+              Adicionar
             </button>
           </form>
         </div>
 
-        {/* Kanban Board */}
-        <div style={{ overflowX: 'auto', paddingBottom: '20px' }}>
-          <div style={{ display: 'flex', gap: '16px', minWidth: 'fit-content' }}>
+        {/* Abas */}
+        <div style={{ overflowX: 'auto', paddingBottom: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', minWidth: 'fit-content' }}>
             {etapas.map(etapa => {
-              const implantacoesEtapa = implantacoes.filter(i => i.etapa === etapa.value);
+              const count = implantacoes.filter(i => i.etapa === etapa.value).length;
+              const isActive = activeTab === etapa.value;
 
               return (
-                <div
+                <button
                   key={etapa.value}
+                  onClick={() => setActiveTab(etapa.value)}
                   style={{
-                    flex: '0 0 200px',
-                    background: 'rgba(255,255,255,0.02)',
-                    border: `1px solid ${COLORS.borderColor}`,
-                    borderRadius: '12px',
-                    padding: '12px',
-                    minHeight: '400px',
-                    display: 'flex',
-                    flexDirection: 'column',
+                    flex: '0 0 auto',
+                    padding: '10px 16px',
+                    background: isActive ? etapa.color : 'transparent',
+                    border: isActive ? 'none' : `1px solid ${COLORS.borderColor}`,
+                    borderRadius: '10px',
+                    color: isActive ? '#fff' : COLORS.textSecondary,
+                    fontSize: '13px',
+                    fontWeight: isActive ? 700 : 500,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.2s',
                   }}
                 >
-                  {/* Cabeçalho da coluna */}
-                  <div
-                    style={{
-                      padding: '8px 10px',
-                      background: etapa.color,
-                      borderRadius: '8px',
-                      marginBottom: '10px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em', lineHeight: 1.2 }}>
-                      {etapa.label}
-                    </div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginTop: '4px' }}>
-                      {implantacoesEtapa.length}
-                    </div>
-                  </div>
-
-                  {/* Cards de implantação */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
-                    {implantacoesEtapa.map(impl => (
-                      <div
-                        key={impl.id}
-                        style={{
-                          background: 'rgba(139, 92, 246, 0.1)',
-                          border: `1px solid ${COLORS.borderColor}`,
-                          borderRadius: '8px',
-                          padding: '10px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary, marginBottom: '4px' }}>
-                              {impl.revenda}
-                            </div>
-                            {impl.dataPrevista && (
-                              <div style={{ fontSize: '11px', color: COLORS.textSecondary }}>
-                                {new Date(impl.dataPrevista).toLocaleDateString('pt-BR')}
-                              </div>
-                            )}
-                          </div>
-                          <button
-                            onClick={() => handleDelete(impl.id)}
-                            style={{
-                              background: 'transparent',
-                              border: 'none',
-                              color: COLORS.textSecondary,
-                              cursor: 'pointer',
-                              padding: '2px 4px',
-                              display: 'flex',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-
-                        {impl.progresso > 0 && (
-                          <div style={{ marginTop: '8px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                              <span style={{ fontSize: '10px', color: COLORS.textSecondary }}>Progresso</span>
-                              <span style={{ fontSize: '10px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.progresso}%</span>
-                            </div>
-                            <div style={{ height: '4px', borderRadius: '4px', background: COLORS.borderColor, overflow: 'hidden' }}>
-                              <div style={{ height: '100%', borderRadius: '4px', width: `${impl.progresso}%`, background: impl.progresso === 100 ? COLORS.green : COLORS.yellow }} />
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Botão para mover próxima etapa */}
-                        {etapa.value !== 'abandonado' && etapa.value !== 'pausado' && (
-                          <div style={{ marginTop: '8px' }}>
-                            <button
-                              onClick={() => {
-                                const currentIndex = etapas.findIndex(e => e.value === etapa.value);
-                                if (currentIndex < etapas.length - 1) {
-                                  handleMoveToEtapa(impl.id, etapas[currentIndex + 1].value);
-                                }
-                              }}
-                              style={{
-                                width: '100%',
-                                padding: '6px 8px',
-                                background: 'rgba(139, 92, 246, 0.2)',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: COLORS.purple,
-                                fontSize: '11px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                              }}
-                            >
-                              Próxima Etapa →
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                  {etapa.label} <span style={{ marginLeft: '6px', fontWeight: 700 }}>{count}</span>
+                </button>
               );
             })}
           </div>
+        </div>
+
+        {/* Cards Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+          {implantacoesAtivas.length > 0 ? (
+            implantacoesAtivas.map(impl => (
+              <div
+                key={impl.id}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05))',
+                  border: `1px solid ${COLORS.borderColor}`,
+                  borderRadius: '14px',
+                  padding: '18px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                }}
+              >
+                {/* Botão delete */}
+                <button
+                  onClick={() => handleDelete(impl.id)}
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    background: 'transparent',
+                    border: 'none',
+                    color: COLORS.textSecondary,
+                    cursor: 'pointer',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <X size={16} />
+                </button>
+
+                {/* Conteúdo */}
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '6px', lineHeight: 1.2 }}>
+                    {impl.revenda}
+                  </div>
+                  {impl.dataPrevista && (
+                    <div style={{ fontSize: '13px', color: COLORS.textSecondary, marginBottom: '8px' }}>
+                      {new Date(impl.dataPrevista).toLocaleDateString('pt-BR')}
+                    </div>
+                  )}
+                </div>
+
+                {/* Progresso */}
+                <div style={{ marginBottom: '14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', color: COLORS.textSecondary }}>Progresso</span>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: COLORS.textPrimary }}>{impl.progresso}%</span>
+                  </div>
+                  <div style={{ height: '6px', borderRadius: '6px', background: COLORS.borderColor, overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        borderRadius: '6px',
+                        width: `${impl.progresso}%`,
+                        background: impl.progresso === 100 ? COLORS.green : COLORS.yellow,
+                        transition: 'width 0.2s',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Botão próxima etapa */}
+                {activeTab !== 'abandonado' && activeTab !== 'pausado' && (
+                  <button
+                    onClick={() => {
+                      const currentIndex = etapas.findIndex(e => e.value === activeTab);
+                      if (currentIndex < etapas.length - 1) {
+                        handleMoveToEtapa(impl.id, etapas[currentIndex + 1].value);
+                      }
+                    }}
+                    style={{
+                      padding: '10px',
+                      background: `${COLORS.purple}22`,
+                      border: `1px solid ${COLORS.purple}44`,
+                      borderRadius: '8px',
+                      color: COLORS.purple,
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Próxima Etapa →
+                  </button>
+                )}
+              </div>
+            ))
+          ) : (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 20px', color: COLORS.textSecondary }}>
+              <p>Nenhuma implantação nesta etapa</p>
+            </div>
+          )}
         </div>
       </div>
     </PlatformLayout>
