@@ -73,7 +73,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
         } text-white transition-all duration-300 flex flex-col`}
-        style={{ background: ${colors.cardBackground}, borderRight: '1px solid #23262C' }}
+        style={{ background: colors.cardBackground, borderRight: `1px solid ${colors.borderColor}` }}
       >
         {/* Logo */}
         <div className="p-6 flex items-center justify-between gap-3">
@@ -98,14 +98,14 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
             <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               Decola
             </h1>
-            <p style={{ fontSize: '11.5px', color: ${colors.textSecondary}, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
+            <p style={{ fontSize: '11.5px', color: colors.textSecondary, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
               Central de Implantação
             </p>
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-1 rounded"
-            style={{ background: 'transparent', border: 0, color: ${colors.textSecondary}, cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 0, color: colors.textSecondary, cursor: 'pointer' }}
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -123,7 +123,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${sidebarOpen ? '' : 'justify-center px-2'}`}
                 style={{
                   background: isActive ? '#8B5CF6' : 'transparent',
-                  color: isActive ? '#fff' : ${colors.textSecondary}
+                  color: isActive ? '#fff' : colors.textSecondary
                 }}
                 title={item.label}
               >
@@ -136,14 +136,14 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
         {/* Footer */}
         <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
-          <p className="text-xs" style={{ color: ${colors.textSecondary} }}>
+          <p className="text-xs" style={{ color: colors.textSecondary }}>
             {sidebarOpen ? `Logado como ${userRole === 'gestor' ? 'Gestor' : 'Agente'}` : '✓'}
           </p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: ${colors.background} }}>
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: colors.background }}>
         {/* Top Bar */}
         <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: '1px solid #1D2026', backdropFilter: 'blur(8px)' }} className="px-8 py-4">
           <div className="flex justify-between items-center mb-4">
@@ -151,7 +151,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
               <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
               </h2>
-              <p className="text-sm mt-1" style={{ color: ${colors.textSecondary} }}>Visão geral das implantações · atualizado há 4 min</p>
+              <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
             <div className="flex items-center gap-4">
               <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>🔔</button>

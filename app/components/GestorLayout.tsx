@@ -54,7 +54,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
         } text-white transition-all duration-300 flex flex-col`}
-        style={{ background: `${colors.cardBackground}`, borderRight: '1px solid #23262C' }}
+        style={{ background: colors.cardBackground, borderRight: `1px solid ${colors.borderColor}` }}
       >
         {/* Logo */}
         <div className="p-6 flex items-center justify-between gap-3">
@@ -79,14 +79,14 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
             <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               Decola
             </h1>
-            <p style={{ fontSize: '11.5px', color: `${colors.textSecondary}`, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
+            <p style={{ fontSize: '11.5px', color: colors.textSecondary, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
               Central de Implantação
             </p>
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-1 rounded"
-            style={{ background: 'transparent', border: 0, color: `${colors.textSecondary}`, cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 0, color: colors.textSecondary, cursor: 'pointer' }}
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -132,7 +132,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
 
         {/* Footer */}
         <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
-          <p className="text-xs" style={{ color: `${colors.textSecondary}` }}>
+          <p className="text-xs" style={{ color: colors.textSecondary }}>
             {sidebarOpen ? 'Logado como Gestor' : '✓'}
           </p>
         </div>
@@ -147,11 +147,11 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
               <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
               </h2>
-              <p className="text-sm mt-1" style={{ color: `${colors.textSecondary}` }}>Visão geral das implantações · atualizado há 4 min</p>
+              <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: `${colors.textPrimary}` }}>🔔</button>
-              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: `${colors.textPrimary}` }}>⚙️</button>
+              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>🔔</button>
+              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>⚙️</button>
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-lg transition-all"
