@@ -15,7 +15,10 @@ import {
   History,
   Zap,
   CheckCircle2,
+  Sun,
+  Moon,
 } from 'lucide-react';
+import { useTheme } from '@/app/context/ThemeContext';
 
 interface GestorLayoutProps {
   children: React.ReactNode;
@@ -35,11 +38,12 @@ const allMenuItems = [
 ];
 
 export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
+  const { colors, isDark, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [period, setPeriod] = useState<'mes' | 'trimestre' | 'ano'>('mes');
 
   return (
-    <div className="flex h-screen" style={{ background: '#0E1013', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+    <div className="flex h-screen" style={{ background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
         .sora { font-family: "Sora", sans-serif; }
@@ -50,7 +54,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
         } text-white transition-all duration-300 flex flex-col`}
-        style={{ background: '#16181D', borderRight: '1px solid #23262C' }}
+        style={{ background: `${colors.cardBackground}`, borderRight: '1px solid #23262C' }}
       >
         {/* Logo */}
         <div className="p-6 flex items-center justify-between gap-3">
@@ -75,14 +79,14 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
             <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               Decola
             </h1>
-            <p style={{ fontSize: '11.5px', color: '#8A9099', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
+            <p style={{ fontSize: '11.5px', color: `${colors.textSecondary}`, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
               Central de Implantação
             </p>
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-1 rounded"
-            style={{ background: 'transparent', border: 0, color: '#6B7280', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 0, color: `${colors.textSecondary}`, cursor: 'pointer' }}
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -115,7 +119,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${sidebarOpen ? '' : 'justify-center px-2'}`}
                 style={{
                   background: isActive ? '#8B5CF6' : 'transparent',
-                  color: isActive ? '#fff' : '#9AA1AA'
+                  color: isActive ? '#fff' : `${colors.textSecondary}`
                 }}
                 title={item.label}
               >
@@ -128,14 +132,14 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
 
         {/* Footer */}
         <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
-          <p className="text-xs" style={{ color: '#8A9099' }}>
+          <p className="text-xs" style={{ color: `${colors.textSecondary}` }}>
             {sidebarOpen ? 'Logado como Gestor' : '✓'}
           </p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#0E1013' }}>
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: `${colors.background}` }}>
         {/* Top Bar */}
         <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: '1px solid #1D2026', backdropFilter: 'blur(8px)' }} className="px-8 py-4">
           <div className="flex justify-between items-center mb-4">
@@ -143,11 +147,19 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
               <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
               </h2>
-              <p className="text-sm mt-1" style={{ color: '#8A9099' }}>Visão geral das implantações · atualizado há 4 min</p>
+              <p className="text-sm mt-1" style={{ color: `${colors.textSecondary}` }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 rounded-lg" style={{ background: '#16181D', border: '1px solid #23262C', color: '#C9CED6' }}>🔔</button>
-              <button className="p-2 rounded-lg" style={{ background: '#16181D', border: '1px solid #23262C', color: '#C9CED6' }}>⚙️</button>
+              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: `${colors.textPrimary}` }}>🔔</button>
+              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: `${colors.textPrimary}` }}>⚙️</button>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg transition-all"
+                style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary, cursor: 'pointer' }}
+                title={isDark ? 'Tema Claro' : 'Tema Escuro'}
+              >
+                {isDark ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
               <div className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold" style={{ background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)' }}>
                 G
               </div>
@@ -156,13 +168,13 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
 
           {/* Period Filters */}
           {currentPage === 'dashboard' && (
-            <div className="flex items-center gap-2" style={{ background: '#16181D', border: '1px solid #23262C', borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
+            <div className="flex items-center gap-2" style={{ background: `${colors.cardBackground}`, border: '1px solid #23262C', borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
               <button
                 onClick={() => setPeriod('mes')}
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'mes' ? '#FFC93C' : 'transparent',
-                  color: period === 'mes' ? '#16181D' : '#9AA1AA'
+                  color: period === 'mes' ? `${colors.cardBackground}` : `${colors.textSecondary}`
                 }}
               >
                 Mês
@@ -172,7 +184,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'trimestre' ? '#FFC93C' : 'transparent',
-                  color: period === 'trimestre' ? '#16181D' : '#9AA1AA'
+                  color: period === 'trimestre' ? `${colors.cardBackground}` : `${colors.textSecondary}`
                 }}
               >
                 Trimestre
@@ -182,7 +194,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'ano' ? '#FFC93C' : 'transparent',
-                  color: period === 'ano' ? '#16181D' : '#9AA1AA'
+                  color: period === 'ano' ? `${colors.cardBackground}` : `${colors.textSecondary}`
                 }}
               >
                 Ano
@@ -193,7 +205,7 @@ export function GestorLayout({ children, currentPage }: GestorLayoutProps) {
 
         {/* Page Content */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8" style={{ background: '#0E1013' }}>{children}</div>
+          <div className="p-8" style={{ background: `${colors.background}` }}>{children}</div>
         </div>
       </div>
     </div>
