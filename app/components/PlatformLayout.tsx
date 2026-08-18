@@ -172,13 +172,13 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
           {/* Period Filters */}
           {currentPage === 'dashboard' && (
-            <div className="flex items-center gap-2" style={{ background: ${colors.cardBackground}, border: '1px solid #23262C', borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
+            <div className="flex items-center gap-2" style={{ background: colors.cardBackground, border: `1px solid colors.borderColor`, borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
               <button
                 onClick={() => setPeriod('mes')}
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'mes' ? '#FFC93C' : 'transparent',
-                  color: period === 'mes' ? ${colors.cardBackground} : ${colors.textSecondary}
+                  color: period === 'mes' ? colors.cardBackground : colors.textSecondary
                 }}
               >
                 Mês
@@ -188,7 +188,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'trimestre' ? '#FFC93C' : 'transparent',
-                  color: period === 'trimestre' ? ${colors.cardBackground} : ${colors.textSecondary}
+                  color: period === 'trimestre' ? colors.cardBackground : colors.textSecondary
                 }}
               >
                 Trimestre
@@ -198,7 +198,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 className="px-4 py-2 rounded-lg font-medium transition-colors"
                 style={{
                   background: period === 'ano' ? '#FFC93C' : 'transparent',
-                  color: period === 'ano' ? ${colors.cardBackground} : ${colors.textSecondary}
+                  color: period === 'ano' ? colors.cardBackground : colors.textSecondary
                 }}
               >
                 Ano
@@ -209,7 +209,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
         {/* Page Content */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8" style={{ background: ${colors.background} }}>{children}</div>
+          <div className="p-8" style={{ background: colors.background }}>{children}</div>
         </div>
       </div>
     </div>
