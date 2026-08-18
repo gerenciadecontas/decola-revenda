@@ -256,11 +256,11 @@ export default function ImplantacoesPage() {
                 <div
                   key={etapa.value}
                   style={{
-                    flex: '0 0 320px',
+                    flex: '0 0 200px',
                     background: 'rgba(255,255,255,0.02)',
                     border: `1px solid ${COLORS.borderColor}`,
                     borderRadius: '12px',
-                    padding: '16px',
+                    padding: '12px',
                     minHeight: '400px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -269,23 +269,23 @@ export default function ImplantacoesPage() {
                   {/* Cabeçalho da coluna */}
                   <div
                     style={{
-                      padding: '10px 14px',
+                      padding: '8px 10px',
                       background: etapa.color,
                       borderRadius: '8px',
-                      marginBottom: '14px',
+                      marginBottom: '10px',
                       textAlign: 'center',
                     }}
                   >
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em', lineHeight: 1.2 }}>
                       {etapa.label}
                     </div>
-                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginTop: '6px' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginTop: '4px' }}>
                       {implantacoesEtapa.length}
                     </div>
                   </div>
 
                   {/* Cards de implantação */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                     {implantacoesEtapa.map(impl => (
                       <div
                         key={impl.id}
@@ -293,7 +293,7 @@ export default function ImplantacoesPage() {
                           background: 'rgba(139, 92, 246, 0.1)',
                           border: `1px solid ${COLORS.borderColor}`,
                           borderRadius: '8px',
-                          padding: '12px',
+                          padding: '10px',
                           cursor: 'pointer',
                         }}
                       >
