@@ -144,7 +144,7 @@ export default function ImplantacoesPage() {
                     minHeight: '500px',
                   }}
                 >
-                  {/* Cabeçalho da coluna com botão + */}
+                  {/* Cabeçalho da coluna */}
                   <div
                     style={{
                       padding: '10px 12px',
@@ -152,50 +152,47 @@ export default function ImplantacoesPage() {
                       borderRadius: '10px',
                       marginBottom: '12px',
                       textAlign: 'center',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
                     }}
                   >
-                    <div>
-                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em', lineHeight: 1.2 }}>
-                        {etapa.label}
-                      </div>
-                      <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginTop: '4px' }}>
-                        {implantacoesEtapa.length}
-                      </div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em', lineHeight: 1.2 }}>
+                      {etapa.label}
                     </div>
-                    <button
-                      onClick={() => {
-                        setSelectedEtapa(etapa.value);
-                        setFormData({ ...formData, etapa: etapa.value });
-                        setShowForm(true);
-                      }}
-                      style={{
-                        background: 'rgba(255,255,255,0.2)',
-                        border: 'none',
-                        color: '#fff',
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '8px',
-                        fontSize: '18px',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                      }}
-                    >
-                      +
-                    </button>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginTop: '4px' }}>
+                      {implantacoesEtapa.length}
+                    </div>
                   </div>
+
+                  {/* Botão + */}
+                  <button
+                    onClick={() => {
+                      setSelectedEtapa(etapa.value);
+                      setFormData({ ...formData, etapa: etapa.value });
+                      setShowForm(true);
+                    }}
+                    style={{
+                      background: 'rgba(255,255,255,0.08)',
+                      border: `1px solid ${COLORS.borderColor}`,
+                      color: COLORS.textSecondary,
+                      width: '100%',
+                      padding: '8px',
+                      borderRadius: '8px',
+                      fontSize: '20px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      marginBottom: '12px',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
+                      e.currentTarget.style.color = COLORS.textPrimary;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                      e.currentTarget.style.color = COLORS.textSecondary;
+                    }}
+                  >
+                    +
+                  </button>
 
                   {/* Cards */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, overflowY: 'auto' }}>
