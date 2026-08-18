@@ -154,12 +154,12 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>🔔</button>
-              <button className="p-2 rounded-lg" style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>⚙️</button>
+              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>🔔</button>
+              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>⚙️</button>
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-lg transition-all"
-                style={{ background: `${colors.cardBackground}`, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary, cursor: 'pointer' }}
+                style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary, cursor: 'pointer' }}
                 title={isDark ? 'Tema Claro' : 'Tema Escuro'}
               >
                 {isDark ? <Sun size={20} /> : <Moon size={20} />}
