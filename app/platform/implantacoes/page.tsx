@@ -55,6 +55,7 @@ const etapas = [
 export default function ImplantacoesPage() {
   const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
   const [activeTab, setActiveTab] = useState<string>('chegada');
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<{
     revenda: string;
     etapa: string;
@@ -125,118 +126,23 @@ export default function ImplantacoesPage() {
   return (
     <PlatformLayout currentPage="implantacoes">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
-        {/* Formulário */}
-        <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>
-            Adicionar Nova Implantação
-          </h2>
-          <form onSubmit={handleAddImplantacao} style={{ display: 'grid', gap: '16px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Revenda *
-                </label>
-                <select
-                  value={formData.revenda}
-                  onChange={(e) => setFormData({ ...formData, revenda: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${COLORS.borderColor}`,
-                    borderRadius: '8px',
-                    color: COLORS.textPrimary,
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  <option value="">Selecione uma revenda</option>
-                  {revendas.map(r => (
-                    <option key={r} value={r}>{r}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Etapa Atual *
-                </label>
-                <select
-                  value={formData.etapa}
-                  onChange={(e) => setFormData({ ...formData, etapa: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${COLORS.borderColor}`,
-                    borderRadius: '8px',
-                    color: COLORS.textPrimary,
-                    fontSize: '13px',
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  {etapas.map(e => (
-                    <option key={e.value} value={e.value}>{e.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Data Prevista
-                </label>
-                <input
-                  type="date"
-                  value={formData.dataPrevista}
-                  onChange={(e) => setFormData({ ...formData, dataPrevista: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${COLORS.borderColor}`,
-                    borderRadius: '8px',
-                    color: COLORS.textPrimary,
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                  }}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Progresso: {formData.progresso}%
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={formData.progresso}
-                  onChange={(e) => setFormData({ ...formData, progresso: parseInt(e.target.value) })}
-                  style={{
-                    width: '100%',
-                    height: '6px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    accentColor: COLORS.green,
-                  }}
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              style={{
-                background: COLORS.purple,
-                color: '#fff',
-                border: 'none',
-                padding: '12px 24px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              Adicionar
-            </button>
-          </form>
+        {/* Botão de adicionar no topo */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={() => setShowForm(true)}
+            style={{
+              padding: '10px 20px',
+              background: COLORS.purple,
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            + Adicionar
+          </button>
         </div>
 
         {/* Abas */}
@@ -368,6 +274,188 @@ export default function ImplantacoesPage() {
             </div>
           )}
         </div>
+
+        {/* Modal */}
+        {showForm && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.7)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1000,
+            }}
+            onClick={() => setShowForm(false)}
+          >
+            <div
+              style={{
+                background: COLORS.cardBg,
+                border: `1px solid ${COLORS.borderColor}`,
+                borderRadius: '18px',
+                padding: '24px',
+                maxWidth: '500px',
+                width: '90%',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '20px', fontWeight: 600, color: COLORS.textPrimary, margin: 0 }}>
+                  Adicionar Nova Implantação
+                </h2>
+                <button
+                  onClick={() => setShowForm(false)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: COLORS.textSecondary,
+                    cursor: 'pointer',
+                    fontSize: '24px',
+                    padding: '0',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={(e) => { handleAddImplantacao(e); setShowForm(false); }} style={{ display: 'grid', gap: '16px' }}>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
+                    Revenda *
+                  </label>
+                  <select
+                    value={formData.revenda}
+                    onChange={(e) => setFormData({ ...formData, revenda: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${COLORS.borderColor}`,
+                      borderRadius: '8px',
+                      color: COLORS.textPrimary,
+                      fontSize: '14px',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    <option value="">Selecione uma revenda</option>
+                    {revendas.map(r => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
+                    Etapa Atual *
+                  </label>
+                  <select
+                    value={formData.etapa}
+                    onChange={(e) => setFormData({ ...formData, etapa: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${COLORS.borderColor}`,
+                      borderRadius: '8px',
+                      color: COLORS.textPrimary,
+                      fontSize: '13px',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    {etapas.map(e => (
+                      <option key={e.value} value={e.value}>{e.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
+                    Data Prevista
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.dataPrevista}
+                    onChange={(e) => setFormData({ ...formData, dataPrevista: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${COLORS.borderColor}`,
+                      borderRadius: '8px',
+                      color: COLORS.textPrimary,
+                      fontSize: '14px',
+                      fontFamily: 'inherit',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
+                    Progresso: {formData.progresso}%
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={formData.progresso}
+                    onChange={(e) => setFormData({ ...formData, progresso: parseInt(e.target.value) })}
+                    style={{
+                      width: '100%',
+                      height: '6px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      accentColor: COLORS.green,
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: 'transparent',
+                      color: COLORS.textSecondary,
+                      border: `1px solid ${COLORS.borderColor}`,
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: COLORS.purple,
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Adicionar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </PlatformLayout>
   );
