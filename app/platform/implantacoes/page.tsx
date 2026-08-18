@@ -2,12 +2,16 @@
 
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 
 const COLORS = {
   purple: '#8B5CF6',
   yellow: '#FFC93C',
   green: '#34D399',
   red: '#F87171',
+  blue: '#60A5FA',
+  pink: '#EC4899',
+  indigo: '#A78BFA',
   darkBg: '#0E1013',
   cardBg: '#16181D',
   borderColor: '#23262C',
@@ -19,10 +23,10 @@ const COLORS = {
 interface Implantacao {
   id: string;
   revenda: string;
-  etapa: 'kickoff' | 'configuracao' | 'testes' | 'golive';
+  etapa: string;
   progresso: number;
   dataPrevista: string;
-  status: 'em-andamento' | 'concluida';
+  status: 'em-andamento' | 'concluida' | 'pausado' | 'abandonado';
 }
 
 const revendas = [
@@ -35,22 +39,29 @@ const revendas = [
 ];
 
 const etapas = [
-  { value: 'kickoff', label: 'Kickoff' },
-  { value: 'configuracao', label: 'Configuração' },
-  { value: 'testes', label: 'Testes' },
-  { value: 'golive', label: 'Go-live' },
+  { value: 'chegada', label: 'CHEGADA', color: COLORS.blue },
+  { value: 'boas-vindas', label: 'BOAS VINDAS', color: COLORS.blue },
+  { value: 'sem-retorno', label: 'SEM RETORNO', color: COLORS.red },
+  { value: 'apresentacao-desktop', label: 'APRESENTAÇÃO E INSTALAÇÃO LC DESKTOP', color: COLORS.purple },
+  { value: 'apresentacao-web', label: 'APRESENTAÇÃO E INSTALAÇÃO DO LC WEB', color: COLORS.purple },
+  { value: 'lc-academy', label: 'LC ACADEMY', color: COLORS.indigo },
+  { value: 'acompanhamento', label: 'ACOMPANHAMENTO DOS CLIENTES INICIAIS', color: COLORS.pink },
+  { value: 'decola-produtos', label: 'DECOLA PRODUTOS', color: COLORS.purple },
+  { value: 'ativou-3', label: 'ATIVOU 3 CLIENTES', color: COLORS.green },
+  { value: 'pausado', label: 'PAUSADO', color: COLORS.yellow },
+  { value: 'abandonado', label: 'ABANDONADO', color: COLORS.red },
 ];
 
 export default function ImplantacoesPage() {
   const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
   const [formData, setFormData] = useState<{
     revenda: string;
-    etapa: 'kickoff' | 'configuracao' | 'testes' | 'golive';
+    etapa: string;
     progresso: number;
     dataPrevista: string;
   }>({
     revenda: '',
-    etapa: 'kickoff',
+    etapa: 'chegada',
     progresso: 0,
     dataPrevista: '',
   });
@@ -69,7 +80,7 @@ export default function ImplantacoesPage() {
 
   const handleAddImplantacao = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.revenda || !formData.dataPrevista) return;
+    if (!formData.revenda) return;
 
     const newImplantacao: Implantacao = {
       id: Date.now().toString(),
@@ -77,11 +88,11 @@ export default function ImplantacoesPage() {
       etapa: formData.etapa,
       progresso: formData.progresso,
       dataPrevista: formData.dataPrevista,
-      status: 'em-andamento',
+      status: formData.etapa === 'pausado' ? 'pausado' : formData.etapa === 'abandonado' ? 'abandonado' : 'em-andamento',
     };
 
     saveImplantacoes([...implantacoes, newImplantacao]);
-    setFormData({ revenda: '', etapa: 'kickoff', progresso: 0, dataPrevista: '' });
+    setFormData({ revenda: '', etapa: 'chegada', progresso: 0, dataPrevista: '' });
   };
 
   const handleUpdateProgress = (id: string, newProgress: number) => {
@@ -92,21 +103,21 @@ export default function ImplantacoesPage() {
     );
   };
 
-  const handleComplete = (id: string) => {
+  const handleMoveToEtapa = (id: string, newEtapa: string) => {
     saveImplantacoes(
-      implantacoes.map(i =>
-        i.id === id ? { ...i, status: 'concluida', progresso: 100 } : i
-      )
+      implantacoes.map(i => {
+        if (i.id === id) {
+          const newStatus = newEtapa === 'pausado' ? 'pausado' : newEtapa === 'abandonado' ? 'abandonado' : 'em-andamento';
+          return { ...i, etapa: newEtapa, status: newStatus };
+        }
+        return i;
+      })
     );
   };
 
   const handleDelete = (id: string) => {
     saveImplantacoes(implantacoes.filter(i => i.id !== id));
   };
-
-  const implantacoesEmAndamento = implantacoes.filter(i => i.status === 'em-andamento');
-  const hoje = new Date().toISOString().split('T')[0];
-  const implantacoesHoje = implantacoesEmAndamento.filter(i => i.dataPrevista === hoje);
 
   return (
     <PlatformLayout currentPage="implantacoes">
@@ -117,7 +128,7 @@ export default function ImplantacoesPage() {
             Implantações
           </h1>
           <p style={{ fontSize: '15px', color: COLORS.textSecondary, margin: 0 }}>
-            Cadastre e acompanhe o progresso das implantações
+            Acompanhe o progresso das implantações por etapa
           </p>
         </div>
 
@@ -154,11 +165,11 @@ export default function ImplantacoesPage() {
               </div>
               <div>
                 <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Etapa *
+                  Etapa Atual *
                 </label>
                 <select
                   value={formData.etapa}
-                  onChange={(e) => setFormData({ ...formData, etapa: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, etapa: e.target.value })}
                   style={{
                     width: '100%',
                     padding: '10px 12px',
@@ -166,7 +177,7 @@ export default function ImplantacoesPage() {
                     border: `1px solid ${COLORS.borderColor}`,
                     borderRadius: '8px',
                     color: COLORS.textPrimary,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     fontFamily: 'inherit',
                   }}
                 >
@@ -179,7 +190,7 @@ export default function ImplantacoesPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary, display: 'block', marginBottom: '6px' }}>
-                  Data Prevista *
+                  Data Prevista
                 </label>
                 <input
                   type="date"
@@ -235,108 +246,130 @@ export default function ImplantacoesPage() {
           </form>
         </div>
 
-        {/* Lista */}
-        {implantacoesEmAndamento.length > 0 && (
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '24px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>
-              Implantações em Andamento ({implantacoesEmAndamento.length})
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {implantacoesEmAndamento.map(impl => {
-                const etapaLabel = etapas.find(e => e.value === impl.etapa)?.label || impl.etapa;
-                const isToday = impl.dataPrevista === hoje;
-                const dataPrevista = new Date(impl.dataPrevista).toLocaleDateString('pt-BR');
+        {/* Kanban Board */}
+        <div style={{ overflowX: 'auto', paddingBottom: '20px' }}>
+          <div style={{ display: 'flex', gap: '16px', minWidth: 'fit-content' }}>
+            {etapas.map(etapa => {
+              const implantacoesEtapa = implantacoes.filter(i => i.etapa === etapa.value);
 
-                return (
+              return (
+                <div
+                  key={etapa.value}
+                  style={{
+                    flex: '0 0 320px',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${COLORS.borderColor}`,
+                    borderRadius: '12px',
+                    padding: '16px',
+                    minHeight: '400px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  {/* Cabeçalho da coluna */}
                   <div
-                    key={impl.id}
                     style={{
-                      background: 'rgba(255,255,255,0.03)',
-                      border: `1px solid ${isToday ? COLORS.yellow : COLORS.borderColor}`,
-                      borderRadius: '10px',
-                      padding: '16px',
+                      padding: '10px 14px',
+                      background: etapa.color,
+                      borderRadius: '8px',
+                      marginBottom: '14px',
+                      textAlign: 'center',
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '12px' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.revenda}</span>
-                          {isToday && (
-                            <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: `${COLORS.yellow}22`, color: COLORS.yellow }}>
-                              HOJE
-                            </span>
-                          )}
-                        </div>
-                        <p style={{ margin: 0, fontSize: '13px', color: COLORS.textSecondary }}>
-                          {etapaLabel} · Previsto para {dataPrevista}
-                        </p>
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', marginLeft: '12px' }}>
-                        <button
-                          onClick={() => handleComplete(impl.id)}
-                          style={{
-                            background: COLORS.green,
-                            color: '#fff',
-                            border: 'none',
-                            padding: '6px 10px',
-                            borderRadius: '6px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          ✓ Concluir
-                        </button>
-                        <button
-                          onClick={() => handleDelete(impl.id)}
-                          style={{
-                            background: 'transparent',
-                            color: COLORS.red,
-                            border: `1px solid ${COLORS.red}44`,
-                            padding: '6px 10px',
-                            borderRadius: '6px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          ✕
-                        </button>
-                      </div>
+                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#fff', letterSpacing: '0.04em' }}>
+                      {etapa.label}
                     </div>
-
-                    <div style={{ marginBottom: '10px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                        <span style={{ fontSize: '12px', color: COLORS.textSecondary }}>Progresso</span>
-                        <span style={{ fontSize: '12px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.progresso}%</span>
-                      </div>
-                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                        <div style={{ height: '6px', borderRadius: '6px', background: COLORS.borderColor, overflow: 'hidden', flex: 1 }}>
-                          <div style={{ height: '100%', borderRadius: '6px', width: `${impl.progresso}%`, background: impl.progresso === 100 ? COLORS.green : COLORS.yellow }} />
-                        </div>
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          value={impl.progresso}
-                          onChange={(e) => handleUpdateProgress(impl.id, parseInt(e.target.value))}
-                          style={{
-                            width: '100px',
-                            height: '4px',
-                            cursor: 'pointer',
-                            accentColor: COLORS.yellow,
-                          }}
-                          title="Ajuste o progresso"
-                        />
-                      </div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginTop: '6px' }}>
+                      {implantacoesEtapa.length}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+
+                  {/* Cards de implantação */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+                    {implantacoesEtapa.map(impl => (
+                      <div
+                        key={impl.id}
+                        style={{
+                          background: 'rgba(139, 92, 246, 0.1)',
+                          border: `1px solid ${COLORS.borderColor}`,
+                          borderRadius: '8px',
+                          padding: '12px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary, marginBottom: '4px' }}>
+                              {impl.revenda}
+                            </div>
+                            {impl.dataPrevista && (
+                              <div style={{ fontSize: '11px', color: COLORS.textSecondary }}>
+                                {new Date(impl.dataPrevista).toLocaleDateString('pt-BR')}
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleDelete(impl.id)}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: COLORS.textSecondary,
+                              cursor: 'pointer',
+                              padding: '2px 4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+
+                        {impl.progresso > 0 && (
+                          <div style={{ marginTop: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                              <span style={{ fontSize: '10px', color: COLORS.textSecondary }}>Progresso</span>
+                              <span style={{ fontSize: '10px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.progresso}%</span>
+                            </div>
+                            <div style={{ height: '4px', borderRadius: '4px', background: COLORS.borderColor, overflow: 'hidden' }}>
+                              <div style={{ height: '100%', borderRadius: '4px', width: `${impl.progresso}%`, background: impl.progresso === 100 ? COLORS.green : COLORS.yellow }} />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Botão para mover próxima etapa */}
+                        {etapa.value !== 'abandonado' && etapa.value !== 'pausado' && (
+                          <div style={{ marginTop: '8px' }}>
+                            <button
+                              onClick={() => {
+                                const currentIndex = etapas.findIndex(e => e.value === etapa.value);
+                                if (currentIndex < etapas.length - 1) {
+                                  handleMoveToEtapa(impl.id, etapas[currentIndex + 1].value);
+                                }
+                              }}
+                              style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                background: 'rgba(139, 92, 246, 0.2)',
+                                border: 'none',
+                                borderRadius: '6px',
+                                color: COLORS.purple,
+                                fontSize: '11px',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                              }}
+                            >
+                              Próxima Etapa →
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        )}
+        </div>
       </div>
     </PlatformLayout>
   );
