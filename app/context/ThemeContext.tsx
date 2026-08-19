@@ -18,12 +18,12 @@ export interface ThemeColors {
 }
 
 const LIGHT_COLORS: ThemeColors = {
-  background: '#F8F9FB',
+  background: '#FAF6F1',
   cardBackground: '#FFFFFF',
-  textPrimary: '#1F2937',
-  textSecondary: '#64748B',
-  borderColor: '#E2E8F0',
-  purple: '#8B5CF6',
+  textPrimary: '#3D2817',
+  textSecondary: '#8B7355',
+  borderColor: '#E8DFD5',
+  purple: '#9B7BB4',
   yellow: '#FFC93C',
   green: '#34D399',
   red: '#F87171',
