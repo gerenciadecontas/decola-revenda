@@ -16,7 +16,7 @@ interface PlatformLayoutProps {
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard' },
   { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes' },
-  { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos' },
+  { id: 'treinamentos', label: 'Jornada de capacitação', icon: Calendar, href: '/platform/treinamentos' },
 ];
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {

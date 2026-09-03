@@ -61,7 +61,7 @@ export default function TreinamentosPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
           <div>
             <h1 style={{ fontSize: '32px', fontWeight: 700, color: theme.textPrimary, margin: '0 0 8px 0' }}>
-              Treinamentos
+              Jornada de capacitação
             </h1>
             <p style={{ fontSize: '14px', color: theme.textSecondary, margin: 0 }}>
               24 sessões no trimestre · atualizado há 2 min
