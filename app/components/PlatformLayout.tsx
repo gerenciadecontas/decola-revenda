@@ -38,7 +38,15 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
           display: 'flex',
           flexDirection: 'column',
           flexShrink: 0,
-          color: '#fff'
+          color: '#fff',
+          margin: '16px',
+          borderRadius: '16px',
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
+          position: 'fixed',
+          left: '16px',
+          top: '16px',
+          height: 'calc(100vh - 32px)',
+          overflowY: 'auto'
         }}
       >
         {/* Logo Section */}
@@ -49,21 +57,26 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 width: '44px',
                 height: '44px',
                 borderRadius: '12px',
-                background: '#7C5CF0',
+                background: '#E6B23E',
                 display: 'grid',
                 placeItems: 'center',
                 fontFamily: '"Sora", sans-serif',
                 fontWeight: 700,
-                color: '#fff',
+                color: '#1A1A1A',
                 fontSize: '22px',
                 flexShrink: 0
               }}
             >
               D
             </div>
-            <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
-              Implantação
-            </p>
+            <div>
+              <h1 style={{ fontFamily: '"Sora", sans-serif', fontSize: '18px', fontWeight: 'bold', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0 }}>
+                Decola
+              </h1>
+              <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '2px', margin: 0 }}>
+                Central de implantação
+              </p>
+            </div>
           </div>
         </div>
 
@@ -82,8 +95,8 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                   gap: '12px',
                   padding: '12px 16px',
                   borderRadius: '8px',
-                  backgroundColor: isActive ? '#8B5CF6' : 'transparent',
-                  color: isActive ? '#fff' : colors.textSecondary,
+                  backgroundColor: isActive ? '#E6B23E' : 'transparent',
+                  color: isActive ? '#1A1A1A' : colors.textSecondary,
                   textDecoration: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -99,7 +112,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: colors.background, minHeight: '100vh' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: colors.background, minHeight: '100vh', marginLeft: '288px' }}>
         {/* Header/Top Bar */}
         <div style={{
           padding: '16px 32px',

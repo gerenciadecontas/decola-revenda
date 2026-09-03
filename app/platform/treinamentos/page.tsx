@@ -181,32 +181,6 @@ export default function JornadaCapacitacaoPage() {
               24 sessões no trimestre · atualizado há 2 min
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button style={{
-              padding: '10px 20px',
-              background: 'transparent',
-              border: `1px solid ${theme.borderColor}`,
-              borderRadius: '8px',
-              color: theme.textPrimary,
-              cursor: 'pointer',
-              fontWeight: '500',
-              fontSize: '14px'
-            }}>
-              Exportar
-            </button>
-            <button style={{
-              padding: '10px 20px',
-              background: '#7C5CF0',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '14px'
-            }}>
-              + Agendar treinamento
-            </button>
-          </div>
         </div>
 
         {/* Main Tabs */}

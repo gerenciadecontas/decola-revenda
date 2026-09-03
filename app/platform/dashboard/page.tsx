@@ -103,32 +103,6 @@ export default function DashboardPage() {
                 Saúde da carteira de implantação · atualizado há 2 min
               </p>
             </div>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button style={{
-                padding: '10px 20px',
-                background: 'transparent',
-                border: `1px solid ${COLORS.borderColor}`,
-                borderRadius: '8px',
-                color: COLORS.textPrimary,
-                cursor: 'pointer',
-                fontWeight: '500',
-                fontSize: '14px'
-              }}>
-                Exportar
-              </button>
-              <button style={{
-                padding: '10px 20px',
-                background: '#7C5CF0',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '14px'
-              }}>
-                + Nova revenda
-              </button>
-            </div>
           </div>
 
           {/* Vision Cards */}
