@@ -23,7 +23,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const { colors, isDark, toggleTheme } = useTheme();
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', background: colors.background, fontFamily: '"Sora", sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
         .sora { font-family: "Sora", sans-serif; }
@@ -127,19 +127,23 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
           <button
             onClick={toggleTheme}
             style={{
-              padding: '8px 12px',
-              background: 'transparent',
+              padding: '10px 12px',
+              background: isDark ? '#16181D' : '#FFFFFF',
               border: `1px solid ${colors.borderColor}`,
-              borderRadius: '6px',
+              borderRadius: '8px',
               color: colors.textSecondary,
               cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              transition: 'all 0.2s ease'
+              fontSize: '18px',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '40px',
+              height: '40px'
             }}
             title="Alternar tema"
           >
-            {isDark ? '☀️ Claro' : '🌙 Escuro'}
+            {isDark ? '☀️' : '🌙'}
           </button>
         </div>
 

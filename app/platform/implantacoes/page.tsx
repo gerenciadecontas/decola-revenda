@@ -1,6 +1,7 @@
 'use client';
 
 import { PlatformLayout } from '@/app/components/PlatformLayout';
+import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useSupabaseTable } from '@/lib/supabase/hooks';
 import '@/app/globals.css';
@@ -53,7 +54,27 @@ const ini = (s: string) => {
   return ((p[0]?.[0] || '') + (p[1]?.[0] || '')).toUpperCase();
 };
 
+const LIGHT_THEME = {
+  background: '#F9F7F4',
+  cardBg: '#FFFFFF',
+  borderColor: '#E8E4DC',
+  textPrimary: '#1A1A1A',
+  textSecondary: '#6B6B6B',
+  textTertiary: '#A0A0A0',
+};
+
+const DARK_THEME = {
+  background: '#0E1013',
+  cardBg: '#16181D',
+  borderColor: '#2A2D33',
+  textPrimary: '#F5F5F5',
+  textSecondary: '#B8BFCC',
+  textTertiary: '#7A8290',
+};
+
 export default function ImplantacoesPage() {
+  const { isDark } = useTheme();
+  const theme = isDark ? DARK_THEME : LIGHT_THEME;
   // @ts-ignore
   const { data: implantacoes = [], create, update: updateRecord, delete_: deleteRecord } = useSupabaseTable<Implantacao>('implantacoes');
   const [showForm, setShowForm] = useState(false);
@@ -203,7 +224,7 @@ export default function ImplantacoesPage() {
 
   return (
     <PlatformLayout currentPage="implantacoes">
-      <div style={{ padding: '24px' }}>
+      <div style={{ padding: '24px', background: theme.background, minHeight: '100vh' }}>
         <div className="page-lead">
           <h2>Implantações</h2>
           <p>Pipeline de onboarding por etapa · {ativas} revendas em curso.</p>
@@ -211,31 +232,31 @@ export default function ImplantacoesPage() {
 
         {/* Stats Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-          <div style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '0 0 8px 0' }}>Implantações ativas</p>
-            <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--ink)' }}>{ativas}</div>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '8px 0 0 0' }}>entraram esta semana</p>
+          <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Implantações ativas</p>
+            <div style={{ fontSize: '32px', fontWeight: 700, color: theme.textPrimary }}>{ativas}</div>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>entraram esta semana</p>
           </div>
 
           <div style={{ background: 'rgba(230, 178, 62, 0.1)', border: '1px solid #E6B23E', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '0 0 8px 0' }}>Sem retorno</p>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Sem retorno</p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
               <div style={{ fontSize: '32px', fontWeight: 700, color: '#E6B23E' }}>{emRisco}</div>
               <span style={{ fontSize: '11px', background: '#E6B23E', color: '#0E1013', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>risco</span>
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '8px 0 0 0' }}>paradas há 5+ dias</p>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>paradas há 5+ dias</p>
           </div>
 
           <div style={{ background: 'rgba(123, 92, 240, 0.08)', border: '1px solid #5B43C0', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '0 0 8px 0' }}>Tempo médio na etapa</p>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Tempo médio na etapa</p>
             <div style={{ fontSize: '32px', fontWeight: 700, color: '#8B7CF6' }}>5d</div>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '8px 0 0 0' }}>meta: 4 dias</p>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>meta: 4 dias</p>
           </div>
 
-          <div style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '0 0 8px 0' }}>Concluídas no mês</p>
-            <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--ink)' }}>{concluidas}</div>
-            <p style={{ fontSize: '12px', color: 'var(--ink-2)', margin: '8px 0 0 0' }}>taxa de go-live</p>
+          <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Concluídas no mês</p>
+            <div style={{ fontSize: '32px', fontWeight: 700, color: theme.textPrimary }}>{concluidas}</div>
+            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>taxa de go-live</p>
           </div>
         </div>
 
@@ -366,7 +387,7 @@ export default function ImplantacoesPage() {
             <div
               style={{
                 background: 'var(--panel)',
-                border: '1px solid var(--line)',
+                border: `1px solid ${theme.borderColor}`,
                 borderRadius: '18px',
                 padding: '24px',
                 maxWidth: '500px',
@@ -375,7 +396,7 @@ export default function ImplantacoesPage() {
               onClick={(e) => e.stopPropagation()}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--ink)', margin: 0 }}>
+                <h2 style={{ fontSize: '20px', fontWeight: 600, color: theme.textPrimary, margin: 0 }}>
                   Nova Implantação
                 </h2>
                 <button
@@ -383,7 +404,7 @@ export default function ImplantacoesPage() {
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: 'var(--ink-2)',
+                    color: theme.textSecondary,
                     cursor: 'pointer',
                     fontSize: '24px',
                     padding: '0',
@@ -395,7 +416,7 @@ export default function ImplantacoesPage() {
 
               <form onSubmit={handleAddImplantacao} style={{ display: 'grid', gap: '16px' }}>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-2)', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: theme.textSecondary, display: 'block', marginBottom: '6px' }}>
                     Revenda *
                   </label>
                   <select
@@ -405,9 +426,9 @@ export default function ImplantacoesPage() {
                       width: '100%',
                       padding: '10px 12px',
                       background: 'var(--panel-2)',
-                      border: '1px solid var(--line)',
+                      border: `1px solid ${theme.borderColor}`,
                       borderRadius: '8px',
-                      color: 'var(--ink)',
+                      color: theme.textPrimary,
                       fontSize: '14px',
                       fontFamily: 'inherit',
                     }}
@@ -420,7 +441,7 @@ export default function ImplantacoesPage() {
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-2)', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 600, color: theme.textSecondary, display: 'block', marginBottom: '6px' }}>
                     Progresso: {formData.progresso}%
                   </label>
                   <input

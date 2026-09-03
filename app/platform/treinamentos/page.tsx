@@ -8,10 +8,10 @@ import '@/app/globals.css';
 const LIGHT_THEME = {
   background: '#F9F7F4',
   cardBg: '#FFFFFF',
-  borderColor: '#E5DCD2',
+  borderColor: '#E8E4DC',
   textPrimary: '#1A1A1A',
-  textSecondary: '#888888',
-  textTertiary: '#A4A8B3',
+  textSecondary: '#6B6B6B',
+  textTertiary: '#A0A0A0',
   purple: '#7C5CF0',
   yellow: '#E6B23E',
 };
@@ -19,12 +19,12 @@ const LIGHT_THEME = {
 const DARK_THEME = {
   background: '#0E1013',
   cardBg: '#16181D',
-  borderColor: '#23262C',
-  textPrimary: '#FFFFFF',
-  textSecondary: '#A4A8B3',
-  textTertiary: '#6B7280',
-  purple: '#8B5CF6',
-  yellow: '#E6B23E',
+  borderColor: '#2A2D33',
+  textPrimary: '#F5F5F5',
+  textSecondary: '#B8BFCC',
+  textTertiary: '#7A8290',
+  purple: '#9D7EFF',
+  yellow: '#F5C947',
 };
 
 const TREINAMENTOS_DATA = {
