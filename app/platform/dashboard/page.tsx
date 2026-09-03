@@ -128,7 +128,7 @@ export default function DashboardPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
             <div>
               <h1 style={{ fontSize: '40px', fontWeight: 700, color: theme.textPrimary, margin: '0 0 8px 0' }}>
-                Visão geral
+                Dashboard
               </h1>
               <p style={{ fontSize: '14px', color: theme.textSecondary, margin: 0 }}>
                 Saúde da carteira de implantação · atualizado há 2 min
@@ -140,11 +140,17 @@ export default function DashboardPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
             <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '18px', padding: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <p style={{ fontSize: '12px', color: theme.textSecondary, margin: 0 }}>Revendas em implantação</p>
-                <span style={{ fontSize: '12px', color: theme.textSecondary }}>+2</span>
+                <p style={{ fontSize: '12px', color: theme.textSecondary, margin: 0 }}>Meta do mês</p>
+                <span style={{ fontSize: '12px', background: atingiuMeta ? '#4E8E5B' : theme.yellow, color: atingiuMeta ? '#fff' : '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: '600' }}>{Math.round((implantacoesDoMes / metaMes) * 100)}%</span>
               </div>
-              <div style={{ fontSize: '40px', fontWeight: 700, color: theme.textPrimary, marginBottom: '8px' }}>{ativas}</div>
-              <p style={{ fontSize: '12px', color: theme.textSecondary, margin: 0 }}>entraram esta semana</p>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '40px', fontWeight: 700, color: theme.textPrimary }}>{implantacoesDoMes}</div>
+                <span style={{ fontSize: '14px', color: theme.textSecondary }}>de {metaMes}</span>
+              </div>
+              <div style={{ height: '8px', background: theme.borderColor, borderRadius: '99px', overflow: 'hidden', marginBottom: '8px' }}>
+                <div style={{ height: '100%', background: atingiuMeta ? '#4E8E5B' : theme.yellow, width: `${Math.min((implantacoesDoMes / metaMes) * 100, 100)}%`, transition: 'width 0.3s' }} />
+              </div>
+              <p style={{ fontSize: '12px', color: theme.textSecondary, margin: 0 }}>implantações este mês</p>
             </div>
 
             <div style={{ background: 'rgba(230, 178, 62, 0.1)', border: `1px solid ${COLORS.yellow}`, borderRadius: '18px', padding: '20px' }}>
