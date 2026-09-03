@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import '@/app/globals.css';
 
 const LIGHT_THEME = {
-  background: '#F8F6F1',
+  background: '#F9F7F4',
   cardBg: '#FFFFFF',
   borderColor: '#E5DCD2',
   textPrimary: '#1A1A1A',
