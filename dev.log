@@ -1,0 +1,763 @@
+
+> decola-revenda@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.29:3000
+- Environments: .env.local
+✓ Ready in 6.6s
+✓ Running next.config.ts took 430ms
+
+ GET /admin/implantacao-visao-geral 200 in 3.8s (next.js: 2.7s, application-code: 1048ms)
+✓ Compiled in 95ms
+ GET /admin/implantacao-visao-geral 200 in 68ms (next.js: 21ms, application-code: 47ms)
+✓ Compiled in 104ms
+✓ Compiled in 43ms
+ GET /admin/implantacao-visao-geral 200 in 44ms (next.js: 15ms, application-code: 29ms)
+✓ Compiled in 26ms
+ GET /admin/implantacao-visao-geral 200 in 65ms (next.js: 22ms, application-code: 43ms)
+⚠ Fast Refresh had to perform a full reload when ./app/context/ThemeContext.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+✓ Compiled in 86ms
+ GET /admin/implantacao-visao-geral 200 in 86ms (next.js: 15ms, application-code: 71ms)
+ GET /admin/implantacao-visao-geral 200 in 53ms (next.js: 7ms, application-code: 45ms)
+ GET /admin/implantacao-visao-geral 200 in 32ms (next.js: 14ms, application-code: 19ms)
+✓ Compiled in 100ms
+✓ Compiled in 60ms
+ GET /admin/implantacao-visao-geral 200 in 39ms (next.js: 13ms, application-code: 26ms)
+✓ Compiled in 22ms
+ GET /admin/implantacao-visao-geral 200 in 44ms (next.js: 17ms, application-code: 28ms)
+ GET /admin/implantacao-visao-geral 200 in 74ms (next.js: 10ms, application-code: 64ms)
+✓ Compiled in 108ms
+ GET /admin/implantacao-visao-geral 200 in 51ms (next.js: 20ms, application-code: 31ms)
+✓ Compiled in 81ms
+ GET /admin/implantacao-visao-geral 200 in 51ms (next.js: 21ms, application-code: 30ms)
+✓ Compiled in 81ms
+ GET /admin/implantacao-visao-geral 200 in 87ms (next.js: 22ms, application-code: 65ms)
+✓ Compiled in 72ms
+ GET /admin/implantacao-visao-geral 200 in 55ms (next.js: 20ms, application-code: 35ms)
+✓ Compiled in 70ms
+ GET /admin/implantacao-visao-geral 200 in 73ms (next.js: 19ms, application-code: 54ms)
+✓ Compiled in 66ms
+ GET /admin/implantacao-visao-geral 200 in 64ms (next.js: 27ms, application-code: 37ms)
+✓ Compiled in 30ms
+ GET /admin/implantacao-visao-geral 200 in 45ms (next.js: 15ms, application-code: 30ms)
+✓ Compiled in 62ms
+ GET /admin/implantacao-visao-geral 200 in 53ms (next.js: 16ms, application-code: 37ms)
+✓ Compiled in 74ms
+ GET /admin/implantacao-visao-geral 200 in 76ms (next.js: 36ms, application-code: 40ms)
+✓ Compiled in 106ms
+ GET /admin/implantacao-visao-geral 200 in 49ms (next.js: 17ms, application-code: 32ms)
+✓ Compiled in 73ms
+ GET /admin/implantacao-visao-geral 200 in 54ms (next.js: 22ms, application-code: 32ms)
+ GET /admin/implantacao-visao-geral 200 in 77ms (next.js: 6ms, application-code: 72ms)
+✓ Compiled in 1ms
+ GET /admin/implantacao-visao-geral 200 in 41ms (next.js: 12ms, application-code: 29ms)
+✓ Compiled in 34ms
+ GET /admin/implantacao-visao-geral 200 in 67ms (next.js: 21ms, application-code: 46ms)
+✓ Compiled in 46ms
+ GET /admin/implantacao-visao-geral 200 in 40ms (next.js: 15ms, application-code: 25ms)
+✓ Compiled in 44ms
+ GET /admin/implantacao-visao-geral 200 in 43ms (next.js: 15ms, application-code: 28ms)
+⚠ Fast Refresh had to perform a full reload when ./app/context/ThemeContext.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+✓ Compiled in 48ms
+ GET /admin/implantacao-visao-geral 200 in 81ms (next.js: 16ms, application-code: 65ms)
+ GET /admin/implantacao-visao-geral 200 in 50ms (next.js: 5ms, application-code: 45ms)
+✓ Compiled in 326ms
+⨯ ReferenceError: allMenuItems is not defined
+    at GestorLayout (app\components\GestorLayout.tsx:124:12)
+  122 |         {/* Menu */}
+  123 |         <nav style={{ flex: 1, padding: '24px 12px', display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto' }}>
+> 124 |           {allMenuItems.map((item) => {
+      |            ^
+  125 |             const Icon = item.icon;
+  126 |             const isActive = currentPage === item.id;
+  127 |             return ( {
+  digest: '3635216358'
+}
+ GET /admin/implantacao-visao-geral 500 in 137ms (next.js: 10ms, application-code: 127ms)
+⨯ ReferenceError: allMenuItems is not defined
+    at GestorLayout (app\components\GestorLayout.tsx:231:18)
+  229 |             <div>
+  230 |               <h2 className="sora text-2xl font-bold" style={{ color: isDark ? '#fff' : colors.textPrimary, letterSpacing: '-0.02em' }}>
+> 231 |                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+      |                  ^
+  232 |               </h2>
+  233 |               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
+  234 |             </div> {
+  digest: '3635216358'
+}
+ GET /admin/implantacao-visao-geral 500 in 114ms (next.js: 16ms, application-code: 98ms)
+⨯ ReferenceError: allMenuItems is not defined
+    at GestorLayout (app\components\GestorLayout.tsx:284:18)
+  282 |             <div>
+  283 |               <h2 className="sora text-2xl font-bold" style={{ color: isDark ? '#fff' : colors.textPrimary, letterSpacing: '-0.02em' }}>
+> 284 |                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+      |                  ^
+  285 |               </h2>
+  286 |               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
+  287 |             </div> {
+  digest: '3635216358'
+}
+ GET /admin/implantacao-visao-geral 500 in 112ms (next.js: 17ms, application-code: 95ms)
+[browser] Uncaught ReferenceError: allMenuItems is not defined
+    at GestorLayout (app/components/GestorLayout.tsx:284:18)
+    at ImplantacaoVisaoGeralPage (app/admin/implantacao-visao-geral/page.tsx:103:5)
+  282 |             <div>
+  283 |               <h2 className="sora text-2xl font-bold" style={{ color: isDark ? '#fff' : colors.textPrimary, letterSpacing: '-0.02em' }}>
+> 284 |                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+      |                  ^
+  285 |               </h2>
+  286 |               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
+  287 |             </div>
+⨯ ReferenceError: allMenuItems is not defined
+    at GestorLayout (app\components\GestorLayout.tsx:284:18)
+  282 |             <div>
+  283 |               <h2 className="sora text-2xl font-bold" style={{ color: isDark ? '#fff' : colors.textPrimary, letterSpacing: '-0.02em' }}>
+> 284 |                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+      |                  ^
+  285 |               </h2>
+  286 |               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
+  287 |             </div> {
+  digest: '3635216358'
+}
+ GET /admin/implantacao-visao-geral 500 in 78ms (next.js: 7ms, application-code: 70ms)
+[browser] Uncaught ReferenceError: allMenuItems is not defined
+    at GestorLayout (app/components/GestorLayout.tsx:284:18)
+    at ImplantacaoVisaoGeralPage (app/admin/implantacao-visao-geral/page.tsx:103:5)
+  282 |             <div>
+  283 |               <h2 className="sora text-2xl font-bold" style={{ color: isDark ? '#fff' : colors.textPrimary, letterSpacing: '-0.02em' }}>
+> 284 |                 {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
+      |                  ^
+  285 |               </h2>
+  286 |               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
+  287 |             </div>
+ GET /admin/implantacao-visao-geral 200 in 81ms (next.js: 19ms, application-code: 61ms)
+✓ Compiled in 44ms
+ GET /admin/implantacao-visao-geral 200 in 53ms (next.js: 16ms, application-code: 37ms)
+ GET /admin/implantacao-visao-geral 200 in 54ms (next.js: 5ms, application-code: 48ms)
+ GET /admin/implantacao-visao-geral 200 in 16ms (next.js: 6ms, application-code: 9ms)
+ GET /admin/implantacao-visao-geral 200 in 27ms (next.js: 5ms, application-code: 21ms)
+ GET /admin/implantacao-visao-geral 200 in 13ms (next.js: 5ms, application-code: 8ms)
+ GET /admin/implantacao-visao-geral 200 in 18ms (next.js: 5ms, application-code: 13ms)
+ GET /admin/implantacao-visao-geral 200 in 15ms (next.js: 7ms, application-code: 8ms)
+ GET /admin/implantacao-visao-geral 200 in 19ms (next.js: 6ms, application-code: 13ms)
+ GET /admin/implantacao-visao-geral 200 in 12ms (next.js: 5ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 22ms (next.js: 5ms, application-code: 17ms)
+ GET /admin/implantacao-visao-geral 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 5ms, application-code: 21ms)
+ GET /admin/treinamentos 200 in 1214ms (next.js: 1147ms, application-code: 67ms)
+ GET /admin/treinamentos 200 in 123ms (next.js: 10ms, application-code: 113ms)
+ GET /admin/treinamentos 200 in 88ms (next.js: 13ms, application-code: 75ms)
+ GET /admin/treinamentos 200 in 88ms (next.js: 41ms, application-code: 47ms)
+ GET /admin/treinamentos 200 in 88ms (next.js: 65ms, application-code: 23ms)
+ GET /admin/implantacao-visao-geral 200 in 27ms (next.js: 7ms, application-code: 20ms)
+ GET /admin/implantacao-visao-geral 200 in 15ms (next.js: 6ms, application-code: 9ms)
+ GET /admin/implantacao-visao-geral 200 in 28ms (next.js: 5ms, application-code: 23ms)
+ GET /admin/implantacao-visao-geral 200 in 12ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 18ms (next.js: 5ms, application-code: 13ms)
+ GET /admin/implantacao-visao-geral 200 in 11ms (next.js: 5ms, application-code: 6ms)
+ GET /admin/implantacao-visao-geral 200 in 22ms (next.js: 5ms, application-code: 17ms)
+ GET /admin/treinamentos 200 in 27ms (next.js: 7ms, application-code: 20ms)
+ GET /admin/treinamentos 200 in 29ms (next.js: 9ms, application-code: 20ms)
+ GET /admin/treinamentos 200 in 25ms (next.js: 5ms, application-code: 20ms)
+ GET /admin/treinamentos 200 in 26ms (next.js: 9ms, application-code: 17ms)
+ GET /admin/treinamentos 200 in 19ms (next.js: 5ms, application-code: 14ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 7ms, application-code: 18ms)
+ GET /admin/implantacao-visao-geral 200 in 28ms (next.js: 21ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 20ms (next.js: 4ms, application-code: 15ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 5ms, application-code: 20ms)
+✓ Compiled in 34ms
+ GET /admin/implantacao-visao-geral 200 in 49ms (next.js: 17ms, application-code: 31ms)
+ GET /admin/implantacao-visao-geral 200 in 30ms (next.js: 8ms, application-code: 22ms)
+ GET /admin/implantacao-visao-geral 200 in 169ms (next.js: 19ms, application-code: 150ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 10ms, application-code: 15ms)
+✓ Compiled in 132ms
+✓ Compiled in 113ms
+ GET /admin/implantacao-visao-geral 200 in 59ms (next.js: 17ms, application-code: 42ms)
+ GET /admin/implantacao-visao-geral 200 in 34ms (next.js: 13ms, application-code: 21ms)
+✓ Compiled in 36ms
+ GET /admin/implantacao-visao-geral 200 in 33ms (next.js: 13ms, application-code: 20ms)
+✓ Compiled in 62ms
+ GET /admin/implantacao-visao-geral 200 in 40ms (next.js: 18ms, application-code: 22ms)
+✓ Compiled in 54ms
+✓ Compiled in 27ms
+ GET /admin/implantacao-visao-geral 200 in 57ms (next.js: 34ms, application-code: 23ms)
+ GET /admin/implantacao-visao-geral 200 in 14ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 32ms (next.js: 7ms, application-code: 24ms)
+ GET /admin/implantacao-visao-geral 200 in 57ms (next.js: 5ms, application-code: 52ms)
+ GET /admin/treinamentos 200 in 62ms (next.js: 32ms, application-code: 31ms)
+ GET /admin/treinamentos 200 in 22ms (next.js: 5ms, application-code: 18ms)
+ GET /admin/implantacao-visao-geral 200 in 28ms (next.js: 6ms, application-code: 22ms)
+ GET /admin/implantacao-visao-geral 200 in 13ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 33ms (next.js: 9ms, application-code: 23ms)
+ GET /admin/implantacao-visao-geral 200 in 12ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 20ms (next.js: 6ms, application-code: 14ms)
+ GET /admin/implantacao-visao-geral 200 in 13ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 5ms, application-code: 21ms)
+ GET /admin/implantacao-visao-geral 200 in 14ms (next.js: 6ms, application-code: 9ms)
+ GET /admin/implantacao-visao-geral 200 in 28ms (next.js: 6ms, application-code: 22ms)
+ GET /admin/implantacao-visao-geral 200 in 12ms (next.js: 6ms, application-code: 7ms)
+ GET /admin/implantacao-visao-geral 200 in 21ms (next.js: 6ms, application-code: 15ms)
+ GET /admin/implantacao-visao-geral 200 in 13ms (next.js: 6ms, application-code: 8ms)
+ GET /admin/implantacao-visao-geral 200 in 17ms (next.js: 5ms, application-code: 12ms)
+ GET /admin/implantacao-visao-geral 200 in 13ms (next.js: 7ms, application-code: 6ms)
+ GET /admin/implantacao-visao-geral 200 in 21ms (next.js: 5ms, application-code: 17ms)
+✓ Compiled in 61ms
+ GET /admin/implantacao-visao-geral 200 in 52ms (next.js: 17ms, application-code: 35ms)
+✓ Compiled in 54ms
+ GET /admin/implantacao-visao-geral 200 in 67ms (next.js: 21ms, application-code: 46ms)
+ GET /admin/implantacao-visao-geral 200 in 75ms (next.js: 9ms, application-code: 66ms)
+✓ Compiled in 59ms
+ GET /admin/implantacao-visao-geral 200 in 35ms (next.js: 16ms, application-code: 19ms)
+ GET /admin/implantacao-visao-geral 200 in 33ms (next.js: 13ms, application-code: 19ms)
+✓ Compiled in 64ms
+ GET /admin/implantacao-visao-geral 200 in 89ms (next.js: 30ms, application-code: 59ms)
+ GET /admin/implantacao-visao-geral 200 in 36ms (next.js: 14ms, application-code: 22ms)
+✓ Compiled in 141ms
+✓ Compiled in 37ms
+ GET /admin/implantacao-visao-geral 200 in 55ms (next.js: 21ms, application-code: 34ms)
+ GET /admin/implantacao-visao-geral 200 in 59ms (next.js: 5ms, application-code: 54ms)
+ GET /admin/implantacao-visao-geral 200 in 37ms (next.js: 16ms, application-code: 20ms)
+✓ Compiled in 50ms
+ GET /admin/treinamentos 200 in 31ms (next.js: 10ms, application-code: 21ms)
+ GET /admin/implantacoes 200 in 1125ms (next.js: 1069ms, application-code: 55ms)
+ GET /admin/implantacoes 200 in 32ms (next.js: 8ms, application-code: 24ms)
+ GET /admin/implantacao-visao-geral 200 in 24ms (next.js: 10ms, application-code: 14ms)
+ GET /admin/implantacoes 200 in 38ms (next.js: 18ms, application-code: 20ms)
+ GET /admin/treinamentos 200 in 34ms (next.js: 12ms, application-code: 22ms)
+ GET /admin/implantacoes 200 in 26ms (next.js: 6ms, application-code: 20ms)
+ GET /admin/implantacao-visao-geral 200 in 45ms (next.js: 22ms, application-code: 23ms)
+ GET /admin/implantacao-visao-geral 200 in 31ms (next.js: 8ms, application-code: 23ms)
+ GET /admin/treinamentos 200 in 28ms (next.js: 6ms, application-code: 22ms)
+ GET /admin/implantacoes 200 in 23ms (next.js: 7ms, application-code: 17ms)
+ GET /admin/implantacao-visao-geral 200 in 25ms (next.js: 5ms, application-code: 20ms)
+ GET /admin/implantacao-visao-geral 200 in 32ms (next.js: 7ms, application-code: 25ms)
+ GET /admin/implantacoes 200 in 35ms (next.js: 11ms, application-code: 24ms)
+ GET /admin/implantacoes 200 in 323ms (next.js: 5ms, application-code: 318ms)
+✓ Compiled in 35ms
+ GET /admin/implantacoes 200 in 41ms (next.js: 10ms, application-code: 30ms)
+ GET /admin/implantacoes 200 in 66ms (next.js: 8ms, application-code: 58ms)
+✓ Compiled in 33ms
+ GET /admin/implantacoes 200 in 46ms (next.js: 15ms, application-code: 31ms)
+✓ Compiled in 19ms
+ GET /admin/implantacoes 200 in 58ms (next.js: 20ms, application-code: 38ms)
+✓ Compiled in 32ms
+ GET /admin/implantacoes 200 in 53ms (next.js: 21ms, application-code: 33ms)
+✓ Compiled in 45ms
+ GET /admin/implantacoes 200 in 45ms (next.js: 15ms, application-code: 29ms)
+✓ Compiled in 33ms
+ GET /admin/implantacoes 200 in 71ms (next.js: 19ms, application-code: 53ms)
+✓ Compiled in 35ms
+ GET /admin/implantacoes 200 in 64ms (next.js: 18ms, application-code: 46ms)
+✓ Compiled in 53ms
+ GET /admin/implantacoes 200 in 51ms (next.js: 17ms, application-code: 34ms)
+✓ Compiled in 29ms
+ GET /admin/implantacoes 200 in 60ms (next.js: 23ms, application-code: 37ms)
+✓ Compiled in 35ms
+ GET /admin/implantacoes 200 in 50ms (next.js: 16ms, application-code: 35ms)
+✓ Compiled in 34ms
+ GET /admin/implantacoes 200 in 67ms (next.js: 33ms, application-code: 35ms)
+✓ Compiled in 37ms
+ GET /admin/implantacoes 200 in 59ms (next.js: 19ms, application-code: 39ms)
+✓ Compiled in 26ms
+ GET /admin/implantacoes 200 in 45ms (next.js: 14ms, application-code: 31ms)
+ GET /admin/implantacoes 200 in 41ms (next.js: 14ms, application-code: 27ms)
+✓ Compiled in 43ms
+ GET /admin/treinamentos 200 in 26ms (next.js: 6ms, application-code: 21ms)
+ GET /admin/treinamentos 200 in 34ms (next.js: 9ms, application-code: 25ms)
+✓ Compiled in 34ms
+ GET /admin/implantacoes 200 in 33ms (next.js: 11ms, application-code: 22ms)
+ GET /admin/implantacoes 200 in 45ms (next.js: 13ms, application-code: 33ms)
+✓ Compiled in 35ms
+ GET /admin/implantacoes 200 in 71ms (next.js: 7ms, application-code: 65ms)
+ GET /admin/implantacoes 200 in 61ms (next.js: 7ms, application-code: 54ms)
+ GET /admin/implantacoes 200 in 35ms (next.js: 15ms, application-code: 20ms)
+✓ Compiled in 57ms
+ GET /admin/implantacoes 200 in 54ms (next.js: 9ms, application-code: 46ms)
+ GET /admin/implantacoes 200 in 42ms (next.js: 14ms, application-code: 28ms)
+✓ Compiled in 36ms
+✓ Compiled in 66ms
+ GET /admin/implantacoes 200 in 43ms (next.js: 17ms, application-code: 26ms)
+ GET /admin/implantacoes 200 in 60ms (next.js: 6ms, application-code: 53ms)
+✓ Compiled in 46ms
+[browser] ./app/admin/implantacoes/page.tsx:465:1
+Error: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  463 |     </GestorLayout>
+  464 |   );
+> 465 | }
+      | ^
+  466 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:465:1
+Error: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  463 |     </GestorLayout>
+  464 |   );
+> 465 | }
+      | ^
+  466 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+ GET /admin/implantacoes 200 in 51ms (next.js: 25ms, application-code: 26ms)
+ GET /admin/implantacoes 200 in 52ms (next.js: 10ms, application-code: 42ms)
+✓ Compiled in 32ms
+ GET /admin/implantacoes 200 in 46ms (next.js: 17ms, application-code: 28ms)
+✓ Compiled in 29ms
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+⨯ ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  [90m469 |[0m         )}
+  [90m470 |[0m       </div>
+[31m[1m>[0m [90m471 |[0m     </[33mGestorLayout[0m>
+  [90m    |[0m     [31m[1m^[0m
+  [90m472 |[0m   );
+  [90m473 |[0m }
+  [90m474 |[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+
+
+./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  [90m469 |[0m         )}
+  [90m470 |[0m       </div>
+[31m[1m>[0m [90m471 |[0m     </[33mGestorLayout[0m>
+  [90m    |[0m      [31m[1m^^^^^^^^^^^^^^[0m
+  [90m472 |[0m   );
+  [90m473 |[0m }
+  [90m474 |[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+ GET /admin/implantacoes 500 in 3.9s (next.js: 3.6s, application-code: 297ms)
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] Uncaught Error: ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./app/admin/implantacoes/page.tsx:471:5)
+    at <unknown> (Error: (./app/admin/implantacoes/page.tsx:471:5)
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:5
+Error: Expression expected
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |     ^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+[browser] ./app/admin/implantacoes/page.tsx:471:6
+Error: Unterminated regexp literal
+  469 |         )}
+  470 |       </div>
+> 471 |     </GestorLayout>
+      |      ^^^^^^^^^^^^^^
+  472 |   );
+  473 | }
+  474 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/implantacoes/page.tsx [Client Component Browser]
+    ./app/admin/implantacoes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/implantacoes/page.tsx [Client Component SSR]
+    ./app/admin/implantacoes/page.tsx [Server Component] 
+ GET /admin/implantacoes 200 in 92ms (next.js: 22ms, application-code: 70ms)
+ GET /admin/implantacoes 200 in 59ms (next.js: 6ms, application-code: 53ms)
+✓ Compiled in 44ms
+ GET /admin/implantacoes 200 in 66ms (next.js: 20ms, application-code: 47ms)
+✓ Compiled in 40ms
+ GET /admin/implantacoes 200 in 43ms (next.js: 13ms, application-code: 30ms)
+✓ Compiled in 31ms
+ GET /admin/implantacoes 200 in 43ms (next.js: 14ms, application-code: 28ms)
+✓ Compiled in 42ms
+ GET /admin/implantacoes 200 in 53ms (next.js: 16ms, application-code: 37ms)
+ GET /admin/implantacoes 200 in 41ms (next.js: 15ms, application-code: 25ms)
+✓ Compiled in 34ms
+ GET /admin/implantacoes 200 in 61ms (next.js: 8ms, application-code: 53ms)
+✓ Compiled in 47ms
+ GET /admin/implantacoes 200 in 58ms (next.js: 23ms, application-code: 35ms)
+✓ Compiled in 64ms
+ GET /admin/implantacoes 200 in 68ms (next.js: 24ms, application-code: 44ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ReferenceError: React is not defined
+    at ImplantacoesPage (app\admin\implantacoes\page.tsx:39:24)
+  37 |   const [showConfig, setShowConfig] = useState(false);
+  38 |   const { colors, isDark } = useTheme();
+> 39 |   const scrollBarRef = React.useRef<HTMLDivElement>(null);
+     |                        ^
+  40 |   const columnsRef = React.useRef<HTMLDivElement>(null);
+  41 |
+  42 |   const handleScroll = (ref: React.RefObject<HTMLDivElement>) => { {
+  digest: '89277268'
+}
+✓ Compiled in 108ms
+ GET /admin/implantacoes 500 in 141ms (next.js: 24ms, application-code: 117ms)
+⨯ ReferenceError: React is not defined
+    at ImplantacoesPage (app\admin\implantacoes\page.tsx:39:24)
+  37 |   const [showConfig, setShowConfig] = useState(false);
+  38 |   const { colors, isDark } = useTheme();
+> 39 |   const scrollBarRef = React.useRef<HTMLDivElement>(null);
+     |                        ^
+  40 |   const columnsRef = React.useRef<HTMLDivElement>(null);
+  41 |
+  42 |   const handleScroll = (ref: React.RefObject<HTMLDivElement>) => { {
+  digest: '89277268'
+}
+ GET /admin/implantacoes 500 in 155ms (next.js: 23ms, application-code: 132ms)
+[browser] Uncaught ReferenceError: React is not defined
+    at ImplantacoesPage (app/admin/implantacoes/page.tsx:39:24)
+  37 |   const [showConfig, setShowConfig] = useState(false);
+  38 |   const { colors, isDark } = useTheme();
+> 39 |   const scrollBarRef = React.useRef<HTMLDivElement>(null);
+     |                        ^
+  40 |   const columnsRef = React.useRef<HTMLDivElement>(null);
+  41 |
+  42 |   const handleScroll = (ref: React.RefObject<HTMLDivElement>) => {
+⨯ ReferenceError: React is not defined
+    at ImplantacoesPage (app\admin\implantacoes\page.tsx:39:24)
+  37 |   const [showConfig, setShowConfig] = useState(false);
+  38 |   const { colors, isDark } = useTheme();
+> 39 |   const scrollBarRef = React.useRef<HTMLDivElement>(null);
+     |                        ^
+  40 |   const columnsRef = React.useRef<HTMLDivElement>(null);
+  41 |
+  42 |   const handleScroll = (ref: React.RefObject<HTMLDivElement>) => { {
+  digest: '89277268'
+}
+ GET /admin/implantacoes 500 in 76ms (next.js: 9ms, application-code: 67ms)
+[browser] Uncaught ReferenceError: React is not defined
+    at ImplantacoesPage (app/admin/implantacoes/page.tsx:39:24)
+  37 |   const [showConfig, setShowConfig] = useState(false);
+  38 |   const { colors, isDark } = useTheme();
+> 39 |   const scrollBarRef = React.useRef<HTMLDivElement>(null);
+     |                        ^
+  40 |   const columnsRef = React.useRef<HTMLDivElement>(null);
+  41 |
+  42 |   const handleScroll = (ref: React.RefObject<HTMLDivElement>) => {
+ GET /admin/implantacoes 200 in 66ms (next.js: 16ms, application-code: 50ms)
+✓ Compiled in 44ms
+ GET /admin/implantacoes 200 in 56ms (next.js: 20ms, application-code: 36ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 28ms
+⨯ ReferenceError: handleScroll is not defined
+    at ImplantacoesPage (app\admin\implantacoes\page.tsx:215:23)
+  213 |           <div
+  214 |             ref={columnsRef}
+> 215 |             onScroll={handleScroll(columnsRef)}
+      |                       ^
+  216 |             className="pipeline-scroll"
+  217 |             style={{ display: 'flex', gap: '16px', scrollBehavior: 'smooth', overflowX: 'auto', overflowY: 'hidden', paddingBottom: '0' }}>
+  218 |             {etapas.map(etapa => { {
+  digest: '4220930898'
+}
+ GET /admin/implantacoes 500 in 129ms (next.js: 17ms, application-code: 112ms)
+ GET /admin/implantacoes 200 in 91ms (next.js: 17ms, application-code: 74ms)
+ GET /admin/implantacoes 200 in 60ms (next.js: 8ms, application-code: 52ms)
+✓ Compiled in 34ms
+ GET /admin/implantacoes 200 in 54ms (next.js: 22ms, application-code: 33ms)
+✓ Compiled in 26ms
+ GET /admin/implantacoes 200 in 39ms (next.js: 13ms, application-code: 26ms)
+[browser] Uncaught ReferenceError: golive is not defined
+    at ImplantacoesPage (app/admin/implantacoes/page.tsx:189:113)
+  187 |           <div style={{ background: isDark ? '#1a1a1a' : '#f5f5f5', border: `1px solid ${isDark ? '#333' : '#e0e0e0'}`, borderRadius: '12px', padding: '20px' }}>
+  188 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: '0 0 12px 0', fontWeight: 500 }}>Concluídas no mês</p>
+> 189 |             <div style={{ fontSize: '36px', fontWeight: 700, color: colors.textPrimary, marginBottom: '8px' }}>{golive}</div>
+      |                                                                                                                 ^
+  190 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: 0 }}>taxa de go-live</p>
+  191 |           </div>
+  192 |         </div>
+⨯ ReferenceError: golive is not defined
+    at ImplantacoesPage (app\admin\implantacoes\page.tsx:189:113)
+  187 |           <div style={{ background: isDark ? '#1a1a1a' : '#f5f5f5', border: `1px solid ${isDark ? '#333' : '#e0e0e0'}`, borderRadius: '12px', padding: '20px' }}>
+  188 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: '0 0 12px 0', fontWeight: 500 }}>Concluídas no mês</p>
+> 189 |             <div style={{ fontSize: '36px', fontWeight: 700, color: colors.textPrimary, marginBottom: '8px' }}>{golive}</div>
+      |                                                                                                                 ^
+  190 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: 0 }}>taxa de go-live</p>
+  191 |           </div>
+  192 |         </div> {
+  digest: '1427663075'
+}
+ GET /admin/implantacoes 500 in 61ms (next.js: 8ms, application-code: 53ms)
+[browser] Uncaught ReferenceError: golive is not defined
+    at ImplantacoesPage (app/admin/implantacoes/page.tsx:189:113)
+  187 |           <div style={{ background: isDark ? '#1a1a1a' : '#f5f5f5', border: `1px solid ${isDark ? '#333' : '#e0e0e0'}`, borderRadius: '12px', padding: '20px' }}>
+  188 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: '0 0 12px 0', fontWeight: 500 }}>Concluídas no mês</p>
+> 189 |             <div style={{ fontSize: '36px', fontWeight: 700, color: colors.textPrimary, marginBottom: '8px' }}>{golive}</div>
+      |                                                                                                                 ^
+  190 |             <p style={{ fontSize: '12px', color: colors.textSecondary, margin: 0 }}>taxa de go-live</p>
+  191 |           </div>
+  192 |         </div>
+ GET /admin/implantacoes 200 in 82ms (next.js: 13ms, application-code: 69ms)
+ GET /admin/implantacoes 200 in 57ms (next.js: 9ms, application-code: 48ms)
+ GET /admin/implantacoes 200 in 49ms (next.js: 7ms, application-code: 43ms)

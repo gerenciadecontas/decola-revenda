@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import CronogramaAccordion from '@/components/CronogramaAccordion';
 import { Dia, Tema, Progresso, Revenda } from '@/lib/types';
 
@@ -10,7 +10,6 @@ export default function AdminRevendaDetailPage() {
   const router = useRouter();
   const params = useParams();
   const revendaId = params.id as string;
-  const supabase = createClient();
 
   const [revenda, setRevenda] = useState<Revenda | null>(null);
   const [dias, setDias] = useState<Dia[]>([]);

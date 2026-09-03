@@ -1,26 +1,72 @@
-@import "tailwindcss";
-
+/* Tema Escuro */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-a: #17181C;
+  --bg-b: #1C1E23;
+  --panel: #212329;
+  --panel-2: #272A31;
+  --panel-3: #2E313A;
+  --ink: #ECEEF3;
+  --ink-2: #A4A8B3;
+  --ink-3: #6C7079;
+  --line: #2D3038;
+  --line-2: #3A3E47;
+  --yellow: #F6C552;
+  --yellow-2: #FFD873;
+  --yellow-d: #E6B23E;
+  --yellow-soft: rgba(246, 197, 82, 0.15);
+  --ink-dark: #2A1E03;
+  --purple: #9686C9;
+  --purple-soft: rgba(150, 134, 201, 0.18);
+  --red: #E08585;
+  --red-soft: rgba(224, 133, 133, 0.14);
+  --shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.75);
+  --shadow-sm: 0 14px 30px -22px rgba(0, 0, 0, 0.6);
+  --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Tema Claro */
+body.light {
+  --bg-a: #E6E1D6;
+  --bg-b: #EDE8DD;
+  --panel: #F3EFE7;
+  --panel-2: #EAE5DA;
+  --panel-3: #E0DACE;
+  --ink: #22242A;
+  --ink-2: #5C616B;
+  --ink-3: #8B9099;
+  --line: #DDD7CA;
+  --line-2: #CEC7B8;
+  --yellow-d: #E6B23E;
+  --yellow: #F6C552;
+  --yellow-2: #FFD873;
+  --purple: #7C5CF0;
+  --purple-soft: rgba(124, 92, 240, 0.12);
+  --red: #D9534F;
+  --red-soft: rgba(217, 83, 79, 0.12);
+  --shadow: 0 24px 48px -30px rgba(60, 50, 30, 0.3);
+  --shadow-sm: 0 14px 30px -24px rgba(60, 50, 30, 0.22);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(160deg, var(--bg-a), var(--bg-b));
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+body.light {
+  background: linear-gradient(160deg, var(--bg-a), var(--bg-b));
+  color: var(--ink);
 }

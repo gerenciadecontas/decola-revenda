@@ -56,34 +56,7 @@ export default function HomePage() {
         </h1>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px' }}>
-        <button
-          onClick={() => router.push('/admin/dashboard')}
-          style={{
-            padding: '16px 32px',
-            background: COLORS.purple,
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '16px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#7C3AED';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = COLORS.purple;
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
-        >
-          👨‍💼 Gestor
-        </button>
+      <div>
         <button
           onClick={() => router.push('/platform/dashboard')}
           style={{

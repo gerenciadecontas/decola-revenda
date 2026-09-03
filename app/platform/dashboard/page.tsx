@@ -2,266 +2,215 @@
 
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useState, useEffect } from 'react';
-
-const COLORS = {
-  purple: '#8B5CF6',
-  yellow: '#FFC93C',
-  green: '#34D399',
-  red: '#F87171',
-  darkBg: '#0E1013',
-  cardBg: '#16181D',
-  borderColor: '#23262C',
-  textPrimary: '#E8EAED',
-  textSecondary: '#9AA1AA',
-  textTertiary: '#6B7280',
-};
-
-interface Pendencia {
-  id: string;
-  revenda: string;
-  descricao: string;
-  nivel: 'critica' | 'normal';
-  status: 'aberta' | 'resolvida';
-  dataAbertura: string;
-}
+import { useSupabaseTable } from '@/lib/supabase/hooks';
+import '@/app/globals.css';
 
 interface Implantacao {
-  id: string;
-  revenda: string;
-  etapa: 'kickoff' | 'configuracao' | 'testes' | 'golive';
+  id?: string;
+  revenda?: string;
+  etapa: string;
   progresso: number;
-  dataPrevista: string;
-  status: 'em-andamento' | 'concluida';
+  status: 'em-andamento' | 'concluida' | 'pausado' | 'abandonado';
+  created_at?: string;
 }
 
-interface Compromisso {
-  id: string;
-  titulo: string;
-  data: string;
-  hora: string;
-  tipo: 'treinamento' | 'reuniao' | 'visita' | 'outro';
-  descricao: string;
-}
+const needsActionItems = [
+  { revenda: 'Papelaria Central', issue: '3 tentativas de contato sem retorno', action: 'Ligar', actionColor: '#4A90E2' },
+  { revenda: 'Casa do Pintor', issue: 'Parada há 9 dias em Sem retorno', action: 'Escalar', actionColor: '#E2944A' },
+  { revenda: 'Auto Peças Bandeirantes', issue: 'Treinamento pediu reagendamento', action: 'Reagendar', actionColor: '#7C5CF0' },
+  { revenda: 'Ferragem Sul', issue: 'Cadastro fiscal incompleto', action: 'Cobrar dados', actionColor: '#D9534F' },
+];
+
+const getColors = () => ({
+  yellow: 'var(--yellow-d)',
+  orange: '#C99526',
+  red: 'var(--red)',
+  purple: 'var(--purple)',
+  green: '#4E8E5B',
+  darkBg: 'var(--bg-a)',
+  cardBg: 'var(--panel)',
+  borderColor: 'var(--line)',
+  textPrimary: 'var(--ink)',
+  textSecondary: 'var(--ink-2)',
+  textTertiary: 'var(--ink-3)',
+});
 
 export default function DashboardPage() {
-  const [pendencias, setPendencias] = useState<Pendencia[]>([]);
-  const [implantacoes, setImplantacoes] = useState<Implantacao[]>([]);
-  const [compromissos, setCompromisos] = useState<Compromisso[]>([]);
+  // @ts-ignore
+  const { data: implantacoes = [] } = useSupabaseTable<Implantacao>('implantacoes');
+  const [today] = useState(() => new Date().toLocaleDateString('pt-BR'));
+  const [metaMes, setMetaMes] = useState(10);
 
-  // Carregar dados do localStorage
   useEffect(() => {
-    const savedPendencias = localStorage.getItem('pendencias-list');
-    if (savedPendencias) {
-      setPendencias(JSON.parse(savedPendencias));
-    }
-
-    const savedImplantacoes = localStorage.getItem('implantacoes-list');
-    if (savedImplantacoes) {
-      setImplantacoes(JSON.parse(savedImplantacoes));
-    }
-
-    const savedCompromisos = localStorage.getItem('agenda-list');
-    if (savedCompromisos) {
-      setCompromisos(JSON.parse(savedCompromisos));
+    const saved = localStorage.getItem('meta-implantacoes-mes');
+    if (saved) {
+      setMetaMes(parseInt(saved));
     }
   }, []);
 
-  // Calcular dias abertos
-  const getDiasAbertos = (dataAbertura: string) => {
-    const hoje = new Date();
-    const data = new Date(dataAbertura);
-    const diff = Math.floor((hoje.getTime() - data.getTime()) / (1000 * 60 * 60 * 24));
-    return diff;
+  const COLORS = getColors();
+
+  const STAGES_FUNIL = [
+    { id: 'chegada', nome: 'Chegada', color: COLORS.yellow },
+    { id: 'boas-vindas', nome: 'Boas-vindas', color: COLORS.orange },
+    { id: 'sem-retorno', nome: 'Sem retorno', color: COLORS.red },
+    { id: 'ativou-3', nome: 'Ativou 3 clientes', color: COLORS.purple },
+  ];
+
+  const ativas = implantacoes.filter(i => i.status === 'em-andamento').length;
+  const emRisco = implantacoes.filter(i => i.status === 'em-andamento' && i.etapa === 'sem-retorno').length;
+  const concluidas = implantacoes.filter(i => i.status === 'concluida').length;
+
+  const getCurrentMonthImplantacoes = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    return implantacoes.filter(i => {
+      if (!i.created_at) return false;
+      const date = new Date(i.created_at);
+      return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    }).length;
   };
 
-  // Dados de hoje
-  const hoje = new Date().toISOString().split('T')[0];
-  const pendenciasHoje = pendencias.filter(p => p.status === 'aberta' && p.dataAbertura === hoje);
-  const implantacoesHoje = implantacoes.filter(i => i.status === 'em-andamento' && i.dataPrevista === hoje);
+  const implantacoesDoMes = getCurrentMonthImplantacoes();
+  const progressoMeta = Math.min((implantacoesDoMes / metaMes) * 100, 100);
+  const atingiuMeta = implantacoesDoMes >= metaMes;
 
-  const trainingsToday = [
-    { time: '10:00', title: 'LC WEB - Cadastro de Produtos', revenda: 'Auto Nova Peças' },
-    { time: '14:30', title: 'LC WEB - Vendas', revenda: 'Elétrica Pro' },
-  ];
+  const tempoMedio = 5;
 
-  const deploymentsToday = [
-    { id: 1, revenda: 'MGX Automação', stage: 'Configuração', progress: 65 },
-    { id: 2, revenda: 'TecCampo', stage: 'Testes', progress: 80 },
-  ];
-
-  const upcomingTrainings = [
-    { date: '12 Ago', time: '14:00', title: 'Módulo Financeiro', revenda: 'Nova Rota', remote: true },
-    { date: '14 Ago', time: '09:30', title: 'Fiscal avançado', revenda: 'TecCampo', remote: false },
-    { date: '16 Ago', time: '11:00', title: 'LC ERP Desktop', revenda: 'Auto Nova', remote: true },
-  ];
-
-  const myRevendas = [
-    { name: 'Auto Nova Peças', city: 'São Paulo', status: 'Em implantação', lastContact: '2 dias' },
-    { name: 'MGX Automação', city: 'Belo Horizonte', status: 'Ativa', lastContact: '5 dias' },
-    { name: 'TecCampo', city: 'Curitiba', status: 'Em implantação', lastContact: '1 dia' },
-    { name: 'Elétrica Pro', city: 'Rio de Janeiro', status: 'Ativa', lastContact: '3 dias' },
-  ];
-
-  const needsAttention = [
-    { name: 'Nova Rota Distribuição', issue: 'Sem resposta há 7 dias', daysAlert: 7 },
-    { name: 'Força Distribuidora', issue: 'Dúvidas não respondidas', daysAlert: 4 },
-  ];
-
-  const delayedActivities = [
-    { activity: 'Treinamento de Força de Vendas', revenda: 'Auto Nova Peças', daysLate: 2 },
-    { activity: 'Implementação de relatórios customizados', revenda: 'Elétrica Pro', daysLate: 5 },
-  ];
-
-  const getDiasProximos = () => {
-    const dias = [];
-    const dataHoje = new Date();
-    for (let i = 0; i < 7; i++) {
-      const data = new Date(dataHoje);
-      data.setDate(data.getDate() + i);
-      dias.push(data.toISOString().split('T')[0]);
-    }
-    return dias;
+  const getFunnelData = () => {
+    return STAGES_FUNIL.map(stage => {
+      const count = implantacoes.filter(i => i.etapa === stage.id && i.status === 'em-andamento').length;
+      const dias = stage.id === 'chegada' ? 2 : stage.id === 'boas-vindas' ? 4 : stage.id === 'sem-retorno' ? 9 : 1;
+      return { ...stage, count, dias };
+    });
   };
 
-  const getNomeDia = (dataStr: string) => {
-    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-    const data = new Date(dataStr + 'T00:00:00');
-    return nomes[data.getDay()];
-  };
-
-  const formatData = (dataStr: string) => {
-    return new Date(dataStr + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-  };
-
-  const diasProximos = getDiasProximos();
-  const weekAgenda = diasProximos.map(dia => {
-    const compromissosDia = compromissos.filter(c => c.data === dia).sort((a, b) => a.hora.localeCompare(b.hora));
-    const items = compromissosDia.length === 0
-      ? ['Sem compromissos']
-      : compromissosDia.map(c => `${c.hora} - ${c.titulo}`);
-
-    return {
-      day: getNomeDia(dia),
-      date: formatData(dia),
-      items,
-    };
-  });
+  const funnelData = getFunnelData();
+  const maxCount = Math.max(...funnelData.map(s => s.count), 1);
 
   return (
     <PlatformLayout currentPage="dashboard">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <div style={{ padding: '32px', paddingTop: '0' }}>
         {/* Page Header */}
-        <div>
-          <h1 style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>
-            Seu Dashboard
-          </h1>
-          <p style={{ fontSize: '15px', color: COLORS.textSecondary, margin: 0 }}>
-            Acompanhe suas atividades, treinamentos e implantações de hoje
-          </p>
-        </div>
-
-        {/* TODAY SECTION - Priority Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-          {/* Trainings Today */}
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-              <div style={{ fontSize: '24px' }}>📚</div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Treinamentos Hoje</h3>
-              <div style={{ background: COLORS.yellow, color: COLORS.darkBg, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
-                {trainingsToday.length}
-              </div>
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', paddingBottom: '16px', borderBottom: `1px solid ${COLORS.borderColor}` }}>
+            <div>
+              <h1 style={{ fontSize: '28px', fontWeight: 700, color: COLORS.textPrimary, margin: '0 0 4px 0' }}>
+                Relatório Operacional
+              </h1>
+              <p style={{ fontSize: '14px', color: COLORS.textSecondary, margin: 0 }}>
+                Saúde da carteira de implantação no fechamento do período.
+              </p>
             </div>
-            {trainingsToday.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {trainingsToday.map((training, i) => (
-                  <div key={i} style={{ background: 'rgba(255,255,255,0.04)', padding: '12px', borderRadius: '10px', borderLeft: `3px solid ${COLORS.yellow}` }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.yellow }}>{training.time}</div>
-                    <div style={{ fontSize: '13px', color: COLORS.textPrimary, marginTop: '4px', fontWeight: 500 }}>{training.title}</div>
-                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{training.revenda}</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ fontSize: '13px', color: COLORS.textSecondary }}>Nenhum treinamento programado para hoje</div>
-            )}
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ fontSize: '13px', color: COLORS.textSecondary, margin: '0 0 4px 0' }}>{today}</p>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>Carteira de revendas · {ativas} em implantação</p>
+            </div>
           </div>
 
-          {/* Deployments Today */}
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-              <div style={{ fontSize: '24px' }}>🚀</div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary }}>Implantações Hoje</h3>
-              <div style={{ background: COLORS.green, color: COLORS.darkBg, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', marginLeft: 'auto' }}>
-                {implantacoesHoje.length}
+          {/* Vision Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+              <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: '0 0 8px 0' }}>Revendas em implantação</p>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary }}>{ativas}</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>entraram esta semana</p>
+            </div>
+
+            <div style={{ background: 'rgba(230, 178, 62, 0.1)', border: `1px solid ${COLORS.yellow}`, borderRadius: '18px', padding: '20px' }}>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Em risco</p>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
+                <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.yellow }}>{emRisco}</div>
+                <span style={{ fontSize: '11px', background: COLORS.yellow, color: COLORS.darkBg, padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>atenção</span>
+              </div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>paradas há 5+ dias</p>
+            </div>
+
+            <div style={{ background: 'rgba(123, 92, 240, 0.08)', border: `1px solid #5B43C0`, borderRadius: '18px', padding: '20px' }}>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Ciclo médio</p>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#8B7CF6' }}>18d</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>meta: 15 dias</p>
+            </div>
+
+            <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+              <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: '0 0 8px 0' }}>Go-live no mês</p>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary }}>{concluidas}</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>taxa de conclusão</p>
+            </div>
+
+            <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: 0, fontWeight: 500 }}>Meta do mês</p>
+                <span style={{ fontSize: '11px', background: atingiuMeta ? COLORS.green : COLORS.yellow, color: atingiuMeta ? '#fff' : COLORS.darkBg, padding: '4px 10px', borderRadius: '6px', fontWeight: 600 }}>{Math.round(progressoMeta)}%</span>
+              </div>
+              <div style={{ fontSize: '28px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '12px' }}>
+                {implantacoesDoMes}/{metaMes}
+              </div>
+              <div style={{ height: '8px', background: COLORS.borderColor, borderRadius: '99px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', background: atingiuMeta ? COLORS.green : COLORS.yellow, width: `${progressoMeta}%`, transition: 'width 0.3s' }} />
               </div>
             </div>
-            {implantacoesHoje.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {implantacoesHoje.map((impl, i) => (
-                  <div key={i}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{impl.revenda}</div>
-                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{impl.etapa.charAt(0).toUpperCase() + impl.etapa.slice(1)}</div>
-                    <div style={{ height: '5px', borderRadius: '4px', background: COLORS.borderColor, marginTop: '8px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', background: COLORS.green, width: `${impl.progresso}%` }} />
-                    </div>
-                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>{impl.progresso}% concluído</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ fontSize: '13px', color: COLORS.textSecondary }}>Nenhuma implantação prevista para hoje</div>
-            )}
           </div>
-
         </div>
 
-
-        {/* UPCOMING & SCHEDULE */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-          {/* Upcoming Trainings */}
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Próximos Treinamentos</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {upcomingTrainings.map((t, i) => (
-                <div key={i} style={{ display: 'flex', gap: '12px', padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
-                  <div style={{ textAlign: 'center', minWidth: '50px', flexShrink: 0 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: COLORS.yellow }}>{t.date.split(' ')[0]}</div>
-                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '2px' }}>{t.date.split(' ')[1]}</div>
-                  </div>
-                  <div style={{ width: '1px', background: COLORS.borderColor }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{t.title}</div>
-                    <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '3px' }}>{t.revenda}</div>
-                    <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '4px' }}>
-                      {t.time} · {t.remote ? '🌐 Remoto' : '📍 Presencial'}
+        {/* Two Column Layout */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          {/* Funnel */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '24px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 20px 0' }}>Funil de onboarding</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              {funnelData.map(stage => (
+                <div key={stage.id}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: stage.color }} />
+                      <span style={{ fontSize: '14px', fontWeight: 600, color: COLORS.textPrimary }}>{stage.nome}</span>
                     </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textSecondary }}>{stage.count}</span>
+                      <span style={{ fontSize: '12px', color: COLORS.textTertiary }}>{stage.dias}d na etapa</span>
+                    </div>
+                  </div>
+                  <div style={{ height: '8px', background: COLORS.borderColor, borderRadius: '99px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', background: stage.color, width: `${(stage.count / maxCount) * 100}%`, transition: 'width 0.3s' }} />
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* My Revendas */}
-          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '22px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 16px 0' }}>Revendas Sob Minha Responsabilidade</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {myRevendas.map((revenda, i) => (
-                <div key={i} style={{ padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+          {/* Needs Action */}
+          <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '24px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 20px 0' }}>Precisa de ação</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {needsActionItems.map((item, i) => (
+                <div key={i} style={{ paddingBottom: '16px', borderBottom: i < needsActionItems.length - 1 ? `1px solid ${COLORS.borderColor}` : 'none' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: '12px' }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>{revenda.name}</div>
-                      <div style={{ fontSize: '12px', color: COLORS.textSecondary, marginTop: '2px' }}>{revenda.city}</div>
+                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: COLORS.textPrimary, margin: '0 0 4px 0' }}>
+                        {item.revenda}
+                      </h4>
+                      <p style={{ fontSize: '13px', color: COLORS.textSecondary, margin: 0 }}>
+                        {item.issue}
+                      </p>
                     </div>
-                    <div style={{ fontSize: '11px', fontWeight: 600, padding: '4px 8px', borderRadius: '6px', background: revenda.status === 'Em implantação' ? `${COLORS.purple}22` : `${COLORS.green}22`, color: revenda.status === 'Em implantação' ? COLORS.purple : COLORS.green }}>
-                      {revenda.status}
-                    </div>
+                    <button style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: item.actionColor,
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      padding: '0',
+                    }}>
+                      {item.action}
+                    </button>
                   </div>
-                  <div style={{ fontSize: '11px', color: COLORS.textTertiary, marginTop: '6px' }}>Último contato: {revenda.lastContact}</div>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </PlatformLayout>

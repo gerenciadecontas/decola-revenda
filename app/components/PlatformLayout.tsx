@@ -1,69 +1,36 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
-  Building2,
   Users,
   Calendar,
-  AlertCircle,
-  FileText,
-  Settings,
-  ChevronDown,
   Menu,
   X,
-  History,
-  Zap,
-  CheckCircle2,
   Sun,
   Moon,
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
-
-type UserRole = 'gestor' | 'agente-canal';
 
 interface PlatformLayoutProps {
   children: React.ReactNode;
   currentPage: string;
 }
 
-const allMenuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard', roles: ['gestor', 'agente-canal'] },
-  { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes', roles: ['gestor', 'agente-canal'] },
-  { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos', roles: ['gestor', 'agente-canal'] },
-  { id: 'pendencias', label: 'Pendências', icon: CheckCircle2, href: '/platform/pendencias', roles: ['gestor', 'agente-canal'] },
-  { id: 'agenda', label: 'Agenda', icon: Calendar, href: '/platform/agenda', roles: ['gestor', 'agente-canal'] },
-  { id: 'revendas', label: 'Revendas', icon: Building2, href: '/platform/revendas', roles: ['gestor', 'agente-canal'] },
-  { id: 'agentes', label: 'Agentes', icon: Users, href: '/platform/agentes', roles: ['gestor'] },
-  { id: 'relatorios', label: 'Relatórios', icon: FileText, href: '/platform/relatorios', roles: ['gestor'] },
-  { id: 'configuracoes', label: 'Configurações', icon: Settings, href: '/platform/configuracoes', roles: ['gestor'] },
+const menuItems = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/platform/dashboard' },
+  { id: 'implantacoes', label: 'Implantações', icon: Users, href: '/platform/implantacoes' },
+  { id: 'treinamentos', label: 'Treinamentos', icon: Calendar, href: '/platform/treinamentos' },
 ];
-
-const getMenuItems = (role: UserRole) => {
-  return allMenuItems.filter(item => item.roles.includes(role));
-};
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const { colors, isDark, toggleTheme } = useTheme();
-  const [userRole, setUserRoleState] = useState<UserRole>('gestor');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [period, setPeriod] = useState<'mes' | 'trimestre' | 'ano'>('mes');
 
-  useEffect(() => {
-    const savedRole = localStorage.getItem('platformRole') as UserRole | null;
-    if (savedRole) {
-      setUserRoleState(savedRole);
-    }
-  }, []);
-
-  const setUserRole = (role: UserRole) => {
-    setUserRoleState(role);
-    localStorage.setItem('platformRole', role);
-  };
-
   return (
-    <div className="flex h-screen" style={{ background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+    <div className="flex min-h-screen w-full" style={{ background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
         .sora { font-family: "Sora", sans-serif; }
@@ -72,7 +39,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
       <div
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
-        } text-white transition-all duration-300 flex flex-col`}
+        } text-white transition-all duration-300 flex flex-col shrink-0`}
         style={{ background: colors.cardBackground, borderRight: `1px solid ${colors.borderColor}` }}
       >
         {/* Logo */}
@@ -113,7 +80,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
         {/* Menu */}
         <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
-          {getMenuItems(userRole).map((item) => {
+          {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
@@ -134,82 +101,13 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
           })}
         </nav>
 
-        {/* Footer */}
-        <div className={`p-4 ${sidebarOpen ? '' : 'text-center'}`} style={{ borderTop: '1px solid #23262C' }}>
-          <p className="text-xs" style={{ color: colors.textSecondary }}>
-            {sidebarOpen ? `Logado como ${userRole === 'gestor' ? 'Gestor' : 'Agente'}` : '✓'}
-          </p>
-        </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: colors.background }}>
-        {/* Top Bar */}
-        <div style={{ background: 'rgba(14,16,19,0.92)', borderBottom: '1px solid #1D2026', backdropFilter: 'blur(8px)' }} className="px-8 py-4">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h2 className="sora text-2xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
-                {allMenuItems.find((item) => item.id === currentPage)?.label || 'Dashboard'}
-              </h2>
-              <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>Visão geral das implantações · atualizado há 4 min</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>🔔</button>
-              <button className="p-2 rounded-lg" style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary }}>⚙️</button>
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg transition-all"
-                style={{ background: colors.cardBackground, border: `1px solid ${colors.borderColor}`, color: colors.textPrimary, cursor: 'pointer' }}
-                title={isDark ? 'Tema Claro' : 'Tema Escuro'}
-              >
-                {isDark ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
-              <div className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold" style={{ background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)' }}>
-                {userRole === 'gestor' ? 'G' : 'A'}
-              </div>
-            </div>
-          </div>
-
-          {/* Period Filters */}
-          {currentPage === 'dashboard' && (
-            <div className="flex items-center gap-2" style={{ background: colors.cardBackground, border: `1px solid colors.borderColor`, borderRadius: '10px', padding: '3px', width: 'fit-content' }}>
-              <button
-                onClick={() => setPeriod('mes')}
-                className="px-4 py-2 rounded-lg font-medium transition-colors"
-                style={{
-                  background: period === 'mes' ? '#FFC93C' : 'transparent',
-                  color: period === 'mes' ? colors.cardBackground : colors.textSecondary
-                }}
-              >
-                Mês
-              </button>
-              <button
-                onClick={() => setPeriod('trimestre')}
-                className="px-4 py-2 rounded-lg font-medium transition-colors"
-                style={{
-                  background: period === 'trimestre' ? '#FFC93C' : 'transparent',
-                  color: period === 'trimestre' ? colors.cardBackground : colors.textSecondary
-                }}
-              >
-                Trimestre
-              </button>
-              <button
-                onClick={() => setPeriod('ano')}
-                className="px-4 py-2 rounded-lg font-medium transition-colors"
-                style={{
-                  background: period === 'ano' ? '#FFC93C' : 'transparent',
-                  color: period === 'ano' ? colors.cardBackground : colors.textSecondary
-                }}
-              >
-                Ano
-              </button>
-            </div>
-          )}
-        </div>
-
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: colors.background, minHeight: '100vh' }}>
         {/* Page Content */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8" style={{ background: colors.background }}>{children}</div>
+          {children}
         </div>
       </div>
     </div>

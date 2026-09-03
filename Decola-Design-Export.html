@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decola - Plataforma de Implantações</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "DM Sans", system-ui, sans-serif;
+            background: #0E1013;
+            color: #E8EAED;
+            transition: all 0.3s ease;
+        }
+
+        body.light {
+            background: linear-gradient(160deg, #E6E1D6, #EDE8DD);
+            color: #22242A;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: #16181D;
+            border-right: 1px solid #23262C;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        body.light .sidebar {
+            background: #F3EFE7;
+            border-right: 1px solid #DDD7CA;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(150deg, #8B5CF6, #6D28D9);
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .logo-text p {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9AA1AA;
+        }
+
+        body.light .logo-text p {
+            color: #8B9099;
+        }
+
+        /* MENU */
+        .menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 600;
+            color: #9AA1AA;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #E8EAED;
+        }
+
+        .menu-item.active {
+            background: #8B5CF6;
+            color: white;
+        }
+
+        body.light .menu-item {
+            color: #5C616B;
+        }
+
+        body.light .menu-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #22242A;
+        }
+
+        body.light .menu-item.active {
+            background: #8B5CF6;
+            color: white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0E1013;
+        }
+
+        body.light .main {
+            background: linear-gradient(160deg, #E6E1D6, #EDE8DD);
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: rgba(14, 16, 19, 0.92);
+            border-bottom: 1px solid #1D2026;
+            backdrop-filter: blur(8px);
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.light .topbar {
+            background: rgba(243, 239, 231, 0.95);
+            border-bottom: 1px solid #DDD7CA;
+        }
+
+        .topbar-left h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: "Sora", sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-left p {
+            font-size: 13px;
+            color: #9AA1AA;
+        }
+
+        body.light .topbar-left p {
+            color: #8B9099;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #16181D;
+            border: 1px solid #23262C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        body.light .icon-btn {
+            background: #EAE5DA;
+            border: 1px solid #DDD7CA;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: linear-gradient(150deg, #8B5CF6, #6D28D9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            font-family: "Sora", sans-serif;
+            letter-spacing: -0.025em;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 13.5px;
+            color: #6C7079;
+            margin-bottom: 32px;
+        }
+
+        body.light .page-subtitle {
+            color: #8B9099;
+        }
+
+        /* CARDS */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #212329;
+            border: 1px solid #2D3038;
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: 0 14px 30px -22px rgba(0, 0, 0, 0.6);
+        }
+
+        body.light .stat-card {
+            background: #F3EFE7;
+            border: 1px solid #DDD7CA;
+            box-shadow: 0 14px 30px -24px rgba(60, 50, 30, 0.22);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: rgba(246, 197, 82, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .stat-value {
+            font-size: 29px;
+            font-weight: 700;
+            font-family: "Sora", sans-serif;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6C7079;
+        }
+
+        body.light .stat-label {
+            color: #8B9099;
+        }
+
+        /* KANBAN BOARD */
+        .board-title {
+            font-size: 18px;
+            font-weight: 600;
+            font-family: "Sora", sans-serif;
+            margin-bottom: 16px;
+        }
+
+        .board {
+            display: flex;
+            gap: 18px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .column {
+            flex: 0 0 296px;
+            background: #272A31;
+            border: 1px solid #2D3038;
+            border-radius: 24px;
+            padding: 16px 14px;
+        }
+
+        body.light .column {
+            background: #EAE5DA;
+            border: 1px solid #DDD7CA;
+        }
+
+        .column-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 2px 4px 14px;
+            margin-bottom: 12px;
+        }
+
+        .column-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .column-name {
+            font-size: 14.5px;
+            font-weight: 600;
+            font-family: "Sora", sans-serif;
+            flex: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .column-count {
+            font-size: 11.5px;
+            font-weight: 800;
+            background: #2E313A;
+            color: #A4A8B3;
+            border-radius: 7px;
+            padding: 2px 8px;
+        }
+
+        body.light .column-count {
+            background: #E0DACE;
+            color: #5C616B;
+        }
+
+        .card {
+            background: #212329;
+            border: 1px solid #2D3038;
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 14px 30px -22px rgba(0, 0, 0, 0.6);
+            margin-bottom: 12px;
+        }
+
+        body.light .card {
+            background: #F3EFE7;
+            border: 1px solid #DDD7CA;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 12px;
+        }
+
+        .card-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3A3D46, #26282E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E8EAED;
+            font-size: 13px;
+            font-weight: 700;
+            flex: none;
+        }
+
+        body.light .card-avatar {
+            background: linear-gradient(135deg, #D4CEBf, #C8C0AC);
+            color: #22242A;
+        }
+
+        .card-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-name {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: "Sora", sans-serif;
+            letter-spacing: -0.01em;
+            margin-bottom: 2px;
+        }
+
+        .card-sub {
+            font-size: 11.5px;
+            color: #6C7079;
+        }
+
+        body.light .card-sub {
+            color: #8B9099;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(246, 197, 82, 0.15);
+            color: #FFD873;
+        }
+
+        body.light .badge {
+            background: rgba(246, 197, 82, 0.2);
+            color: #805A10;
+        }
+
+        .card-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+            color: #6C7079;
+            margin-bottom: 6px;
+        }
+
+        body.light .card-progress {
+            color: #8B9099;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #2E313A;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        body.light .progress-bar {
+            background: #EBE7DE;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD873, #E6B23E);
+            border-radius: 99px;
+        }
+
+        /* THEME TOGGLE */
+        .theme-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: #8B5CF6;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 24px -12px rgba(139, 92, 246, 0.5);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #34373F;
+            border-radius: 99px;
+        }
+
+        body.light ::-webkit-scrollbar-thumb {
+            background: #D8D2C6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">D</div>
+                <div class="logo-text">
+                    <h1>Decola</h1>
+                    <p>Central de Implantação</p>
+                </div>
+            </div>
+
+            <nav class="menu">
+                <button class="menu-item" onclick="switchPage('dashboard')">
+                    <span>📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="menu-item active" onclick="switchPage('implantacoes')">
+                    <span>👥</span>
+                    <span>Implantações</span>
+                </button>
+                <button class="menu-item" onclick="switchPage('treinamentos')">
+                    <span>📅</span>
+                    <span>Treinamentos</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- TOPBAR -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h2 id="pageTitle">Implantações</h2>
+                    <p id="pageSubtitle">Visão geral das implantações · atualizado há 4 min</p>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-btn">🔔</button>
+                    <button class="icon-btn">⚙️</button>
+                    <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+                    <div class="avatar">A</div>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content" id="content">
+                <h1 class="page-title" id="contentTitle">Implantações</h1>
+                <p class="page-subtitle" id="contentSubtitle">Visão Kanban de todas as revendas em implantação</p>
+
+                <!-- STATS -->
+                <div class="card-grid" id="statsSection">
+                </div>
+
+                <h3 class="board-title" id="boardTitle">Pipeline de Onboarding</h3>
+
+                <!-- KANBAN BOARD -->
+                <div class="board" id="boardSection">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THEME TOGGLE BUTTON -->
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <script>
+        const pages = {
+            dashboard: {
+                title: 'Dashboard',
+                subtitle: 'Visão geral da plataforma · atualizado há 4 min',
+                stats: [
+                    { icon: '👥', value: '12', label: 'Implantações ativas' },
+                    { icon: '⚠️', value: '3', label: 'Sem retorno / em risco' },
+                    { icon: '⏱️', value: '5d', label: 'Tempo médio na etapa' },
+                    { icon: '📈', value: '8', label: 'Concluídas no mês' }
+                ],
+                boardTitle: 'Resumo Geral',
+                showBoard: false
+            },
+            implantacoes: {
+                title: 'Implantações',
+                subtitle: 'Visão Kanban de todas as revendas em implantação',
+                stats: [
+                    { icon: '👥', value: '12', label: 'Implantações ativas' },
+                    { icon: '⚠️', value: '3', label: 'Sem retorno / em risco' },
+                    { icon: '⏱️', value: '5d', label: 'Tempo médio na etapa' },
+                    { icon: '📈', value: '8', label: 'Concluídas no mês' }
+                ],
+                boardTitle: 'Pipeline de Onboarding',
+                showBoard: true
+            },
+            treinamentos: {
+                title: 'Treinamentos',
+                subtitle: 'Gerencie e acompanhe todos os treinamentos · atualizado há 2 min',
+                stats: [
+                    { icon: '📚', value: '24', label: 'Treinamentos total' },
+                    { icon: '✅', value: '16', label: 'Concluídos' },
+                    { icon: '⏳', value: '8', label: 'Em andamento' },
+                    { icon: '👥', value: '12', label: 'Agentes treinados' }
+                ],
+                boardTitle: 'Próximos Treinamentos',
+                showBoard: false
+            }
+        };
+
+        let currentPage = 'implantacoes';
+
+        function switchPage(page) {
+            currentPage = page;
+            updateMenuActive();
+            updateContent();
+            localStorage.setItem('lastPage', page);
+        }
+
+        function updateMenuActive() {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.menu-item').classList.add('active');
+        }
+
+        function updateContent() {
+            const pageData = pages[currentPage];
+
+            // Update topbar
+            document.getElementById('pageTitle').textContent = pageData.title;
+            document.getElementById('pageSubtitle').textContent = pageData.subtitle;
+
+            // Update content
+            document.getElementById('contentTitle').textContent = pageData.title;
+            document.getElementById('contentSubtitle').textContent = pageData.subtitle;
+
+            // Update stats
+            const statsSection = document.getElementById('statsSection');
+            statsSection.innerHTML = pageData.stats.map(stat => `
+                <div class="stat-card">
+                    <div class="stat-icon">${stat.icon}</div>
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+
+            // Update board title
+            document.getElementById('boardTitle').textContent = pageData.boardTitle;
+
+            // Show/hide board
+            const boardSection = document.getElementById('boardSection');
+            if (pageData.showBoard) {
+                boardSection.style.display = 'flex';
+                renderBoard();
+            } else {
+                boardSection.style.display = 'none';
+            }
+        }
+
+        function renderBoard() {
+            const boardSection = document.getElementById('boardSection');
+            boardSection.innerHTML = `
+                <div class="column">
+                    <div class="column-head">
+                        <div class="column-dot" style="background: #E6B23E;"></div>
+                        <span class="column-name">Chegada</span>
+                        <span class="column-count">2</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-avatar">DA</div>
+                            <div class="card-meta">
+                                <div class="card-name">Distribuidora Aurora</div>
+                                <div class="card-sub">Carla Mendes · Atacado</div>
+                            </div>
+                        </div>
+                        <div class="card-tags">
+                            <span class="badge">Novo</span>
+                        </div>
+                        <div class="card-progress">
+                            <span>Progresso</span>
+                            <span>15%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 15%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="column-head">
+                        <div class="column-dot" style="background: #C99526;"></div>
+                        <span class="column-name">Boas-vindas</span>
+                        <span class="column-count">2</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-avatar">CC</div>
+                            <div class="card-meta">
+                                <div class="card-name">Casa & Cia Materiais</div>
+                                <div class="card-sub">Roberto Alves · Construção</div>
+                            </div>
+                        </div>
+                        <div class="card-tags">
+                            <span class="badge" style="background: rgba(255, 255, 255, 0.06); color: #A4A8B3;">Contato ok</span>
+                        </div>
+                        <div class="card-progress">
+                            <span>Progresso</span>
+                            <span>32%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 32%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="column-head">
+                        <div class="column-dot" style="background: #D9534F;"></div>
+                        <span class="column-name">Sem retorno</span>
+                        <span class="column-count">1</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-avatar">PC</div>
+                            <div class="card-meta">
+                                <div class="card-name">Papelaria Central</div>
+                                <div class="card-sub">Diego Ramos · Varejo</div>
+                            </div>
+                        </div>
+                        <div class="card-tags">
+                            <span class="badge" style="background: rgba(217, 83, 79, 0.14); color: #A32C28;">3 tentativas</span>
+                        </div>
+                        <div class="card-progress">
+                            <span>Progresso</span>
+                            <span>20%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 20%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="column-head">
+                        <div class="column-dot" style="background: #7C5CF0;"></div>
+                        <span class="column-name">Go-Live</span>
+                        <span class="column-count">1</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-avatar">SU</div>
+                            <div class="card-meta">
+                                <div class="card-name">Supermercado União</div>
+                                <div class="card-sub">Paulo Freitas · Atacado</div>
+                            </div>
+                        </div>
+                        <div class="card-tags">
+                            <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: #34D399;">Ativo</span>
+                        </div>
+                        <div class="card-progress">
+                            <span>Progresso</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const icon = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('light')) {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light');
+            document.querySelector('.theme-toggle').textContent = '🌙';
+        }
+
+        // Load last page
+        const lastPage = localStorage.getItem('lastPage') || 'implantacoes';
+        if (lastPage !== 'implantacoes') {
+            currentPage = lastPage;
+            document.querySelectorAll('.menu-item').forEach((item, idx) => {
+                if ((idx === 0 && lastPage === 'dashboard') ||
+                    (idx === 1 && lastPage === 'implantacoes') ||
+                    (idx === 2 && lastPage === 'treinamentos')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize
+        updateContent();
+    </script>
+</body>
+</html>
