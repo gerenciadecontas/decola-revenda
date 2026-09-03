@@ -65,7 +65,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
             <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               Decola
             </h1>
-            <p style={{ fontSize: '11.5px', color: colors.textSecondary, letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
+            <p style={{ fontSize: '11.5px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
               Central de Implantação
             </p>
           </div>
