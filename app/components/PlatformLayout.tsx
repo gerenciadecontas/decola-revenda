@@ -20,7 +20,7 @@ const menuItems = [
 ];
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
-  const { colors } = useTheme();
+  const { colors, isDark, toggleTheme } = useTheme();
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100%', background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
@@ -105,6 +105,36 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
       {/* Main Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: colors.background, minHeight: '100vh' }}>
+        {/* Header/Top Bar */}
+        <div style={{
+          padding: '16px 32px',
+          borderBottom: `1px solid ${colors.borderColor}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: '16px',
+          background: colors.background,
+          flexShrink: 0
+        }}>
+          <button
+            onClick={toggleTheme}
+            style={{
+              padding: '8px 12px',
+              background: 'transparent',
+              border: `1px solid ${colors.borderColor}`,
+              borderRadius: '6px',
+              color: colors.textSecondary,
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+              transition: 'all 0.2s ease'
+            }}
+            title="Alternar tema"
+          >
+            {isDark ? '☀️ Claro' : '🌙 Escuro'}
+          </button>
+        </div>
+
         {/* Page Content */}
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {children}
