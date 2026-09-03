@@ -37,49 +37,41 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
       `}</style>
       {/* Sidebar */}
       <div
-        className={`${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } text-white transition-all duration-300 flex flex-col shrink-0`}
+        className="w-64 text-white transition-all duration-300 flex flex-col shrink-0"
         style={{ background: colors.cardBackground, borderRight: `1px solid ${colors.borderColor}` }}
       >
         {/* Logo */}
-        <div className="p-6 flex items-center justify-between gap-3">
-          <div className={sidebarOpen ? '' : 'hidden'}>
+        <div className="p-6">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '11px',
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
                 background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)',
                 display: 'grid',
                 placeItems: 'center',
                 fontFamily: '"Sora", sans-serif',
                 fontWeight: 700,
                 color: '#fff',
-                fontSize: '18px',
-                marginBottom: '8px',
+                fontSize: '22px',
               }}
             >
               D
             </div>
-            <h1 className="sora text-xl font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-              Decola
-            </h1>
-            <p style={{ fontSize: '11.5px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '3px' }}>
-              Central de Implantação
-            </p>
+            <div>
+              <h1 className="sora text-lg font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0 }}>
+                Decola
+              </h1>
+              <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '2px', margin: 0 }}>
+                Implantação
+              </p>
+            </div>
           </div>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1 rounded"
-            style={{ background: 'transparent', border: 0, color: colors.textSecondary, cursor: 'pointer' }}
-          >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
@@ -87,15 +79,16 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
               <Link
                 key={item.id}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${sidebarOpen ? '' : 'justify-center px-2'}`}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors"
                 style={{
                   background: isActive ? '#8B5CF6' : 'transparent',
-                  color: isActive ? '#fff' : colors.textSecondary
+                  color: isActive ? '#fff' : colors.textSecondary,
+                  textDecoration: 'none'
                 }}
                 title={item.label}
               >
-                <Icon size={20} />
-                {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
+                <Icon size={20} style={{ flexShrink: 0 }} />
+                <span className="text-sm font-medium">{item.label}</span>
               </Link>
             );
           })}
