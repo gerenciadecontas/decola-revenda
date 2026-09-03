@@ -1,15 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
   Users,
   Calendar,
-  Menu,
-  X,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
 
@@ -25,9 +20,7 @@ const menuItems = [
 ];
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
-  const { colors, isDark, toggleTheme } = useTheme();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [period, setPeriod] = useState<'mes' | 'trimestre' | 'ano'>('mes');
+  const { colors } = useTheme();
 
   return (
     <div className="flex min-h-screen w-full" style={{ background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>

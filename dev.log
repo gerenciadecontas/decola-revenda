@@ -7,8 +7,8 @@
 - Local:         http://localhost:3001
 - Network:       http://192.168.1.7:3001
 - Environments: .env.local
-✓ Ready in 728ms
-✓ Running next.config.ts took 39ms
+✓ Ready in 523ms
+✓ Running next.config.ts took 43ms
 ⨯ Another next dev server is already running.
 
 - Local:        http://localhost:3000
