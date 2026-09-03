@@ -49,7 +49,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 width: '44px',
                 height: '44px',
                 borderRadius: '12px',
-                background: 'linear-gradient(150deg, #8B5CF6, #6D28D9)',
+                background: '#7C5CF0',
                 display: 'grid',
                 placeItems: 'center',
                 fontFamily: '"Sora", sans-serif',
@@ -61,14 +61,9 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
             >
               D
             </div>
-            <div>
-              <h1 style={{ fontFamily: '"Sora", sans-serif', fontSize: '18px', fontWeight: 'bold', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0 }}>
-                Decola
-              </h1>
-              <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '2px', margin: 0 }}>
-                Implantação
-              </p>
-            </div>
+            <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
+              Implantação
+            </p>
           </div>
         </div>
 

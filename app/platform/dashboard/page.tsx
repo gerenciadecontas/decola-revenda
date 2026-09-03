@@ -94,61 +94,79 @@ export default function DashboardPage() {
       <div style={{ padding: '32px', paddingTop: '0' }}>
         {/* Page Header */}
         <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', paddingBottom: '16px', borderBottom: `1px solid ${COLORS.borderColor}` }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
             <div>
-              <h1 style={{ fontSize: '28px', fontWeight: 700, color: COLORS.textPrimary, margin: '0 0 4px 0' }}>
-                Relatório Operacional
+              <h1 style={{ fontSize: '40px', fontWeight: 700, color: COLORS.textPrimary, margin: '0 0 8px 0' }}>
+                Visão geral
               </h1>
               <p style={{ fontSize: '14px', color: COLORS.textSecondary, margin: 0 }}>
-                Saúde da carteira de implantação no fechamento do período.
+                Saúde da carteira de implantação · atualizado há 2 min
               </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: '13px', color: COLORS.textSecondary, margin: '0 0 4px 0' }}>{today}</p>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: COLORS.textPrimary }}>Carteira de revendas · {ativas} em implantação</p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{
+                padding: '10px 20px',
+                background: 'transparent',
+                border: `1px solid ${COLORS.borderColor}`,
+                borderRadius: '8px',
+                color: COLORS.textPrimary,
+                cursor: 'pointer',
+                fontWeight: '500',
+                fontSize: '14px'
+              }}>
+                Exportar
+              </button>
+              <button style={{
+                padding: '10px 20px',
+                background: '#7C5CF0',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: '14px'
+              }}>
+                + Nova revenda
+              </button>
             </div>
           </div>
 
           {/* Vision Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
             <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-              <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: '0 0 8px 0' }}>Revendas em implantação</p>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary }}>{ativas}</div>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>entraram esta semana</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>Revendas em implantação</p>
+                <span style={{ fontSize: '12px', color: COLORS.textSecondary }}>+2</span>
+              </div>
+              <div style={{ fontSize: '40px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>{ativas}</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>entraram esta semana</p>
             </div>
 
             <div style={{ background: 'rgba(230, 178, 62, 0.1)', border: `1px solid ${COLORS.yellow}`, borderRadius: '18px', padding: '20px' }}>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Em risco</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-                <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.yellow }}>{emRisco}</div>
-                <span style={{ fontSize: '11px', background: COLORS.yellow, color: COLORS.darkBg, padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>atenção</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>Em risco</p>
+                <span style={{ fontSize: '12px', background: COLORS.yellow, color: '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: '600' }}>atenção</span>
               </div>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>paradas há 5+ dias</p>
+              <div style={{ fontSize: '40px', fontWeight: 700, color: COLORS.yellow, marginBottom: '8px' }}>{emRisco}</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>paradas há 5+ dias</p>
             </div>
 
             <div style={{ background: 'rgba(123, 92, 240, 0.08)', border: `1px solid #5B43C0`, borderRadius: '18px', padding: '20px' }}>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '0 0 8px 0' }}>Ciclo médio</p>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#8B7CF6' }}>18d</div>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>meta: 15 dias</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>Ciclo médio</p>
+                <span style={{ fontSize: '12px', color: '#7C5CF0' }}>-2d</span>
+              </div>
+              <div style={{ fontSize: '40px', fontWeight: 700, color: '#7C5CF0', marginBottom: '8px' }}>18d</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>meta: 15 dias</p>
             </div>
 
             <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-              <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: '0 0 8px 0' }}>Go-live no mês</p>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: COLORS.textPrimary }}>{concluidas}</div>
-              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: '8px 0 0 0' }}>taxa de conclusão</p>
-            </div>
-
-            <div style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                <p style={{ fontSize: '12px', color: COLORS.textTertiary, margin: 0, fontWeight: 500 }}>Meta do mês</p>
-                <span style={{ fontSize: '11px', background: atingiuMeta ? COLORS.green : COLORS.yellow, color: atingiuMeta ? '#fff' : COLORS.darkBg, padding: '4px 10px', borderRadius: '6px', fontWeight: 600 }}>{Math.round(progressoMeta)}%</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>Go-live no mês</p>
+                <span style={{ fontSize: '12px', color: COLORS.textSecondary }}>89%</span>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '12px' }}>
-                {implantacoesDoMes}/{metaMes}
-              </div>
-              <div style={{ height: '8px', background: COLORS.borderColor, borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', background: atingiuMeta ? COLORS.green : COLORS.yellow, width: `${progressoMeta}%`, transition: 'width 0.3s' }} />
-              </div>
+              <div style={{ fontSize: '40px', fontWeight: 700, color: COLORS.textPrimary, marginBottom: '8px' }}>{concluidas}</div>
+              <p style={{ fontSize: '12px', color: COLORS.textSecondary, margin: 0 }}>taxa de conclusão</p>
             </div>
           </div>
         </div>
