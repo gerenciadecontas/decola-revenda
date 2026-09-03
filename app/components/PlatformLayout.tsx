@@ -23,18 +23,26 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const { colors } = useTheme();
 
   return (
-    <div className="flex min-h-screen w-full" style={{ background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', background: colors.background, fontFamily: '"DM Sans", system-ui, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap');
         .sora { font-family: "Sora", sans-serif; }
       `}</style>
+
       {/* Sidebar */}
       <div
-        className="w-64 text-white transition-all duration-300 flex flex-col shrink-0"
-        style={{ background: colors.cardBackground, borderRight: `1px solid ${colors.borderColor}` }}
+        style={{
+          width: '256px',
+          backgroundColor: colors.cardBackground,
+          borderRight: `1px solid ${colors.borderColor}`,
+          display: 'flex',
+          flexDirection: 'column',
+          flexShrink: 0,
+          color: '#fff'
+        }}
       >
-        {/* Logo */}
-        <div className="p-6">
+        {/* Logo Section */}
+        <div style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div
               style={{
@@ -48,12 +56,13 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
                 fontWeight: 700,
                 color: '#fff',
                 fontSize: '22px',
+                flexShrink: 0
               }}
             >
               D
             </div>
             <div>
-              <h1 className="sora text-lg font-bold" style={{ color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0 }}>
+              <h1 style={{ fontFamily: '"Sora", sans-serif', fontSize: '18px', fontWeight: 'bold', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0 }}>
                 Decola
               </h1>
               <p style={{ fontSize: '10px', color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'uppercase', marginTop: '2px', margin: 0 }}>
@@ -64,7 +73,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
+        <nav style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto' }}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
@@ -72,27 +81,32 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
               <Link
                 key={item.id}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors"
                 style={{
-                  background: isActive ? '#8B5CF6' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  backgroundColor: isActive ? '#8B5CF6' : 'transparent',
                   color: isActive ? '#fff' : colors.textSecondary,
-                  textDecoration: 'none'
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
                 }}
                 title={item.label}
               >
                 <Icon size={20} style={{ flexShrink: 0 }} />
-                <span className="text-sm font-medium">{item.label}</span>
+                <span style={{ fontSize: '14px', fontWeight: '500' }}>{item.label}</span>
               </Link>
             );
           })}
         </nav>
-
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: colors.background, minHeight: '100vh' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: colors.background, minHeight: '100vh' }}>
         {/* Page Content */}
-        <div className="flex-1 overflow-auto">
+        <div style={{ flex: 1, overflowY: 'auto' }}>
           {children}
         </div>
       </div>
