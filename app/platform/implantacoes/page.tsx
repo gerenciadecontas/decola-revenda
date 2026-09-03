@@ -79,6 +79,14 @@ export default function ImplantacoesPage() {
   const { data: implantacoes = [], create, update: updateRecord, delete_: deleteRecord } = useSupabaseTable<Implantacao>('implantacoes');
   const [showForm, setShowForm] = useState(false);
   const [q, setQ] = useState('');
+
+  useEffect(() => {
+    if (!isDark) {
+      document.body.classList.add('light');
+    } else {
+      document.body.classList.remove('light');
+    }
+  }, [isDark]);
   const [dragRev, setDragRev] = useState<string | null>(null);
   const [isLight, setIsLight] = useState(false);
   const [formData, setFormData] = useState<{
@@ -260,38 +268,6 @@ export default function ImplantacoesPage() {
           </div>
         </div>
 
-        <div className="filterbar">
-          <span className="flabel">🔍 Filtros</span>
-          <div className="finput">
-            <input
-              id="kq"
-              placeholder="Buscar revenda, responsável ou agente..."
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-            />
-          </div>
-          <button
-            className="btn btn-ghost btn-sm"
-            id="clearBtn"
-            onClick={() => setQ('')}
-            style={{ display: q ? 'inline-flex' : 'none' }}
-          >
-            Limpar
-          </button>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => setShowForm(true)}
-          >
-            + Nova implantação
-          </button>
-          <button
-            className="btn btn-ghost btn-sm"
-            onClick={() => setIsLight(!isLight)}
-            title={isLight ? 'Escuro' : 'Claro'}
-          >
-            {isLight ? '🌙' : '☀️'}
-          </button>
-        </div>
 
         <div className="stages" id="stages">
           {STAGES.map((s, i) => {
@@ -325,6 +301,11 @@ export default function ImplantacoesPage() {
                 key={s.id}
                 className="col"
                 data-stage={s.id}
+                style={{
+                  background: theme.cardBg,
+                  borderColor: theme.borderColor,
+                  color: theme.textPrimary
+                }}
                 onDragOver={(e) => {
                   e.preventDefault();
                   (e.currentTarget as HTMLElement).classList.add('over');
@@ -342,17 +323,17 @@ export default function ImplantacoesPage() {
               >
                 <div className="col-head">
                   <span className="sdot" style={{ background: s.c }} />
-                  <b>{s.nome}</b>
-                  <span className="scount">{list.length}</span>
+                  <b style={{ color: theme.textPrimary }}>{s.nome}</b>
+                  <span className="scount" style={{ background: theme.borderColor, color: theme.textSecondary }}>{list.length}</span>
                 </div>
 
                 <div className="col-body">
                   {list.length > 0 ? (
                     list.map((c) => renderCard(c, s))
                   ) : (
-                    <div className="col-empty">
-                      <div className="ce-ic">📭</div>
-                      <b>Nenhuma implantação</b>
+                    <div className="col-empty" style={{ color: theme.textSecondary }}>
+                      <div className="ce-ic" style={{ background: theme.borderColor, color: theme.textTertiary }}>📭</div>
+                      <b style={{ color: theme.textSecondary }}>Nenhuma implantação</b>
                       <p>Arraste um card para cá</p>
                     </div>
                   )}
@@ -386,7 +367,7 @@ export default function ImplantacoesPage() {
           >
             <div
               style={{
-                background: 'var(--panel)',
+                background: 'theme.cardBg',
                 border: `1px solid ${theme.borderColor}`,
                 borderRadius: '18px',
                 padding: '24px',
@@ -425,7 +406,7 @@ export default function ImplantacoesPage() {
                     style={{
                       width: '100%',
                       padding: '10px 12px',
-                      background: 'var(--panel-2)',
+                      background: 'theme.cardBg',
                       border: `1px solid ${theme.borderColor}`,
                       borderRadius: '8px',
                       color: theme.textPrimary,
