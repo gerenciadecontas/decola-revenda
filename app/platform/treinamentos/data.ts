@@ -5,8 +5,6 @@ export const temaKey = (modulo: string, day: number, idx: number) => `${modulo}-
 export const TREINAMENTOS_DATA = {
   lcweb: {
     label: 'LC WEB',
-    days: 10,
-    temas: 73,
     items: [
       {
         day: 1,
@@ -72,8 +70,6 @@ export const TREINAMENTOS_DATA = {
   },
   lcerp: {
     label: 'LC ERP Desktop',
-    days: 4,
-    temas: 20,
     items: [
       {
         day: 1,
@@ -103,8 +99,6 @@ export const TREINAMENTOS_DATA = {
   },
   produtos: {
     label: 'Serviços adicionais',
-    days: 1,
-    temas: 8,
     items: [
       {
         day: 1,
@@ -115,3 +109,37 @@ export const TREINAMENTOS_DATA = {
     ]
   }
 };
+
+export type ModuloId = keyof typeof TREINAMENTOS_DATA;
+
+export interface TreinamentoItem {
+  day: number;
+  title: string;
+  obj: string;
+  temas: string[];
+  custom?: boolean;
+}
+
+export type CustomTreinamentos = Partial<Record<ModuloId, TreinamentoItem[]>>;
+
+export const CUSTOM_KEY = 'jornada-treinamentos-custom';
+
+export const MODULO_IDS = Object.keys(TREINAMENTOS_DATA) as ModuloId[];
+
+export const loadCustom = (): CustomTreinamentos => {
+  try {
+    return JSON.parse(localStorage.getItem(CUSTOM_KEY) || '{}');
+  } catch {
+    return {};
+  }
+};
+
+export const getModulos = (custom: CustomTreinamentos) =>
+  MODULO_IDS.map(id => ({
+    id,
+    label: TREINAMENTOS_DATA[id].label,
+    items: [
+      ...(TREINAMENTOS_DATA[id].items as TreinamentoItem[]),
+      ...(custom[id] || []).map(i => ({ ...i, custom: true })),
+    ],
+  }));

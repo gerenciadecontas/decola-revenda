@@ -25,7 +25,8 @@ export function useLocalTable<T extends { id?: string; created_at?: string; upda
   }, [key]);
 
   const create = async (item: Omit<T, 'id'>) => {
-    const newItem = { ...item, id: Date.now().toString(), created_at: new Date().toISOString() } as T;
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const newItem = { ...item, id, created_at: new Date().toISOString() } as T;
     persist(items => [...items, newItem]);
     return newItem;
   };

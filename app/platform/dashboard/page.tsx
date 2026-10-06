@@ -6,7 +6,8 @@ import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useLocalTable } from '@/lib/supabase/hooks';
 import { STAGES, PRIORIDADES, PRODUTOS, PARADA_DIAS, diasNaEtapa, type Implantacao } from '../implantacoes/data';
-import { TREINAMENTOS_DATA, PROGRESS_KEY, temaKey } from '../treinamentos/data';
+import { getModulos, loadCustom, PROGRESS_KEY, temaKey, type CustomTreinamentos } from '../treinamentos/data';
+import { LIVES_TABLE, LIVE_STATUS, liveDate, sortLives, toISODate, type Live } from '../treinamentos/lives';
 import '@/app/globals.css';
 
 const LIGHT_THEME = {
@@ -81,9 +82,11 @@ export default function DashboardPage() {
   const { isDark } = useTheme();
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
   const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
+  const { data: lives } = useLocalTable<Live>(LIVES_TABLE);
   const [tab, setTab] = useState<'implantacoes' | 'jornada'>('implantacoes');
   const [metaMes, setMetaMes] = useState(10);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [custom, setCustom] = useState<CustomTreinamentos>({});
 
   useEffect(() => {
     try {
@@ -91,6 +94,7 @@ export default function DashboardPage() {
       if (meta) setMetaMes(parseInt(meta));
       const progress = localStorage.getItem(PROGRESS_KEY);
       if (progress) setChecked(JSON.parse(progress));
+      setCustom(loadCustom());
     } catch {}
   }, []);
 
@@ -127,7 +131,7 @@ export default function DashboardPage() {
   const porProduto = PRODUTOS.map(p => ({ label: p, count: emAndamento.filter(i => i.produto === p).length }));
 
   // Jornada de capacitação
-  const modulos = Object.entries(TREINAMENTOS_DATA).map(([id, m]) => {
+  const modulos = getModulos(custom).map(({ id, ...m }) => {
     const dias = m.items.map(item => {
       const feitos = item.temas.filter((_, idx) => checked[temaKey(id, item.day, idx)]).length;
       return { ...item, feitos, total: item.temas.length };
@@ -143,6 +147,13 @@ export default function DashboardPage() {
   const diasTotal = modulos.reduce((s, m) => s + m.diasTotal, 0);
   const diasFeitos = modulos.reduce((s, m) => s + m.diasFeitos, 0);
   const modulosFeitos = modulos.filter(m => m.temasFeitos === m.temasTotal).length;
+
+  const prefixoMes = toISODate(agora).slice(0, 7);
+  const livesMes = lives.filter(l => l.data.startsWith(prefixoMes));
+  const proximasLives = lives
+    .filter(l => l.status === 'agendada' && liveDate(l).getTime() >= Date.now())
+    .sort(sortLives)
+    .slice(0, 3);
 
   const grid4: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' };
   const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px', marginBottom: '24px' };
@@ -353,9 +364,38 @@ export default function DashboardPage() {
               })}
             </div>
 
-            <Panel theme={theme} title="Lives e Acompanhamento" action={<Link href="/platform/treinamentos" style={linkStyle}>Abrir jornada →</Link>}>
-              <Empty theme={theme} text="Os indicadores de Lives e Acompanhamento aparecem aqui assim que essas abas forem implementadas na Jornada de capacitação." />
-            </Panel>
+            <div style={grid2}>
+              <Panel theme={theme} title="Lives do mês" action={<Link href="/platform/treinamentos" style={linkStyle}>Abrir agenda →</Link>}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                  {[
+                    ['Agendadas', livesMes.filter(l => l.status === 'agendada').length, LIVE_STATUS.agendada.c],
+                    ['Realizadas', livesMes.filter(l => l.status === 'realizada').length, LIVE_STATUS.realizada.c],
+                    ['Canceladas', livesMes.filter(l => l.status === 'cancelada').length, LIVE_STATUS.cancelada.c],
+                  ].map(([label, n, c]) => (
+                    <div key={label as string} style={{ border: `1px solid ${theme.borderColor}`, borderRadius: '12px', padding: '12px' }}>
+                      <div style={{ fontSize: '24px', fontWeight: 700, color: c as string }}>{n}</div>
+                      <div style={{ fontSize: '12px', color: theme.textSecondary }}>{label}</div>
+                    </div>
+                  ))}
+                </div>
+                {proximasLives.length === 0 ? (
+                  <Empty theme={theme} text="Nenhuma live agendada daqui para frente." />
+                ) : (
+                  proximasLives.map((l, i) => (
+                    <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', padding: '10px 0', borderTop: i === 0 ? `1px solid ${theme.borderColor}` : 'none' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 600, color: theme.textPrimary, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{l.tema}</span>
+                      <span style={{ fontSize: '13px', color: theme.textSecondary, whiteSpace: 'nowrap' }}>
+                        {new Date(`${l.data}T00:00:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} · {l.hora}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </Panel>
+
+              <Panel theme={theme} title="Acompanhamento">
+                <Empty theme={theme} text="Os indicadores de Acompanhamento aparecem aqui assim que essa aba for implementada na Jornada de capacitação." />
+              </Panel>
+            </div>
           </>
         )}
       </div>
