@@ -8,6 +8,7 @@ import { useLocalTable } from '@/lib/supabase/hooks';
 import { STAGES, PRIORIDADES, PRODUTOS, PARADA_DIAS, diasNaEtapa, type Implantacao } from '../implantacoes/data';
 import { getModulos, loadCustom, PROGRESS_KEY, temaKey, type CustomTreinamentos } from '../treinamentos/data';
 import { LIVES_TABLE, LIVE_STATUS, liveDate, sortLives, toISODate, type Live } from '../treinamentos/lives';
+import { SESSOES_TABLE, SESSAO_STATUS, type SessaoTreinamento } from '../treinamentos/agenda';
 import '@/app/globals.css';
 
 const LIGHT_THEME = {
@@ -83,6 +84,7 @@ export default function DashboardPage() {
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
   const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
   const { data: lives } = useLocalTable<Live>(LIVES_TABLE);
+  const { data: sessoes } = useLocalTable<SessaoTreinamento>(SESSOES_TABLE);
   const [tab, setTab] = useState<'implantacoes' | 'jornada'>('implantacoes');
   const [metaMes, setMetaMes] = useState(10);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
@@ -153,6 +155,12 @@ export default function DashboardPage() {
   const proximasLives = lives
     .filter(l => l.status === 'agendada' && liveDate(l).getTime() >= Date.now())
     .sort(sortLives)
+    .slice(0, 3);
+
+  const sessoesMes = sessoes.filter(s => s.data.startsWith(prefixoMes));
+  const proximasSessoes = sessoes
+    .filter(s => s.status === 'agendado' && new Date(`${s.data}T${s.hora}:00`).getTime() >= Date.now())
+    .sort((a, b) => `${a.data}T${a.hora}`.localeCompare(`${b.data}T${b.hora}`))
     .slice(0, 3);
 
   const grid4: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' };
@@ -392,8 +400,30 @@ export default function DashboardPage() {
                 )}
               </Panel>
 
-              <Panel theme={theme} title="Acompanhamento">
-                <Empty theme={theme} text="Os indicadores de Acompanhamento aparecem aqui assim que essa aba for implementada na Jornada de capacitação." />
+              <Panel theme={theme} title="Treinamentos agendados no mês" action={<Link href="/platform/treinamentos" style={linkStyle}>Abrir agenda →</Link>}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                  {(Object.keys(SESSAO_STATUS) as (keyof typeof SESSAO_STATUS)[]).map(st => (
+                    <div key={st} style={{ border: `1px solid ${theme.borderColor}`, borderRadius: '12px', padding: '12px' }}>
+                      <div style={{ fontSize: '24px', fontWeight: 700, color: SESSAO_STATUS[st].c }}>{sessoesMes.filter(s => s.status === st).length}</div>
+                      <div style={{ fontSize: '12px', color: theme.textSecondary }}>{SESSAO_STATUS[st].label}s</div>
+                    </div>
+                  ))}
+                </div>
+                {proximasSessoes.length === 0 ? (
+                  <Empty theme={theme} text="Nenhum treinamento agendado daqui para frente." />
+                ) : (
+                  proximasSessoes.map((s, i) => (
+                    <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', padding: '10px 0', borderTop: i === 0 ? `1px solid ${theme.borderColor}` : 'none' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 600, color: theme.textPrimary, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        Dia {s.dia} · {s.titulo}
+                        {s.revenda ? ` · ${s.revenda}` : ''}
+                      </span>
+                      <span style={{ fontSize: '13px', color: theme.textSecondary, whiteSpace: 'nowrap' }}>
+                        {new Date(`${s.data}T00:00:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} · {s.hora}
+                      </span>
+                    </div>
+                  ))
+                )}
               </Panel>
             </div>
           </>

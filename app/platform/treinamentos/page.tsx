@@ -7,6 +7,11 @@ import '@/app/globals.css';
 import { getModulos, loadCustom, CUSTOM_KEY, MODULO_IDS, PROGRESS_KEY, temaKey, type CustomTreinamentos, type ModuloId, type TreinamentoItem } from './data';
 
 import { LivesTab } from './LivesTab';
+import { AgendaTab } from './AgendaTab';
+import { LIVES_TABLE, type Live } from './lives';
+import { SESSOES_TABLE, type SessaoTreinamento } from './agenda';
+import { useLocalTable } from '@/lib/supabase/hooks';
+import type { Implantacao } from '../implantacoes/data';
 
 const emptyNovo =(modulo: ModuloId) => ({ modulo, title: '', obj: '', temas: '' });
 
@@ -43,6 +48,10 @@ export default function JornadaCapacitacaoPage() {
   const [novoOpen, setNovoOpen] = useState(false);
   const [novo, setNovo] = useState(emptyNovo('lcweb'));
   const [novoError, setNovoError] = useState('');
+  const livesTable = useLocalTable<Live>(LIVES_TABLE);
+  const sessoesTable = useLocalTable<SessaoTreinamento>(SESSOES_TABLE);
+  const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
+  const revendas = [...new Set(implantacoes.map(i => i.revenda).filter(Boolean))].sort();
 
   useEffect(() => {
     const saved = localStorage.getItem(PROGRESS_KEY);
@@ -140,7 +149,7 @@ export default function JornadaCapacitacaoPage() {
 
         {/* Main Tabs */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', background: isDark ? 'rgba(0,0,0,.28)' : 'rgba(0,0,0,.05)', padding: '8px', borderRadius: '12px', width: 'fit-content' }}>
-          {['treinamentos', 'lives', 'acompanhamento'].map(tab => (
+          {['treinamentos', 'lives', 'agenda'].map(tab => (
             <button
               key={tab}
               onClick={() => setMainTab(tab)}
@@ -155,7 +164,7 @@ export default function JornadaCapacitacaoPage() {
                 cursor: 'pointer'
               }}
             >
-              {tab === 'treinamentos' ? 'Treinamentos' : tab === 'lives' ? 'Lives' : 'Acompanhamento'}
+              {tab === 'treinamentos' ? 'Treinamentos' : tab === 'lives' ? 'Lives' : 'Agenda'}
             </button>
           ))}
         </div>
@@ -353,14 +362,12 @@ export default function JornadaCapacitacaoPage() {
         )}
 
         {/* Lives Tab */}
-        {mainTab === 'lives' && <LivesTab theme={theme} isDark={isDark} />}
+        {mainTab === 'lives' && <LivesTab theme={theme} table={livesTable} />}
 
-        {/* Acompanhamento Tab */}
-        {mainTab === 'acompanhamento' && (
-          <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '12px', padding: '32px', textAlign: 'center' }}>
-            <p style={{ fontSize: '16px', color: theme.textSecondary, margin: 0 }}>Em desenvolvimento...</p>
-          </div>
+        {mainTab === 'agenda' && (
+          <AgendaTab theme={theme} isDark={isDark} lives={livesTable} sessoes={sessoesTable} modulos={modulos} revendas={revendas} />
         )}
+
 
         {novoOpen && (
           <div
