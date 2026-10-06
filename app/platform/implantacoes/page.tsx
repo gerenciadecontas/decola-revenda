@@ -1,12 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useLocalTable } from '@/lib/supabase/hooks';
 import '@/app/globals.css';
 import './styles.css';
-import { STAGES, PRIORIDADES, PRODUTOS, daysSince, type Implantacao, type Prioridade, type Status } from './data';
+import { STAGES, PRIORIDADES, PRODUTOS, ETAPA_CONCLUIDA, daysSince, statusFor, type Implantacao, type Prioridade } from './data';
 
 const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
@@ -40,18 +41,13 @@ const todayISO = () => {
 };
 
 
+
+
 const DROP_ZONES: Record<string, { icon: string; label: string; hint: string }> = {
   'ativou-3': { icon: '📦', label: 'Concluir', hint: 'Solte aqui para concluir a implantação' },
   abandonado: { icon: '🚫', label: 'Cancelar', hint: 'Solte aqui para marcar como abandono' },
 };
 
-
-const statusFor = (etapa: string): Status => {
-  if (etapa === 'ativou-3') return 'concluida';
-  if (etapa === 'pausado') return 'pausado';
-  if (etapa === 'abandonado') return 'abandonado';
-  return 'em-andamento';
-};
 
 
 const ini = (s: string) => {
@@ -147,6 +143,13 @@ export default function ImplantacoesPage() {
 
   const [dragId, setDragId] = useState<string | null>(null);
   const [overStage, setOverStage] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; undo: () => void } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 6000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   useEffect(() => {
     document.body.classList.toggle('light', !isDark);
@@ -265,6 +268,10 @@ export default function ImplantacoesPage() {
     const c = implantacoes.find(i => i.id === id);
     if (!c || c.etapa === etapa) return;
     await update(id, { etapa, status: statusFor(etapa), etapa_desde: new Date().toISOString() });
+    if (etapa === ETAPA_CONCLUIDA) {
+      const anterior = { etapa: c.etapa, status: c.status, etapa_desde: c.etapa_desde };
+      setToast({ msg: `${c.revenda} concluída e ocultada do quadro.`, undo: () => update(id, anterior) });
+    }
   };
 
   const renderCard = (c: Implantacao) => {
@@ -418,6 +425,8 @@ export default function ImplantacoesPage() {
             const list = vis.filter(c => c.etapa === s.id);
             const zone = DROP_ZONES[s.id];
             const isOver = overStage === s.id;
+            const isConcluida = s.id === ETAPA_CONCLUIDA;
+            const visiveis = isConcluida ? [] : list;
 
             return (
               <section
@@ -452,10 +461,20 @@ export default function ImplantacoesPage() {
                   </button>
                 )}
 
-                <div className="col-body">
-                  {list.map(c => renderCard(c))}
+                {isConcluida && list.length > 0 && (
+                  <Link
+                    href="/platform/implantacoes/concluidas"
+                    className="addcard"
+                    style={{ marginTop: 0, marginBottom: '12px', borderStyle: 'solid', textDecoration: 'none' }}
+                  >
+                    👁 Ver concluídas ({list.length})
+                  </Link>
+                )}
 
-                  {list.length === 0 && zone && (
+                <div className="col-body">
+                  {visiveis.map(c => renderCard(c))}
+
+                  {visiveis.length === 0 && zone && (
                     <div className="col-empty" style={{ color: theme.textSecondary, padding: '48px 12px' }}>
                       <div style={{ fontSize: '40px', marginBottom: '8px' }}>{zone.icon}</div>
                       <b style={{ color: theme.textPrimary, fontSize: '16px' }}>{zone.label}</b>
@@ -641,7 +660,7 @@ export default function ImplantacoesPage() {
                   </div>
 
                   <div>
-                    <label style={labelStyle}>Data prevista de go-live</label>
+                    <label style={labelStyle}>Data prevista de conclusão</label>
                     <input type="date" value={form.data_prevista} onChange={setField('data_prevista')} style={inputStyle} />
                   </div>
                   <div />
@@ -690,6 +709,40 @@ export default function ImplantacoesPage() {
                 </div>
               </form>
             </div>
+          </div>
+        )}
+
+        {toast && (
+          <div
+            role="status"
+            style={{
+              position: 'fixed',
+              bottom: '24px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 1100,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              background: isDark ? '#F5F5F5' : '#1A1A1A',
+              color: isDark ? '#1A1A1A' : '#F5F5F5',
+              padding: '12px 16px 12px 20px',
+              borderRadius: '12px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+              fontSize: '14px',
+              fontWeight: 600,
+            }}
+          >
+            <span>✓ {toast.msg}</span>
+            <button
+              onClick={() => {
+                toast.undo();
+                setToast(null);
+              }}
+              style={{ background: 'transparent', border: 'none', color: '#E6B23E', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit' }}
+            >
+              Desfazer
+            </button>
           </div>
         )}
       </div>

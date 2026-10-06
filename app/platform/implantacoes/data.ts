@@ -36,12 +36,12 @@ export const STAGES = [
   { id: 'chegada', nome: 'Chegada', c: '#E6B23E' },
   { id: 'boas-vindas', nome: 'Boas-vindas', c: '#C99526' },
   { id: 'sem-retorno', nome: 'Sem retorno', c: '#D9534F' },
-  { id: 'apresentacao-desktop', nome: 'Apresentação e instalação', c: '#7C5CF0' },
-  { id: 'apresentacao-web', nome: 'Web', c: '#5B43C0' },
+  { id: 'apresentacao-desktop', nome: 'Apresentação e instalação LC Desktop', c: '#7C5CF0' },
+  { id: 'apresentacao-web', nome: 'Apresentação e instalação do LC Web', c: '#5B43C0' },
   { id: 'lc-academy', nome: 'LC Academy', c: '#8B9099' },
-  { id: 'acompanhamento', nome: 'Acompanhamento', c: '#4E8E5B' },
-  { id: 'decola-produtos', nome: 'Produtos', c: '#7C5CF0' },
-  { id: 'ativou-3', nome: 'Go-Live', c: '#4E8E5B' },
+  { id: 'acompanhamento', nome: 'Acompanhamento dos 3 clientes iniciais', c: '#4E8E5B' },
+  { id: 'decola-produtos', nome: 'Decola Produtos', c: '#7C5CF0' },
+  { id: 'ativou-3', nome: 'Ativou 3 clientes', c: '#4E8E5B' },
   { id: 'pausado', nome: 'Pausado', c: '#E6B23E' },
   { id: 'abandonado', nome: 'Abandono', c: '#D9534F' },
 ];
@@ -61,3 +61,12 @@ export const daysSince = (iso?: string) =>
   iso ? Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)) : 0;
 
 export const diasNaEtapa = (c: Implantacao) => daysSince(c.etapa_desde || c.created_at);
+
+export const ETAPA_CONCLUIDA = 'ativou-3';
+
+export const statusFor = (etapa: string): Status => {
+  if (etapa === ETAPA_CONCLUIDA) return 'concluida';
+  if (etapa === 'pausado') return 'pausado';
+  if (etapa === 'abandonado') return 'abandonado';
+  return 'em-andamento';
+};

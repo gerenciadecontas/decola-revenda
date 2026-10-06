@@ -240,7 +240,7 @@ export default function DashboardPage() {
                 value={`${tempoMedio}d`}
                 foot={emAndamento.length ? 'média das revendas em andamento' : 'sem revendas em andamento'}
               />
-              <StatCard theme={theme} label="Concluídas no mês" value={concluidasMes} foot="chegaram ao Go-Live" />
+              <StatCard theme={theme} label="Concluídas no mês" value={concluidasMes} foot="chegaram em Ativou 3 clientes" />
             </div>
 
             <div style={grid2}>
