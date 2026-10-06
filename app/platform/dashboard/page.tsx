@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
-import { useLocalTable } from '@/lib/supabase/hooks';
+import { useTable } from '@/lib/supabase/hooks';
 import { STAGES, PRIORIDADES, PRODUTOS, PARADA_DIAS, diasNaEtapa, type Implantacao } from '../implantacoes/data';
-import { getModulos, loadCustom, PROGRESS_KEY, temaKey, type CustomTreinamentos } from '../treinamentos/data';
+import { getModulos, checkedFrom, CUSTOM_TABLE, PROGRESS_TABLE, temaKey, type CustomRow, type ProgressRow } from '../treinamentos/data';
 import { LIVES_TABLE, LIVE_STATUS, liveDate, sortLives, toISODate, type Live } from '../treinamentos/lives';
 import { SESSOES_TABLE, SESSAO_STATUS, type SessaoTreinamento } from '../treinamentos/agenda';
 import '@/app/globals.css';
@@ -82,21 +82,19 @@ function Empty({ theme, text }: { theme: Theme; text: string }) {
 export default function DashboardPage() {
   const { isDark } = useTheme();
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
-  const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
-  const { data: lives } = useLocalTable<Live>(LIVES_TABLE);
-  const { data: sessoes } = useLocalTable<SessaoTreinamento>(SESSOES_TABLE);
+  const { data: implantacoes } = useTable<Implantacao>('implantacoes');
+  const { data: lives } = useTable<Live>(LIVES_TABLE);
+  const { data: sessoes } = useTable<SessaoTreinamento>(SESSOES_TABLE);
   const [tab, setTab] = useState<'implantacoes' | 'jornada'>('implantacoes');
+  const { data: custom } = useTable<CustomRow>(CUSTOM_TABLE);
+  const { data: progress } = useTable<ProgressRow>(PROGRESS_TABLE, 'tema_key');
+  const checked = checkedFrom(progress);
   const [metaMes, setMetaMes] = useState(10);
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const [custom, setCustom] = useState<CustomTreinamentos>({});
 
   useEffect(() => {
     try {
       const meta = localStorage.getItem('meta-implantacoes-mes');
       if (meta) setMetaMes(parseInt(meta));
-      const progress = localStorage.getItem(PROGRESS_KEY);
-      if (progress) setChecked(JSON.parse(progress));
-      setCustom(loadCustom());
     } catch {}
   }, []);
 

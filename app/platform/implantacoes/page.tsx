@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
-import { useLocalTable } from '@/lib/supabase/hooks';
+import { useTable } from '@/lib/supabase/hooks';
 import '@/app/globals.css';
 import './styles.css';
 import { STAGES, PRIORIDADES, PRODUTOS, ETAPA_CONCLUIDA, daysSince, statusFor, type Implantacao, type Prioridade } from './data';
@@ -130,7 +130,7 @@ const emptyForm = (etapa = 'chegada'): FormState => ({
 export default function ImplantacoesPage() {
   const { isDark } = useTheme();
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
-  const { data: implantacoes, create, update, delete_ } = useLocalTable<Implantacao>('implantacoes');
+  const { data: implantacoes, create, update, delete_ } = useTable<Implantacao>('implantacoes');
 
   const [qNome, setQNome] = useState('');
   const [qCodigo, setQCodigo] = useState('');

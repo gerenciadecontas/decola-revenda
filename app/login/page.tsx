@@ -1,342 +1,103 @@
 'use client';
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { RoleToggle } from '../components/RoleToggle';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTheme } from '@/app/context/ThemeContext';
+import { supabase } from '@/lib/supabase/client';
 
-const mockRevendas = [
-  {
-    id: '1',
-    nome: 'Revenda São Paulo',
-    trilha: { nome: 'LC WEB' },
-    gestor: { full_name: 'João Silva' },
-    percentual: 75,
-    diasSemAtividade: 2,
-    status: 'ativa',
-  },
-  {
-    id: '2',
-    nome: 'Revenda Minas Gerais',
-    trilha: { nome: 'LC ERP Desktop' },
-    gestor: { full_name: 'Maria Santos' },
-    percentual: 45,
-    diasSemAtividade: 5,
-    status: 'ativa',
-  },
-  {
-    id: '3',
-    nome: 'Revenda Rio de Janeiro',
-    trilha: { nome: 'Produtos' },
-    gestor: { full_name: 'Carlos Costa' },
-    percentual: 100,
-    diasSemAtividade: 0,
-    status: 'concluida',
-  },
-];
+const LIGHT = { background: '#F9F7F4', cardBg: '#FFFFFF', border: '#E8E4DC', text: '#1A1A1A', muted: '#6B6B6B', input: '#F9F7F4' };
+const DARK = { background: '#0E1013', cardBg: '#16181D', border: '#2A2D33', text: '#F5F5F5', muted: '#B8BFCC', input: '#0E1013' };
 
-const mockRevendasGestor = [
-  mockRevendas[0],
-  mockRevendas[1],
-];
-
-const mockTreinamentoDiario = [
-  {
-    id: '1',
-    colaborador: 'João',
-    responsavel: 'Maria',
-    diaAtual: '4/10',
-    progresso: 32,
-    ultimaAtividade: 'Hoje 09:15',
-    status: 'em-dia',
-    statusEmoji: '🟢',
-  },
-  {
-    id: '2',
-    colaborador: 'Carlos',
-    responsavel: 'Pedro',
-    diaAtual: '2/10',
-    progresso: 15,
-    ultimaAtividade: 'Ontem',
-    status: 'pendente',
-    statusEmoji: '🟡',
-  },
-  {
-    id: '3',
-    colaborador: 'Ana',
-    responsavel: 'Maria',
-    diaAtual: '10/10',
-    progresso: 100,
-    ultimaAtividade: '07/08',
-    status: 'concluido',
-    statusEmoji: '✅',
-  },
-];
+const ERROS: Record<string, string> = {
+  'Invalid login credentials': 'E-mail ou senha incorretos.',
+  'Email not confirmed': 'Este e-mail ainda não foi confirmado. Peça para o administrador confirmar o usuário no Supabase.',
+};
 
 export default function LoginPage() {
-  const [view, setViewState] = useState<'admin' | 'gestor'>('admin');
-  const [subView, setSubView] = useState<'dashboard' | 'treinamento-diario'>('dashboard');
+  const router = useRouter();
+  const { isDark } = useTheme();
+  const t = isDark ? DARK : LIGHT;
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [erro, setErro] = useState('');
+  const [entrando, setEntrando] = useState(false);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('userRole') as 'admin' | 'gestor' | null;
-    if (savedRole) {
-      setViewState(savedRole);
-    }
-  }, []);
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) router.replace('/platform/dashboard');
+    });
+  }, [router]);
 
-  const setView = (role: 'admin' | 'gestor') => {
-    setViewState(role);
-    localStorage.setItem('userRole', role);
+  const entrar = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErro('');
+    if (!email.trim() || !senha) return setErro('Informe e-mail e senha.');
+    setEntrando(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: senha });
+    setEntrando(false);
+    if (error) return setErro(ERROS[error.message] || `Não foi possível entrar: ${error.message}`);
+    router.replace('/platform/dashboard');
   };
 
-  const revendas = view === 'admin' ? mockRevendas : mockRevendasGestor;
-
-  const stats = {
-    totalRevendas: revendas.length,
-    ativas: revendas.filter((r) => r.status === 'ativa').length,
-    concluidas: revendas.filter((r) => r.status === 'concluida').length,
-    mediaProgresso: Math.round(
-      revendas.reduce((sum, r) => sum + r.percentual, 0) / revendas.length
-    ),
-    emAndamento: revendas.filter((r) => r.percentual > 0 && r.percentual < 100).length,
-    atrasadas: revendas.filter((r) => r.diasSemAtividade && r.diasSemAtividade > 3).length,
-    temasHoje: 8,
-    ultimoTreinamento: 'Hoje às 14:30',
-    quemRealizou: 'Maria Santos',
+  const input: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    background: t.input,
+    border: `1px solid ${t.border}`,
+    borderRadius: '10px',
+    color: t.text,
+    fontSize: '14px',
+    fontFamily: 'inherit',
+    outline: 'none',
+    boxSizing: 'border-box',
   };
+  const label: React.CSSProperties = { fontSize: '12px', fontWeight: 600, color: t.muted, display: 'block', marginBottom: '6px' };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 flex justify-between items-start">
+    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: t.background, padding: '24px', fontFamily: '"Sora", sans-serif' }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');`}</style>
+      <form
+        onSubmit={entrar}
+        style={{ width: '100%', maxWidth: '400px', background: t.cardBg, border: `1px solid ${t.border}`, borderRadius: '18px', padding: '32px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#E6B23E', display: 'grid', placeItems: 'center', fontWeight: 700, color: '#1A1A1A', fontSize: '22px' }}>
+            D
+          </div>
           <div>
-            <h1 className="text-4xl font-bold text-white">
-              {view === 'admin' ? 'Dashboard Admin' : 'Minhas Revendas'}
-            </h1>
-            <p className="text-gray-400 mt-2">
-              {view === 'admin'
-                ? 'Acompanhe o progresso de todas as revendas'
-                : 'Revendas atribuídas a você'}
-            </p>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: t.text }}>Decola</div>
+            <div style={{ fontSize: '10px', color: t.muted, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Central de implantação</div>
           </div>
-          <RoleToggle />
         </div>
 
-        {/* Sub Views Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-slate-700">
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: t.text, margin: '0 0 6px' }}>Entrar</h1>
+        <p style={{ fontSize: '13px', color: t.muted, margin: '0 0 24px' }}>Use o e-mail e a senha cadastrados para a equipe.</p>
+
+        <div style={{ display: 'grid', gap: '14px' }}>
+          <div>
+            <label style={label} htmlFor="email">E-mail</label>
+            <input id="email" type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="voce@lcsistemas.com.br" style={input} autoFocus />
+          </div>
+          <div>
+            <label style={label} htmlFor="senha">Senha</label>
+            <input id="senha" type="password" autoComplete="current-password" value={senha} onChange={e => setSenha(e.target.value)} style={input} />
+          </div>
+
+          {erro && (
+            <div role="alert" style={{ background: 'rgba(217, 83, 79, 0.12)', color: '#D9534F', padding: '10px 12px', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>
+              {erro}
+            </div>
+          )}
+
           <button
-            onClick={() => setSubView('dashboard')}
-            className={`px-4 py-3 font-medium transition-colors ${
-              subView === 'dashboard'
-                ? 'text-purple-500 border-b-2 border-purple-500'
-                : 'text-gray-400 hover:text-gray-300'
-            }`}
+            type="submit"
+            disabled={entrando}
+            style={{ marginTop: '6px', padding: '12px', background: '#E6B23E', border: 'none', borderRadius: '10px', color: '#1A1A1A', cursor: entrando ? 'wait' : 'pointer', fontSize: '15px', fontWeight: 700, fontFamily: 'inherit', opacity: entrando ? 0.7 : 1 }}
           >
-            📊 Dashboard
-          </button>
-          <button
-            onClick={() => setSubView('treinamento-diario')}
-            className={`px-4 py-3 font-medium transition-colors ${
-              subView === 'treinamento-diario'
-                ? 'text-purple-500 border-b-2 border-purple-500'
-                : 'text-gray-400 hover:text-gray-300'
-            }`}
-          >
-            📅 Treinamento Diário
+            {entrando ? 'Entrando...' : 'Entrar'}
           </button>
         </div>
-
-        {/* Dashboard View */}
-        {subView === 'dashboard' && (
-          <>
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-blue-100 rounded-lg">📅</div>
-                  <p className="text-gray-600 text-sm">Dias de treinamento</p>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalRevendas}</p>
-              </div>
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-yellow-100 rounded-lg">📋</div>
-                  <p className="text-gray-600 text-sm">Temas totais</p>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.temasHoje}</p>
-              </div>
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-gray-100 rounded-lg">✓</div>
-                  <p className="text-gray-600 text-sm">Temas concluídos</p>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.atrasadas}</p>
-              </div>
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-purple-100 rounded-lg">📈</div>
-                  <p className="text-gray-600 text-sm">Progresso geral</p>
-                </div>
-                <p className="text-3xl font-bold text-purple-600">{stats.mediaProgresso}%</p>
-              </div>
-            </div>
-
-            {/* Revendas Table */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Nome
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Trilha
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Gestor
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Progresso
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Dias s/ Atividade
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Ações
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {revendas.map((revenda) => (
-                    <tr key={revenda.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-gray-900">{revenda.nome}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{revenda.trilha.nome}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{revenda.gestor.full_name}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-purple-600"
-                              style={{ width: `${revenda.percentual}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">{revenda.percentual}%</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-700">
-                        {revenda.diasSemAtividade === 0 ? (
-                          <span className="text-green-600">Hoje</span>
-                        ) : (
-                          <span>{revenda.diasSemAtividade} dias</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            revenda.status === 'ativa'
-                              ? 'bg-green-100 text-green-800'
-                              : revenda.status === 'pausada'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {revenda.status === 'ativa'
-                            ? 'Ativa'
-                            : revenda.status === 'pausada'
-                            ? 'Pausada'
-                            : 'Concluída'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <Link href={`/admin/revendas/${revenda.id}`} className="text-blue-600 hover:underline">
-                          Ver detalhe
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Action Buttons */}
-            {view === 'admin' && (
-              <div className="mt-8 flex gap-4">
-                <Link
-                  href="/admin/revendas"
-                  className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
-                >
-                  ➕ Criar Novo Treinamento
-                </Link>
-                <button className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium">
-                  📝 Editar Cronograma
-                </button>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Treinamento Diário View */}
-        {subView === 'treinamento-diario' && (
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Colaborador
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Responsável
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Dia Atual
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Progresso
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Última Atividade
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                    Ações
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {mockTreinamentoDiario.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{item.colaborador}</td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{item.responsavel}</td>
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-900">{item.diaAtual}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-purple-600"
-                            style={{ width: `${item.progresso}%` }}
-                          />
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{item.progresso}%</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{item.ultimaAtividade}</td>
-                    <td className="px-6 py-4 text-2xl">{item.statusEmoji}</td>
-                    <td className="px-6 py-4 text-sm space-x-2">
-                      <button className="text-blue-600 hover:underline">Marcar</button>
-                      <button className="text-green-600 hover:underline">Editar</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      </form>
     </div>
   );
 }

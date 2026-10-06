@@ -15,7 +15,7 @@ export interface Live {
   updated_at?: string;
 }
 
-export const LIVES_TABLE = 'jornada-lives';
+export const LIVES_TABLE = 'jornada_lives';
 
 export const LIVE_MODULOS = ['Geral', 'LC WEB', 'LC ERP Desktop', 'Serviços adicionais'];
 

@@ -19,7 +19,7 @@ export interface SessaoTreinamento {
   updated_at?: string;
 }
 
-export const SESSOES_TABLE = 'jornada-treinamentos-agenda';
+export const SESSOES_TABLE = 'jornada_sessoes';
 
 export const SESSAO_STATUS: Record<SessaoStatus, { label: string; c: string }> = {
   agendado: { label: 'Agendado', c: '#E6B23E' },

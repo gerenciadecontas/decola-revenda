@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useTheme } from '@/app/context/ThemeContext';
-import { useLocalTable } from '@/lib/supabase/hooks';
+import { useTable } from '@/lib/supabase/hooks';
 import { ETAPA_CONCLUIDA, PRIORIDADES, STAGES, statusFor, type Implantacao } from '../data';
 import '@/app/globals.css';
 
@@ -41,7 +41,7 @@ const diasEntre = (inicio?: string, fim?: string) => {
 export default function ImplantacoesConcluidasPage() {
   const { isDark } = useTheme();
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
-  const { data: implantacoes, update } = useLocalTable<Implantacao>('implantacoes');
+  const { data: implantacoes, update } = useTable<Implantacao>('implantacoes');
   const [q, setQ] = useState('');
   const [aberta, setAberta] = useState<string | null>(null);
 

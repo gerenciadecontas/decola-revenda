@@ -1,43 +1,71 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { supabase } from './client';
 
-// Supabase project is currently unreachable and has no implantacoes table, so data lives in localStorage.
-export function useLocalTable<T extends { id?: string; created_at?: string; updated_at?: string }>(tableName: string) {
-  const key = `${tableName}-list`;
+const READONLY_FIELDS = ['id', 'created_at', 'updated_at', 'created_by', 'updated_by'];
+
+// Empty strings from forms become NULL so date/number columns accept them.
+export const toRow = (item: Record<string, unknown>, keep: string[] = []) =>
+  Object.fromEntries(
+    Object.entries(item)
+      .filter(([k, v]) => v !== undefined && (keep.includes(k) || !READONLY_FIELDS.includes(k)))
+      .map(([k, v]) => [k, v === '' ? null : v])
+  );
+
+const fail = (acao: string, message: string): never => {
+  window.alert(`Não foi possível ${acao}. ${message}`);
+  throw new Error(message);
+};
+
+export function useTable<T extends Record<string, any>>(table: string, key: string = 'id') {
   const [data, setData] = useState<T[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(key);
-      if (stored) setData(JSON.parse(stored));
-    } catch {}
-  }, [key]);
+    let active = true;
+    supabase
+      .from(table)
+      .select('*')
+      .order('created_at', { ascending: true })
+      .then(({ data: rows, error }) => {
+        if (!active) return;
+        if (error) console.error(`Erro ao carregar ${table}:`, error.message);
+        setData((rows as T[]) || []);
+        setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [table]);
 
-  const persist = useCallback((updater: (items: T[]) => T[]) => {
-    setData(prev => {
-      const next = updater(prev);
-      try {
-        localStorage.setItem(key, JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-  }, [key]);
+  const create = useCallback(
+    async (item: Partial<T>) => {
+      const { data: row, error } = await supabase.from(table).insert(toRow(item, key === 'id' ? [] : [key])).select().single();
+      if (error) return fail('salvar', error.message);
+      setData(prev => [...prev, row as T]);
+      return row as T;
+    },
+    [table, key]
+  );
 
-  const create = async (item: Omit<T, 'id'>) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const newItem = { ...item, id, created_at: new Date().toISOString() } as T;
-    persist(items => [...items, newItem]);
-    return newItem;
-  };
+  const update = useCallback(
+    async (id: string, patch: Partial<T>) => {
+      const { data: row, error } = await supabase.from(table).update(toRow(patch)).eq(key, id).select().single();
+      if (error) return fail('salvar a alteração', error.message);
+      setData(prev => prev.map(i => (i[key] === id ? (row as T) : i)));
+    },
+    [table, key]
+  );
 
-  const update = async (id: string, patch: Partial<T>) => {
-    persist(items => items.map(i => (i.id === id ? { ...i, ...patch, updated_at: new Date().toISOString() } : i)));
-  };
+  const delete_ = useCallback(
+    async (id: string) => {
+      const { error } = await supabase.from(table).delete().eq(key, id);
+      if (error) return fail('excluir', error.message);
+      setData(prev => prev.filter(i => i[key] !== id));
+    },
+    [table, key]
+  );
 
-  const delete_ = async (id: string) => {
-    persist(items => items.filter(i => i.id !== id));
-  };
-
-  return { data, create, update, delete_ };
+  return { data, loading, create, update, delete_ };
 }

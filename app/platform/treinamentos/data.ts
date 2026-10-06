@@ -1,5 +1,3 @@
-export const PROGRESS_KEY = 'jornada-treinamentos-progress';
-
 export const temaKey = (modulo: string, day: number, idx: number) => `${modulo}-day${day}-tema${idx}`;
 
 export const TREINAMENTOS_DATA = {
@@ -118,28 +116,38 @@ export interface TreinamentoItem {
   obj: string;
   temas: string[];
   custom?: boolean;
+  id?: string;
 }
 
-export type CustomTreinamentos = Partial<Record<ModuloId, TreinamentoItem[]>>;
+export interface CustomRow {
+  id?: string;
+  modulo: ModuloId;
+  dia: number;
+  title: string;
+  obj: string | null;
+  temas: string[];
+}
 
-export const CUSTOM_KEY = 'jornada-treinamentos-custom';
+export interface ProgressRow {
+  tema_key: string;
+}
+
+export const CUSTOM_TABLE = 'jornada_treinamentos_custom';
+export const PROGRESS_TABLE = 'jornada_progresso';
 
 export const MODULO_IDS = Object.keys(TREINAMENTOS_DATA) as ModuloId[];
 
-export const loadCustom = (): CustomTreinamentos => {
-  try {
-    return JSON.parse(localStorage.getItem(CUSTOM_KEY) || '{}');
-  } catch {
-    return {};
-  }
-};
-
-export const getModulos = (custom: CustomTreinamentos) =>
+export const getModulos = (custom: CustomRow[]) =>
   MODULO_IDS.map(id => ({
     id,
     label: TREINAMENTOS_DATA[id].label,
     items: [
       ...(TREINAMENTOS_DATA[id].items as TreinamentoItem[]),
-      ...(custom[id] || []).map(i => ({ ...i, custom: true })),
+      ...custom
+        .filter(c => c.modulo === id)
+        .sort((a, b) => a.dia - b.dia)
+        .map(c => ({ id: c.id, day: c.dia, title: c.title, obj: c.obj || '', temas: c.temas || [], custom: true })),
     ],
   }));
+
+export const checkedFrom = (rows: ProgressRow[]) => Object.fromEntries(rows.map(r => [r.tema_key, true])) as Record<string, boolean>;

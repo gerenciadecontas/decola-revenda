@@ -2,15 +2,15 @@
 
 import { useTheme } from '@/app/context/ThemeContext';
 import { PlatformLayout } from '@/app/components/PlatformLayout';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '@/app/globals.css';
-import { getModulos, loadCustom, CUSTOM_KEY, MODULO_IDS, PROGRESS_KEY, temaKey, type CustomTreinamentos, type ModuloId, type TreinamentoItem } from './data';
+import { getModulos, checkedFrom, CUSTOM_TABLE, PROGRESS_TABLE, MODULO_IDS, temaKey, type CustomRow, type ModuloId, type ProgressRow, type TreinamentoItem } from './data';
 
 import { LivesTab } from './LivesTab';
 import { AgendaTab } from './AgendaTab';
 import { LIVES_TABLE, type Live } from './lives';
 import { SESSOES_TABLE, type SessaoTreinamento } from './agenda';
-import { useLocalTable } from '@/lib/supabase/hooks';
+import { useTable } from '@/lib/supabase/hooks';
 import type { Implantacao } from '../implantacoes/data';
 
 const emptyNovo =(modulo: ModuloId) => ({ modulo, title: '', obj: '', temas: '' });
@@ -43,30 +43,18 @@ export default function JornadaCapacitacaoPage() {
   const [mainTab, setMainTab] = useState('treinamentos');
   const [subTab, setSubTab] = useState<ModuloId>('lcweb');
   const [expandedDays, setExpandedDays] = useState<Record<number, boolean>>({ 1: true });
-  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
-  const [custom, setCustom] = useState<CustomTreinamentos>({});
   const [novoOpen, setNovoOpen] = useState(false);
   const [novo, setNovo] = useState(emptyNovo('lcweb'));
   const [novoError, setNovoError] = useState('');
-  const livesTable = useLocalTable<Live>(LIVES_TABLE);
-  const sessoesTable = useLocalTable<SessaoTreinamento>(SESSOES_TABLE);
-  const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
+  const livesTable = useTable<Live>(LIVES_TABLE);
+  const sessoesTable = useTable<SessaoTreinamento>(SESSOES_TABLE);
+  const customTable = useTable<CustomRow>(CUSTOM_TABLE);
+  const progressTable = useTable<ProgressRow>(PROGRESS_TABLE, 'tema_key');
+  const { data: implantacoes } = useTable<Implantacao>('implantacoes');
   const revendas = [...new Set(implantacoes.map(i => i.revenda).filter(Boolean))].sort();
+  const checkedItems = checkedFrom(progressTable.data);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(PROGRESS_KEY);
-    if (saved) {
-      setCheckedItems(JSON.parse(saved));
-    }
-    setCustom(loadCustom());
-  }, []);
-
-  const modulos = getModulos(custom);
-
-  const saveCustom = (next: CustomTreinamentos) => {
-    setCustom(next);
-    localStorage.setItem(CUSTOM_KEY, JSON.stringify(next));
-  };
+  const modulos = getModulos(customTable.data);
 
   const openNovo = () => {
     setNovo(emptyNovo(subTab));
@@ -74,7 +62,7 @@ export default function JornadaCapacitacaoPage() {
     setNovoOpen(true);
   };
 
-  const handleAddTreinamento = (e: React.FormEvent) => {
+  const handleAddTreinamento = async (e: React.FormEvent) => {
     e.preventDefault();
     const title = novo.title.trim();
     const temas = novo.temas.split('\n').map(t => t.trim()).filter(Boolean);
@@ -83,27 +71,25 @@ export default function JornadaCapacitacaoPage() {
 
     const modulo = modulos.find(m => m.id === novo.modulo)!;
     const day = Math.max(0, ...modulo.items.map(i => i.day)) + 1;
-    const item: TreinamentoItem = { day, title, obj: novo.obj.trim(), temas };
-    saveCustom({ ...custom, [novo.modulo]: [...(custom[novo.modulo] || []), item] });
+    await customTable.create({ modulo: novo.modulo, dia: day, title, obj: novo.obj.trim(), temas });
 
     setSubTab(novo.modulo);
     setExpandedDays(prev => ({ ...prev, [day]: true }));
     setNovoOpen(false);
   };
 
-  const handleRemoveTreinamento = (item: TreinamentoItem) => {
-    if (!window.confirm(`Remover o treinamento "Dia ${item.day} · ${item.title}"?`)) return;
-    saveCustom({ ...custom, [subTab]: (custom[subTab] || []).filter(i => i.day !== item.day) });
+  const handleRemoveTreinamento = async (item: TreinamentoItem) => {
+    if (!item.id || !window.confirm(`Remover o treinamento "Dia ${item.day} · ${item.title}"?`)) return;
+    await customTable.delete_(item.id);
     const prefix = temaKey(subTab, item.day, 0).replace(/0$/, '');
-    const remaining = Object.fromEntries(Object.entries(checkedItems).filter(([k]) => !k.startsWith(prefix)));
-    setCheckedItems(remaining);
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(remaining));
+    for (const row of progressTable.data.filter(r => r.tema_key.startsWith(prefix))) {
+      await progressTable.delete_(row.tema_key);
+    }
   };
 
-  const handleCheck = (key: string) => {
-    const newState = { ...checkedItems, [key]: !checkedItems[key] };
-    setCheckedItems(newState);
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(newState));
+  const handleCheck = async (key: string) => {
+    if (checkedItems[key]) await progressTable.delete_(key);
+    else await progressTable.create({ tema_key: key });
   };
 
   const toggleDay = (dayNum: number) => {

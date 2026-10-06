@@ -1,12 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Users,
   Calendar,
+  LogOut,
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
+import { supabase } from '@/lib/supabase/client';
+import { LegacyImport } from './LegacyImport';
 
 interface PlatformLayoutProps {
   children: React.ReactNode;
@@ -21,6 +26,32 @@ const menuItems = [
 
 export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
   const { colors, isDark, toggleTheme } = useTheme();
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) router.replace('/login');
+      else setUserEmail(data.session.user.email || '');
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) router.replace('/login');
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router]);
+
+  const sair = async () => {
+    await supabase.auth.signOut();
+    router.replace('/login');
+  };
+
+  if (userEmail === null) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: colors.background, color: colors.textSecondary, fontFamily: '"Sora", sans-serif' }}>
+        Verificando acesso...
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100%', background: colors.background, fontFamily: '"Sora", sans-serif' }}>
@@ -109,6 +140,18 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
             );
           })}
         </nav>
+
+        <div style={{ padding: '16px', borderTop: `1px solid ${colors.borderColor}` }}>
+          <div style={{ fontSize: '12px', color: colors.textSecondary, marginBottom: '8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={userEmail}>
+            {userEmail}
+          </div>
+          <button
+            onClick={sair}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%', padding: '10px 12px', background: 'transparent', border: `1px solid ${colors.borderColor}`, borderRadius: '8px', color: colors.textSecondary, cursor: 'pointer', fontSize: '13px', fontWeight: 600, fontFamily: 'inherit' }}
+          >
+            <LogOut size={16} /> Sair
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -149,6 +192,7 @@ export function PlatformLayout({ children, currentPage }: PlatformLayoutProps) {
 
         {/* Page Content */}
         <div style={{ flex: 1, overflowY: 'auto' }}>
+          <LegacyImport />
           {children}
         </div>
       </div>
