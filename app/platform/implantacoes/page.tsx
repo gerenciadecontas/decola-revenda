@@ -6,40 +6,7 @@ import { useState, useEffect } from 'react';
 import { useLocalTable } from '@/lib/supabase/hooks';
 import '@/app/globals.css';
 import './styles.css';
-
-type Status = 'em-andamento' | 'concluida' | 'pausado' | 'abandonado';
-type Prioridade = 'baixa' | 'normal' | 'alta' | 'urgente';
-
-interface Implantacao {
-  id?: string;
-  codigo?: string;
-  revenda: string;
-  cnpj?: string;
-  cidade?: string;
-  uf?: string;
-  email?: string;
-  telefone?: string;
-  contato?: string;
-  cargo?: string;
-  situacao?: string;
-  segmento?: string;
-  porte?: string;
-  vendedores?: number;
-  data_ingresso?: string;
-  data_aniversario?: string;
-  contratos?: number;
-  curva?: string;
-  etapa: string;
-  prioridade: Prioridade;
-  produto: string;
-  responsavel?: string;
-  data_prevista?: string;
-  observacoes?: string;
-  status: Status;
-  etapa_desde?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+import { STAGES, PRIORIDADES, PRODUTOS, daysSince, type Implantacao, type Prioridade, type Status } from './data';
 
 const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
@@ -72,33 +39,12 @@ const todayISO = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-const STAGES = [
-  { id: 'chegada', nome: 'Chegada', c: '#E6B23E' },
-  { id: 'boas-vindas', nome: 'Boas-vindas', c: '#C99526' },
-  { id: 'sem-retorno', nome: 'Sem retorno', c: '#D9534F' },
-  { id: 'apresentacao-desktop', nome: 'Apresentação e instalação', c: '#7C5CF0' },
-  { id: 'apresentacao-web', nome: 'Web', c: '#5B43C0' },
-  { id: 'lc-academy', nome: 'LC Academy', c: '#8B9099' },
-  { id: 'acompanhamento', nome: 'Acompanhamento', c: '#4E8E5B' },
-  { id: 'decola-produtos', nome: 'Produtos', c: '#7C5CF0' },
-  { id: 'ativou-3', nome: 'Go-Live', c: '#4E8E5B' },
-  { id: 'pausado', nome: 'Pausado', c: '#E6B23E' },
-  { id: 'abandonado', nome: 'Abandono', c: '#D9534F' },
-];
 
 const DROP_ZONES: Record<string, { icon: string; label: string; hint: string }> = {
   'ativou-3': { icon: '📦', label: 'Concluir', hint: 'Solte aqui para concluir a implantação' },
   abandonado: { icon: '🚫', label: 'Cancelar', hint: 'Solte aqui para marcar como abandono' },
 };
 
-const PRIORIDADES: Record<Prioridade, { label: string; c: string }> = {
-  baixa: { label: 'Baixa', c: '#8B9099' },
-  normal: { label: 'Normal', c: '#4A90E2' },
-  alta: { label: 'Alta', c: '#E2944A' },
-  urgente: { label: 'Urgente', c: '#D9534F' },
-};
-
-const PRODUTOS = ['LC ERP Desktop', 'LC WEB', 'LC ERP Desktop + LC WEB', 'Outros'];
 
 const statusFor = (etapa: string): Status => {
   if (etapa === 'ativou-3') return 'concluida';
@@ -107,8 +53,6 @@ const statusFor = (etapa: string): Status => {
   return 'em-andamento';
 };
 
-const daysSince = (iso?: string) =>
-  iso ? Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)) : 0;
 
 const ini = (s: string) => {
   const p = s.trim().split(/\s+/);
@@ -379,13 +323,6 @@ export default function ImplantacoesPage() {
   };
 
   const ativas = implantacoes.filter(i => i.status === 'em-andamento').length;
-  const semRetorno = implantacoes.filter(i => i.etapa === 'sem-retorno').length;
-  const agora = new Date();
-  const concluidasMes = implantacoes.filter(i => {
-    if (i.status !== 'concluida' || !i.etapa_desde) return false;
-    const d = new Date(i.etapa_desde);
-    return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear();
-  }).length;
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
@@ -437,35 +374,6 @@ export default function ImplantacoesPage() {
           >
             + Nova Revenda
           </button>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-          <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Implantações ativas</p>
-            <div style={{ fontSize: '32px', fontWeight: 700, color: theme.textPrimary }}>{ativas}</div>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>em andamento no pipeline</p>
-          </div>
-
-          <div style={{ background: 'rgba(230, 178, 62, 0.1)', border: '1px solid #E6B23E', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Sem retorno</p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#E6B23E' }}>{semRetorno}</div>
-              <span style={{ fontSize: '11px', background: '#E6B23E', color: '#0E1013', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>risco</span>
-            </div>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>revendas sem retorno</p>
-          </div>
-
-          <div style={{ background: 'rgba(123, 92, 240, 0.08)', border: '1px solid #5B43C0', borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Tempo médio na etapa</p>
-            <div style={{ fontSize: '32px', fontWeight: 700, color: '#8B7CF6' }}>5d</div>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>meta: 4 dias</p>
-          </div>
-
-          <div style={{ background: theme.cardBg, border: `1px solid ${theme.borderColor}`, borderRadius: '18px', padding: '20px' }}>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '0 0 8px 0' }}>Concluídas no mês</p>
-            <div style={{ fontSize: '32px', fontWeight: 700, color: theme.textPrimary }}>{concluidasMes}</div>
-            <p style={{ fontSize: '12px', color: theme.textSecondary, margin: '8px 0 0 0' }}>chegaram ao Go-Live</p>
-          </div>
         </div>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '16px' }}>
