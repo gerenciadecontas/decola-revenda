@@ -1,73 +1,42 @@
-import { supabase } from './client';
+'use client';
 
-const hasSupabase = () => {
-  return !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-};
+import { useCallback, useEffect, useState } from 'react';
 
-// Generic CRUD hooks for any table
-export const useSupabaseTable = (tableName: string) => {
-  const getAll = async () => {
-    if (!hasSupabase()) {
-      const stored = localStorage.getItem(`${tableName}-list`);
-      return stored ? JSON.parse(stored) : [];
-    }
-    
-    const { data, error } = await supabase.from(tableName).select('*');
-    if (error) {
-      console.error(`Error fetching ${tableName}:`, error);
-      return [];
-    }
-    return data || [];
+// Supabase project is currently unreachable and has no implantacoes table, so data lives in localStorage.
+export function useLocalTable<T extends { id?: string; created_at?: string; updated_at?: string }>(tableName: string) {
+  const key = `${tableName}-list`;
+  const [data, setData] = useState<T[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored) setData(JSON.parse(stored));
+    } catch {}
+  }, [key]);
+
+  const persist = useCallback((updater: (items: T[]) => T[]) => {
+    setData(prev => {
+      const next = updater(prev);
+      try {
+        localStorage.setItem(key, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }, [key]);
+
+  const create = async (item: Omit<T, 'id'>) => {
+    const newItem = { ...item, id: Date.now().toString(), created_at: new Date().toISOString() } as T;
+    persist(items => [...items, newItem]);
+    return newItem;
   };
 
-  const create = async (item: any) => {
-    if (!hasSupabase()) {
-      const items = await getAll();
-      const newItem = { ...item, id: Date.now().toString() };
-      const updated = [...items, newItem];
-      localStorage.setItem(`${tableName}-list`, JSON.stringify(updated));
-      return newItem;
-    }
-
-    const { data, error } = await supabase.from(tableName).insert([item]).select();
-    if (error) {
-      console.error(`Error creating ${tableName}:`, error);
-      return null;
-    }
-    return data?.[0] || null;
-  };
-
-  const update = async (id: string, item: any) => {
-    if (!hasSupabase()) {
-      const items = await getAll();
-      const updated = items.map((i: any) => i.id === id ? { ...i, ...item } : i);
-      localStorage.setItem(`${tableName}-list`, JSON.stringify(updated));
-      return { ...items.find((i: any) => i.id === id), ...item };
-    }
-
-    const { data, error } = await supabase.from(tableName).update(item).eq('id', id).select();
-    if (error) {
-      console.error(`Error updating ${tableName}:`, error);
-      return null;
-    }
-    return data?.[0] || null;
+  const update = async (id: string, patch: Partial<T>) => {
+    persist(items => items.map(i => (i.id === id ? { ...i, ...patch, updated_at: new Date().toISOString() } : i)));
   };
 
   const delete_ = async (id: string) => {
-    if (!hasSupabase()) {
-      const items = await getAll();
-      const updated = items.filter((i: any) => i.id !== id);
-      localStorage.setItem(`${tableName}-list`, JSON.stringify(updated));
-      return true;
-    }
-
-    const { error } = await supabase.from(tableName).delete().eq('id', id);
-    if (error) {
-      console.error(`Error deleting ${tableName}:`, error);
-      return false;
-    }
-    return true;
+    persist(items => items.filter(i => i.id !== id));
   };
 
-  return { getAll, create, update, delete_ };
-};
+  return { data, create, update, delete_ };
+}

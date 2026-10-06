@@ -232,17 +232,28 @@ body.light .b-red {
   color: var(--ink-dark);
 }
 
-/* Board */
+/* Board: flipped vertically so the native horizontal scrollbar renders on top; columns flip back. */
 .board {
   display: flex;
   gap: 18px;
   overflow-x: auto;
-  padding: 4px 2px 18px;
-  align-items: flex-start;
+  overflow-y: hidden;
+  padding: 4px 2px 14px;
+  align-items: flex-end;
+  transform: rotateX(180deg);
 }
 
 .board::-webkit-scrollbar {
-  height: 9px;
+  height: 10px;
+}
+
+.board::-webkit-scrollbar-thumb {
+  background: #4A4E57;
+  border-radius: 8px;
+}
+
+body.light .board::-webkit-scrollbar-thumb {
+  background: #CFC8BA;
 }
 
 .col {
@@ -252,6 +263,7 @@ body.light .b-red {
   border: 1px solid var(--line);
   border-radius: 24px;
   padding: 16px 14px;
+  transform: rotateX(180deg);
 }
 
 .col-head {

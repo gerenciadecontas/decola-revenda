@@ -3,7 +3,7 @@
 import { PlatformLayout } from '@/app/components/PlatformLayout';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useState, useEffect } from 'react';
-import { useSupabaseTable } from '@/lib/supabase/hooks';
+import { useLocalTable } from '@/lib/supabase/hooks';
 import '@/app/globals.css';
 
 interface Implantacao {
@@ -67,8 +67,7 @@ const getColors = () => ({
 export default function DashboardPage() {
   const { isDark } = useTheme();
   const theme = isDark ? DARK_THEME : LIGHT_THEME;
-  // @ts-ignore
-  const { data: implantacoes = [] } = useSupabaseTable<Implantacao>('implantacoes');
+  const { data: implantacoes } = useLocalTable<Implantacao>('implantacoes');
   const [today] = useState(() => new Date().toLocaleDateString('pt-BR'));
   const [metaMes, setMetaMes] = useState(10);
 
